@@ -1,5 +1,6 @@
 using AlAshmar.Application.DTOs.Domain;
 using AlAshmar.Application.Services.Crud;
+using AlAshmar.Domain.Commons;
 using AlAshmar.Infrastructure.Authorization.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +34,26 @@ public abstract class BaseController<TEntity, TDto, TCreateDto, TUpdateDto, TKey
     {
         var result = await _repository.GetAllAsync();
         return result.IsError ? BadRequest(result.Errors) : Ok(result.Value.Select(_mapper.Map<TDto>).ToList());
+    }
+
+    [HttpGet("paged")]
+    public virtual async Task<ActionResult<PagedList<TDto>>> GetPaged(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10,
+        CancellationToken cancellationToken = default)
+    {
+        var result = await _repository.GetPagedAsync(page, pageSize);
+        if (result.IsError)
+            return BadRequest(result.Errors);
+
+        var pagedList = new PagedList<TDto>(
+            result.Value.Items.Select(_mapper.Map<TDto>),
+            result.Value.TotalItems,
+            result.Value.Page,
+            result.Value.PageSize
+        );
+
+        return Ok(pagedList);
     }
 
     [HttpGet("{id}")]
