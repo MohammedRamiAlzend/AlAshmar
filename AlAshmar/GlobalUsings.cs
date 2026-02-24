@@ -1,0 +1,15 @@
+global using System;
+global using System.Collections.Generic;
+global using System.Linq;
+global using System.Threading;
+global using System.Threading.Tasks;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Mvc;
+global using AlAshmar.Domain.Entities.Abstraction;
+global using AlAshmar.Domain.Commons;
+global using AlAshmar.Application.Common;
+global using AlAshmar.Application.Services.Crud;
+global using AlAshmar.Application.DTOs.Domain;
+global using AlAshmar.Application.Repos;
+global using AlAshmar.Infrastructure.Authorization.Attributes;
+global using AutoMapper;

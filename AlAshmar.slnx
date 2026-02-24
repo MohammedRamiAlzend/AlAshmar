@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="AlAshmar.Application/AlAshmar.Application.csproj" />
+  <Project Path="AlAshmar.Domain/AlAshmar.Domain.csproj" />
+  <Project Path="AlAshmar.Infrastructure.Persistence/AlAshmar.Infrastructure.Persistence.csproj" />
+  <Project Path="AlAshmar.Infrastructure/AlAshmar.Infrastructure.csproj" />
+  <Project Path="AlAshmar/AlAshmar.csproj" />
+  <Project Path="FileManager/FileManager.csproj" Id="b1199e26-db54-4e6d-9e6d-2cee32731fba" />
+</Solution>

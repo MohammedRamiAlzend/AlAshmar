@@ -1,0 +1,6 @@
+@AlAshmar_HostAddress = http://localhost:5107
+
+GET {{AlAshmar_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
