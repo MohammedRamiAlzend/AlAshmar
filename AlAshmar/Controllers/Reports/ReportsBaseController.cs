@@ -1,6 +1,8 @@
 using AlAshmar.Domain.Commons;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
+using System.Xml.Serialization;
 
 namespace AlAshmar.Controllers.Reports;
 
@@ -65,6 +67,55 @@ public abstract class ReportsBaseController : ControllerBase
     }
 
     /// <summary>
+    /// Returns data as JSON file download.
+    /// </summary>
+    protected FileContentResult DownloadAsJson<T>(T data, string fileName)
+    {
+        var json = System.Text.Json.JsonSerializer.Serialize(data, new System.Text.Json.JsonSerializerOptions
+        {
+            WriteIndented = true,
+            PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase
+        });
+        return File(Encoding.UTF8.GetBytes(json), "application/json", $"{fileName}.json");
+    }
+
+    /// <summary>
+    /// Returns data as XML file download.
+    /// </summary>
+    protected FileContentResult DownloadAsXml<T>(T data, string fileName)
+    {
+        var serializer = new XmlSerializer(typeof(T));
+        using var writer = new StringWriter();
+        serializer.Serialize(writer, data);
+        return File(Encoding.UTF8.GetBytes(writer.ToString()), "application/xml", $"{fileName}.xml");
+    }
+
+    /// <summary>
+    /// Returns data as CSV file download.
+    /// </summary>
+    protected FileContentResult DownloadAsCsv<T>(IEnumerable<T> data, string fileName, Func<T, string[]> rowSelector)
+    {
+        var sb = new StringBuilder();
+        
+        // Get headers from first object's property names
+        var properties = typeof(T).GetProperties();
+        sb.AppendLine(string.Join(",", properties.Select(p => p.Name)));
+        
+        // Add data rows
+        foreach (var item in data)
+        {
+            var values = properties.Select(p =>
+            {
+                var value = p.GetValue(item)?.ToString() ?? string.Empty;
+                return $"\"{value.Replace("\"", "\"\"")}\"";
+            });
+            sb.AppendLine(string.Join(",", values));
+        }
+        
+        return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", $"{fileName}.csv");
+    }
+
+    /// <summary>
     /// Common pagination parameters for report queries.
     /// </summary>
     protected class PaginationParams
@@ -90,5 +141,16 @@ public abstract class ReportsBaseController : ControllerBase
         [FromQuery] public DateTime? FromDate { get; set; }
         [FromQuery] public DateTime? ToDate { get; set; }
         [FromQuery] public ReportPeriodType PeriodType { get; set; } = ReportPeriodType.All;
+    }
+
+    /// <summary>
+    /// Export format enum.
+    /// </summary>
+    protected enum ExportFormat
+    {
+        Json,
+        Xml,
+        Csv,
+        Pdf
     }
 }

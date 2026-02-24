@@ -142,4 +142,34 @@ public class StudentReportsController : ReportsBaseController
 
         return Ok(reports);
     }
+
+    /// <summary>
+    /// Export student daily report as JSON, XML, or CSV.
+    /// </summary>
+    /// <param name="studentId">The student ID</param>
+    /// <param name="date">The report date</param>
+    /// <param name="format">Export format (json, xml, csv)</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    [HttpGet("students/{studentId:guid}/daily/export")]
+    public async Task<IActionResult> ExportDailyReport(
+        [FromRoute] Guid studentId,
+        [FromQuery] DateTime? date = null,
+        [FromQuery] string format = "json",
+        CancellationToken cancellationToken = default)
+    {
+        var reportDate = date ?? DateTime.Today;
+        var result = await _studentReportService.GetDailyReportAsync(studentId, reportDate, cancellationToken);
+
+        if (result.IsError)
+            return BadRequest(result.Errors);
+
+        var fileName = $"StudentReport_{studentId}_{reportDate:yyyyMMdd}";
+
+        return format.ToLower() switch
+        {
+            "json" => DownloadAsJson(result.Value, fileName),
+            "xml" => DownloadAsXml(result.Value, fileName),
+            _ => DownloadAsJson(result.Value, fileName)
+        };
+    }
 }
