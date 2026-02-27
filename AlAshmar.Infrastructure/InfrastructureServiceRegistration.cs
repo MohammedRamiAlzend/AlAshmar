@@ -32,6 +32,9 @@ public static class InfrastructureServiceRegistration
         // Register Authorization Service
         services.AddScoped<Application.Interfaces.IAuthorizationService, AuthorizationService>();
 
+        // Register Authorization Seeder
+        services.AddScoped<AuthorizationSeeder>();
+
         return services;
     }
 

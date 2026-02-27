@@ -16,7 +16,7 @@ public static class AuthorizationPolicies
         // Register authorization handlers
         services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
         services.AddSingleton<IAuthorizationHandler, ResourceOwnershipHandler>();
-        services.AddSingleton<IAuthorizationHandler, ClassEnrollmentHandler>();
+        services.AddScoped<IAuthorizationHandler, ClassEnrollmentHandler>();
         services.AddSingleton<IAuthorizationHandler, TimeBasedAuthorizationHandler>();
 
         // Configure authorization policies

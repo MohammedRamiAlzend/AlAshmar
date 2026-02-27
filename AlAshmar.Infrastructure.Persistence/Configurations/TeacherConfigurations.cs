@@ -33,7 +33,7 @@ public class TeacherConfiguration : IEntityTypeConfiguration<Teacher>
         builder.Property(t => t.Email)
             .HasMaxLength(255);
         
-        builder.HasOne(t => t.User)
+        builder.HasOne(t => t.RelatedUser)
             .WithMany()
             .HasForeignKey(t => t.UserId)
             .OnDelete(DeleteBehavior.SetNull);

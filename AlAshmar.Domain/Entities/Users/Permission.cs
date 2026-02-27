@@ -32,11 +32,12 @@ public class Permission : Entity<Guid>
     public static Permission FromString(string permissionString, string description)
     {
         var parts = permissionString.Split('.');
-        if (parts.Length != 2)
+        if (parts.Length < 2)
             throw new ArgumentException("Permission must be in format 'resource.action'");
 
         return new Permission
         {
+            Id = Guid.NewGuid(),
             Resource = parts[0].ToLowerInvariant(),
             Action = parts[1].ToLowerInvariant(),
             Name = permissionString,

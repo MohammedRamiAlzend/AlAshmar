@@ -50,13 +50,13 @@ public class AuthorizationSeeder
         }
     }
 
-    private static List<Permission> CreateDefaultPermissions()
+    private List<Permission> CreateDefaultPermissions()
     {
         return new List<Permission>
         {
             // Student permissions
             Permission.FromString("students.view", "View student information"),
-            Permission.FromString("students.view.self", "View own student information"),
+            Permission.FromString("students.viewSelf", "View own student information"),
             Permission.FromString("students.create", "Create new students"),
             Permission.FromString("students.update", "Update student information"),
             Permission.FromString("students.delete", "Delete students"),
@@ -64,7 +64,7 @@ public class AuthorizationSeeder
 
             // Teacher permissions
             Permission.FromString("teachers.view", "View teacher information"),
-            Permission.FromString("teachers.view.self", "View own teacher information"),
+            Permission.FromString("teachers.viewSelf", "View own teacher information"),
             Permission.FromString("teachers.create", "Create new teachers"),
             Permission.FromString("teachers.update", "Update teacher information"),
             Permission.FromString("teachers.delete", "Delete teachers"),
@@ -72,7 +72,7 @@ public class AuthorizationSeeder
 
             // Point permissions
             Permission.FromString("points.view", "View points"),
-            Permission.FromString("points.view.self", "View own points"),
+            Permission.FromString("points.viewSelf", "View own points"),
             Permission.FromString("points.assign", "Assign points to students"),
             Permission.FromString("points.update", "Update points"),
             Permission.FromString("points.delete", "Delete points"),
@@ -80,20 +80,20 @@ public class AuthorizationSeeder
 
             // Attendance permissions
             Permission.FromString("attendance.view", "View attendance"),
-            Permission.FromString("attendance.view.self", "View own attendance"),
+            Permission.FromString("attendance.viewSelf", "View own attendance"),
             Permission.FromString("attendance.mark", "Mark attendance"),
             Permission.FromString("attendance.update", "Update attendance records"),
             Permission.FromString("attendance.delete", "Delete attendance records"),
 
             // Hadith permissions
             Permission.FromString("hadith.view", "View hadith records"),
-            Permission.FromString("hadith.view.self", "View own hadith records"),
+            Permission.FromString("hadith.viewSelf", "View own hadith records"),
             Permission.FromString("hadith.manage", "Manage hadith records"),
             Permission.FromString("hadith.assign", "Assign hadith to students"),
 
             // Quran permissions
             Permission.FromString("quraan.view", "View Quran page records"),
-            Permission.FromString("quraan.view.self", "View own Quran page records"),
+            Permission.FromString("quraan.viewSelf", "View own Quran page records"),
             Permission.FromString("quraan.manage", "Manage Quran page records"),
             Permission.FromString("quraan.assign", "Assign Quran pages to students"),
 
@@ -124,16 +124,21 @@ public class AuthorizationSeeder
         };
     }
 
-    private static List<Role> CreateDefaultRoles(List<Permission> allPermissions)
+    private List<Role> CreateDefaultRoles(List<Permission> allPermissions)
     {
         var roles = new List<Role>();
-
-        // SuperAdmin - All permissions
-        var superAdmin = new Role { Type = "SuperAdmin" };
-        superAdmin.Permissions = allPermissions.ToList();
+        Role superAdmin;
+        if(_context.Roles.Any(x => x.Type == Constants.SuperAdminUserType))
+        {
+            superAdmin = _context.Roles.First(x => x.Type == Constants.SuperAdminUserType);
+        }
+        else
+        {
+            superAdmin = new Role { Type = "SuperAdmin" };
+        }
+        superAdmin.Permissions = [.. allPermissions];
         roles.Add(superAdmin);
 
-        // Admin - Most permissions except system settings
         var admin = new Role { Type = "Admin" };
         admin.Permissions = allPermissions
             .Where(p => p.Resource != "system")
@@ -142,13 +147,13 @@ public class AuthorizationSeeder
 
         // Teacher - Classroom-related permissions
         var teacherPermissions = allPermissions.Where(p =>
-            p.Resource == "students" && p.Action is "view" or "view.self" or "update" ||
-            p.Resource == "points" && p.Action is "view" or "view.self" or "assign" ||
-            p.Resource == "attendance" && p.Action is "view" or "view.self" or "mark" ||
-            p.Resource == "hadith" && p.Action is "view" or "view.self" or "assign" or "manage" ||
-            p.Resource == "quraan" && p.Action is "view" or "view.self" or "assign" or "manage" ||
+            p.Resource == "students" && p.Action is "view" or "viewSelf" or "update" ||
+            p.Resource == "points" && p.Action is "view" or "viewSelf" or "assign" ||
+            p.Resource == "attendance" && p.Action is "view" or "viewSelf" or "mark" ||
+            p.Resource == "hadith" && p.Action is "view" or "viewSelf" or "assign" or "manage" ||
+            p.Resource == "quraan" && p.Action is "view" or "viewSelf" or "assign" or "manage" ||
             p.Resource == "classes" ||
-            p.Resource == "teachers" && p.Action is "view" or "view.self"
+            p.Resource == "teachers" && p.Action is "view" or "viewSelf"
         ).ToList();
         var teacher = new Role { Type = "Teacher" };
         teacher.Permissions = teacherPermissions;

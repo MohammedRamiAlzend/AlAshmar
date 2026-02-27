@@ -30,7 +30,7 @@ public class AuthenticationService : IAuthenticationService
             return new Error("401", "Invalid username or password", ErrorKind.Unauthorized);
 
         // TODO: Use proper password hashing (BCrypt/Argon2)
-        if (user.Value.Password != password)
+        if (user.Value.HashedPassword != password)
             return new Error("401", "Invalid username or password", ErrorKind.Unauthorized);
 
         var token = await _tokenService.GenerateTokenAsync(user.Value.UserName, user.Value.Id, user.Value.RoleId, cancellationToken);
@@ -50,7 +50,7 @@ public class AuthenticationService : IAuthenticationService
         var user = new User
         {
             UserName = username,
-            Password = password, // TODO: Hash password
+            HashedPassword = password, // TODO: Hash password
             RoleId = roleId
         };
 

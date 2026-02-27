@@ -8,6 +8,6 @@ public class Role : Entity<Guid>
     [MaxLength(50)]
     public string Type { get; set; } = null!;
 
-    public ICollection<User> Users { get; set; } = new List<User>();
-    public ICollection<Permission> Permissions { get; set; } = new List<Permission>();
+    public ICollection<User> Users { get; set; } = [];
+    public ICollection<Permission> Permissions { get; set; } = [];
 }

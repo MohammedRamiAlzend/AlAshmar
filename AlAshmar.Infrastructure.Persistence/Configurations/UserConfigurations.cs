@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using AlAshmar.Domain.Entities.Users;
+using AlAshmar.Domain.Commons;
 
 namespace AlAshmar.Infrastructure.Persistence.Configurations;
 
@@ -19,16 +20,13 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .IsRequired()
             .HasMaxLength(100);
         
-        builder.Property(u => u.Password)
+        builder.Property(u => u.HashedPassword)
             .IsRequired();
-        
-        builder.HasOne(u => u.Role)
-            .WithMany()
-            .HasForeignKey(u => u.RoleId)
-            .OnDelete(DeleteBehavior.SetNull);
         
         builder.HasIndex(u => u.UserName)
             .IsUnique();
+
+        builder.HasData(Constants.DefaultSuperAdminUser);
     }
 }
 
@@ -61,6 +59,7 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
                     j.HasKey("RoleId", "PermissionId");
                     j.ToTable("RolePermissions");
                 });
+        builder.HasData(Constants.DefaultSuperAdminRole);
     }
 }
 

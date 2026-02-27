@@ -14,9 +14,8 @@ public class Teacher : EntityWithEvents<Guid>
     public string? NationalityNumber { get; set; }
     public string? Email { get; set; }
 
-    public Guid? UserId { get; set; }
-    [ForeignKey(nameof(UserId))]
-    public User? User { get; set; }
+    public Guid UserId { get; set; }
+    public User RelatedUser { get; set; }
 
     public ICollection<TeacherContactInfo> TeacherContactInfos { get; set; } = new List<TeacherContactInfo>();
     public ICollection<TeacherAttachment> TeacherAttachments { get; set; } = new List<TeacherAttachment>();
@@ -39,7 +38,15 @@ public class Teacher : EntityWithEvents<Guid>
         GivenPoints.Add(point);
     }
 
-    public static Teacher Create(string name, string fatherName, string motherName, string? nationalityNumber, string? email, Guid? userId = null)
+    public static Teacher Create(
+        string name,
+        string fatherName,
+        string motherName,
+        string? nationalityNumber,
+        string? email,
+        string userName,
+        string hashedPassword
+        )
     {
         var teacher = new Teacher
         {
@@ -48,7 +55,7 @@ public class Teacher : EntityWithEvents<Guid>
             MotherName = motherName,
             NationalityNumber = nationalityNumber,
             Email = email,
-            UserId = userId
+            RelatedUser = User.Create(userName, hashedPassword, Constants.DefaultTeacherRoleId),
         };
         teacher.AddDomainEvent(new TeacherCreatedEvent(teacher.Id, name));
         return teacher;

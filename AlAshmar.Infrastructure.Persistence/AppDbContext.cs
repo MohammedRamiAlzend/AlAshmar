@@ -8,8 +8,16 @@ using AlAshmar.Domain.Entities.Common;
 
 namespace AlAshmar.Infrastructure.Persistence;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
+public class AppDbContext : DbContext
 {
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    {
+    }
+
+    public AppDbContext()
+    {
+        
+    }
     // Core Entities
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
