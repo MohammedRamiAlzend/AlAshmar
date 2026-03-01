@@ -1,17 +1,6 @@
 using AlAshmar.Application.DTOs;
 using AlAshmar.Application.DTOs.Domain;
-using AlAshmar.Application.UseCases.Students.GetAllStudentsFiltered;
-using AlAshmar.Application.UseCases.Students.GetStudentById;
-using AlAshmar.Application.UseCases.Students.CreateStudent;
-using AlAshmar.Application.UseCases.Students.UpdateStudent;
-using AlAshmar.Application.UseCases.Students.DeleteStudent;
-using AlAshmar.Application.UseCases.Students.GetMemorizationProgress;
-using AlAshmar.Application.UseCases.Students.GetAttendanceRecords;
-using AlAshmar.Application.UseCases.Students.GetPoints;
-using AlAshmar.Application.UseCases.Students.EnrollInClass;
-using AlAshmar.Application.UseCases.Students.GetClassEnrollments;
-using AlAshmar.Application.UseCases.Students.AddAttachment;
-using AlAshmar.Application.UseCases.Students.GetAttachments;
+using AlAshmar.Application.Services.Domain;
 using AlAshmar.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,45 +15,11 @@ namespace AlAshmar.Controllers.Students;
 [Authorize]
 public class StudentManagementController : ControllerBase
 {
-    private readonly IQueryHandler<GetAllStudentsFilteredQuery, Result<List<StudentDto>>> _filterHandler;
-    private readonly IQueryHandler<GetStudentByIdQuery, Result<StudentDto?>> _getByIdHandler;
-    private readonly ICommandHandler<CreateStudentCommand, Result<StudentDto>> _createHandler;
-    private readonly ICommandHandler<UpdateStudentCommand, Result<StudentDto>> _updateHandler;
-    private readonly ICommandHandler<DeleteStudentCommand, Result<Success>> _deleteHandler;
-    private readonly IQueryHandler<GetMemorizationProgressQuery, Result<StudentMemorizationProgressDto>> _memorizationHandler;
-    private readonly IQueryHandler<GetAttendanceRecordsQuery, Result<List<StudentAttendanceDto>>> _attendanceHandler;
-    private readonly IQueryHandler<GetPointsQuery, Result<List<PointDto>>> _pointsHandler;
-    private readonly ICommandHandler<EnrollInClassCommand, Result<Success>> _enrollHandler;
-    private readonly IQueryHandler<GetClassEnrollmentsQuery, Result<List<ClassStudentEnrollmentDto>>> _enrollmentsHandler;
-    private readonly ICommandHandler<AddAttachmentCommand, Result<Success>> _addAttachmentHandler;
-    private readonly IQueryHandler<GetAttachmentsQuery, Result<List<StudentAttachmentDto>>> _attachmentsHandler;
+    private readonly IStudentManagementService _studentService;
 
-    public StudentManagementController(
-        IQueryHandler<GetAllStudentsFilteredQuery, Result<List<StudentDto>>> filterHandler,
-        IQueryHandler<GetStudentByIdQuery, Result<StudentDto?>> getByIdHandler,
-        ICommandHandler<CreateStudentCommand, Result<StudentDto>> createHandler,
-        ICommandHandler<UpdateStudentCommand, Result<StudentDto>> updateHandler,
-        ICommandHandler<DeleteStudentCommand, Result<Success>> deleteHandler,
-        IQueryHandler<GetMemorizationProgressQuery, Result<StudentMemorizationProgressDto>> memorizationHandler,
-        IQueryHandler<GetAttendanceRecordsQuery, Result<List<StudentAttendanceDto>>> attendanceHandler,
-        IQueryHandler<GetPointsQuery, Result<List<PointDto>>> pointsHandler,
-        ICommandHandler<EnrollInClassCommand, Result<Success>> enrollHandler,
-        IQueryHandler<GetClassEnrollmentsQuery, Result<List<ClassStudentEnrollmentDto>>> enrollmentsHandler,
-        ICommandHandler<AddAttachmentCommand, Result<Success>> addAttachmentHandler,
-        IQueryHandler<GetAttachmentsQuery, Result<List<StudentAttachmentDto>>> attachmentsHandler)
+    public StudentManagementController(IStudentManagementService studentService)
     {
-        _filterHandler = filterHandler;
-        _getByIdHandler = getByIdHandler;
-        _createHandler = createHandler;
-        _updateHandler = updateHandler;
-        _deleteHandler = deleteHandler;
-        _memorizationHandler = memorizationHandler;
-        _attendanceHandler = attendanceHandler;
-        _pointsHandler = pointsHandler;
-        _enrollHandler = enrollHandler;
-        _enrollmentsHandler = enrollmentsHandler;
-        _addAttachmentHandler = addAttachmentHandler;
-        _attachmentsHandler = attachmentsHandler;
+        _studentService = studentService;
     }
 
     /// <summary>
@@ -89,8 +44,7 @@ public class StudentManagementController : ControllerBase
         [FromQuery] Guid? teacherId = null,
         CancellationToken cancellationToken = default)
     {
-        var query = new GetAllStudentsFilteredQuery(pageNumber, pageSize, classId, semesterId, eventId, teacherId);
-        var result = await _filterHandler.Handle(query, cancellationToken);
+        var result = await _studentService.GetAllFilteredAsync(pageNumber, pageSize, classId, semesterId, eventId, teacherId, cancellationToken);
         return result.ToActionResult();
     }
 
@@ -104,8 +58,7 @@ public class StudentManagementController : ControllerBase
         [FromRoute] Guid id,
         CancellationToken cancellationToken = default)
     {
-        var query = new GetStudentByIdQuery(id);
-        var result = await _getByIdHandler.Handle(query, cancellationToken);
+        var result = await _studentService.GetByIdAsync(id, cancellationToken);
         return result.ToActionResult();
     }
 
@@ -122,12 +75,10 @@ public class StudentManagementController : ControllerBase
         // Generate username from email or nationality number
         var userName = dto.Email ?? dto.NationalityNumber ?? $"student_{Guid.NewGuid():N}".Substring(0, 20);
         // Note: Password should be hashed before sending
-        var command = new CreateStudentCommand(
+        var result = await _studentService.CreateAsync(
             dto.Name, dto.FatherName, dto.MotherName,
             dto.NationalityNumber, dto.Email,
-            userName, "defaultPassword123" // TODO: Use proper password generation
-        );
-        var result = await _createHandler.Handle(command, cancellationToken);
+            userName, "defaultPassword123", cancellationToken);
         return result.ToActionResult();
     }
 
@@ -143,11 +94,9 @@ public class StudentManagementController : ControllerBase
         [FromBody] UpdateStudentDto dto,
         CancellationToken cancellationToken = default)
     {
-        var command = new UpdateStudentCommand(
+        var result = await _studentService.UpdateAsync(
             id, dto.Name, dto.FatherName, dto.MotherName,
-            dto.NationalityNumber, dto.Email
-        );
-        var result = await _updateHandler.Handle(command, cancellationToken);
+            dto.NationalityNumber, dto.Email, cancellationToken);
         return result.ToActionResult();
     }
 
@@ -161,8 +110,7 @@ public class StudentManagementController : ControllerBase
         [FromRoute] Guid id,
         CancellationToken cancellationToken = default)
     {
-        var command = new DeleteStudentCommand(id);
-        var result = await _deleteHandler.Handle(command, cancellationToken);
+        var result = await _studentService.DeleteAsync(id, cancellationToken);
         return result.ToActionResult();
     }
 
@@ -176,8 +124,7 @@ public class StudentManagementController : ControllerBase
         [FromRoute] Guid id,
         CancellationToken cancellationToken = default)
     {
-        var query = new GetMemorizationProgressQuery(id);
-        var result = await _memorizationHandler.Handle(query, cancellationToken);
+        var result = await _studentService.GetMemorizationProgressAsync(id, cancellationToken);
         return result.ToActionResult();
     }
 
@@ -195,8 +142,7 @@ public class StudentManagementController : ControllerBase
         [FromQuery] DateTime? toDate = null,
         CancellationToken cancellationToken = default)
     {
-        var query = new GetAttendanceRecordsQuery(id, fromDate, toDate);
-        var result = await _attendanceHandler.Handle(query, cancellationToken);
+        var result = await _studentService.GetAttendanceRecordsAsync(id, fromDate, toDate, cancellationToken);
         return result.ToActionResult();
     }
 
@@ -212,8 +158,7 @@ public class StudentManagementController : ControllerBase
         [FromQuery] Guid? semesterId = null,
         CancellationToken cancellationToken = default)
     {
-        var query = new GetPointsQuery(id, semesterId);
-        var result = await _pointsHandler.Handle(query, cancellationToken);
+        var result = await _studentService.GetPointsAsync(id, semesterId, cancellationToken);
         return result.ToActionResult();
     }
 
@@ -229,8 +174,7 @@ public class StudentManagementController : ControllerBase
         [FromBody] Guid classId,
         CancellationToken cancellationToken = default)
     {
-        var command = new EnrollInClassCommand(id, classId);
-        var result = await _enrollHandler.Handle(command, cancellationToken);
+        var result = await _studentService.EnrollInClassAsync(id, classId, cancellationToken);
         return result.ToActionResult();
     }
 
@@ -244,8 +188,7 @@ public class StudentManagementController : ControllerBase
         [FromRoute] Guid id,
         CancellationToken cancellationToken = default)
     {
-        var query = new GetClassEnrollmentsQuery(id);
-        var result = await _enrollmentsHandler.Handle(query, cancellationToken);
+        var result = await _studentService.GetClassEnrollmentsAsync(id, cancellationToken);
         return result.ToActionResult();
     }
 
@@ -267,16 +210,16 @@ public class StudentManagementController : ControllerBase
         // Generate safe file name and path
         var fileName = $"{Guid.NewGuid():N}_{formFile.FileName}";
         var path = Path.Combine("uploads", "students", id.ToString(), fileName);
-        
-        var command = new AddAttachmentCommand(
+
+        var result = await _studentService.AddAttachmentAsync(
             id,
             path,
             formFile.ContentType,
             fileName,
             formFile.FileName,
-            null // ExtensionId can be added based on file type
+            null, // ExtensionId can be added based on file type
+            cancellationToken
         );
-        var result = await _addAttachmentHandler.Handle(command, cancellationToken);
         return result.ToActionResult();
     }
 
@@ -290,8 +233,7 @@ public class StudentManagementController : ControllerBase
         [FromRoute] Guid id,
         CancellationToken cancellationToken = default)
     {
-        var query = new GetAttachmentsQuery(id);
-        var result = await _attachmentsHandler.Handle(query, cancellationToken);
+        var result = await _studentService.GetAttachmentsAsync(id, cancellationToken);
         return result.ToActionResult();
     }
 }

@@ -117,6 +117,15 @@ public record ClassTeacherEnrollmentDto(
     Guid ClassId
 );
 
+public record TeacherStatisticsDto(
+    Guid TeacherId,
+    int TotalClasses,
+    int MainTeacherClasses,
+    int TotalPointsGiven,
+    int TotalPointsCount,
+    int TotalContactInfos
+);
+
 // ==================== STUDENTS DOMAIN ====================
 
 public record StudentDto(
