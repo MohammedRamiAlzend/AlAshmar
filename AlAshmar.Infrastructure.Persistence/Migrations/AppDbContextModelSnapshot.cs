@@ -708,6 +708,16 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                         {
                             Id = new Guid("00000000-0000-0000-0000-000000000011"),
                             Type = "SuperAdmin"
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000001111"),
+                            Type = "Student"
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000111"),
+                            Type = "Teacher"
                         });
                 });
 
@@ -742,7 +752,7 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                         new
                         {
                             Id = new Guid("00000000-0000-0000-0000-000000000010"),
-                            HashedPassword = "1",
+                            HashedPassword = "$2a$11$ugm3BJebpiSW.gjw5fVcYedC2J1OsKlNdykJ6wtVJIemVYnT2rJQO",
                             RoleId = new Guid("00000000-0000-0000-0000-000000000011"),
                             UserName = "1"
                         });
@@ -994,7 +1004,7 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                     b.HasOne("AlAshmar.Domain.Entities.Users.User", "RelatedUser")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("RelatedUser");

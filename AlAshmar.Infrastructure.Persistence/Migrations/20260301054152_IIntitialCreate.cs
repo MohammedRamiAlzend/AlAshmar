@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace AlAshmar.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class IntitialCreate : Migration
+    public partial class IIntitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -202,7 +204,7 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HashedPassword = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -268,7 +270,7 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                     MotherName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     NationalityNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -278,7 +280,7 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -598,6 +600,21 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Roles",
+                columns: new[] { "Id", "Type" },
+                values: new object[,]
+                {
+                    { new Guid("00000000-0000-0000-0000-000000000011"), "SuperAdmin" },
+                    { new Guid("00000000-0000-0000-0000-000000000111"), "Teacher" },
+                    { new Guid("00000000-0000-0000-0000-000000001111"), "Student" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "HashedPassword", "RoleId", "UserName" },
+                values: new object[] { new Guid("00000000-0000-0000-0000-000000000010"), "$2a$11$ugm3BJebpiSW.gjw5fVcYedC2J1OsKlNdykJ6wtVJIemVYnT2rJQO", new Guid("00000000-0000-0000-0000-000000000011"), "1" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AllowableExtentions_ExtName",

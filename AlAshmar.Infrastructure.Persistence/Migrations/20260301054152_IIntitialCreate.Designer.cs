@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlAshmar.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260227104858_IntitialCreate")]
-    partial class IntitialCreate
+    [Migration("20260301054152_IIntitialCreate")]
+    partial class IIntitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -586,7 +586,7 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -705,6 +705,23 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("Roles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000011"),
+                            Type = "SuperAdmin"
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000001111"),
+                            Type = "Student"
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000111"),
+                            Type = "Teacher"
+                        });
                 });
 
             modelBuilder.Entity("AlAshmar.Domain.Entities.Users.User", b =>
@@ -713,7 +730,7 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("HashedPassword")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -733,6 +750,15 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("Users", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000010"),
+                            HashedPassword = "$2a$11$ugm3BJebpiSW.gjw5fVcYedC2J1OsKlNdykJ6wtVJIemVYnT2rJQO",
+                            RoleId = new Guid("00000000-0000-0000-0000-000000000011"),
+                            UserName = "1"
+                        });
                 });
 
             modelBuilder.Entity("RolePermission", b =>
@@ -978,12 +1004,13 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("AlAshmar.Domain.Entities.Teachers.Teacher", b =>
                 {
-                    b.HasOne("AlAshmar.Domain.Entities.Users.User", "User")
+                    b.HasOne("AlAshmar.Domain.Entities.Users.User", "RelatedUser")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("RelatedUser");
                 });
 
             modelBuilder.Entity("AlAshmar.Domain.Entities.Teachers.TeacherAttachment", b =>
