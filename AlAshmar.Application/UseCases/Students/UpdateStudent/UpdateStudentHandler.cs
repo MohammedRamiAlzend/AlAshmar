@@ -3,6 +3,7 @@ using AlAshmar.Application.DTOs;
 using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Application.Repos;
+using AlAshmar.Application.DTOs.Domain;
 
 namespace AlAshmar.Application.UseCases.Students.UpdateStudent;
 
@@ -50,7 +51,9 @@ public class UpdateStudentHandler : ICommandHandler<UpdateStudentCommand, Result
             student.MotherName,
             student.NationalityNumber,
             student.Email,
-            student.UserId
+            student.UserId,
+            null,
+            [], [], [], [], []
         );
     }
 }

@@ -5,6 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\\AlAshmar.Domain\\AlAshmar.Domain.csproj" />
+    <ProjectReference Include="..\ExpressionBuilderLib\\ExpressionBuilderLib.csproj" />
     <ProjectReference Include="..\PdfGenerator\PdfGenerator.csproj" />
   </ItemGroup>
   <ItemGroup>

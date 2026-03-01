@@ -14,13 +14,13 @@ public class User : EntityWithEvents<Guid>
     public Guid RoleId { get; set; }
     public Role Role { get; set; }
 
-    public static User Create(string userName, string hashedPassword , Guid roleId)
+    public static User Create(string userName, string hashedPassword, Guid roleId)
     {
         var user = new User
         {
             Id = Guid.NewGuid(),
             UserName = userName,
-            HashedPassword = hashedPassword,
+            HashedPassword = PasswordHasher.Hash(hashedPassword),
             RoleId = roleId
         };
         user.AddDomainEvent(new UserCreatedEvent(user.Id, user.UserName));

@@ -1,3 +1,6 @@
+using AlAshmar.Application.UseCases.Managers.CreateManager;
+using AlAshmar.Application.UseCases.Students.CreateStudent;
+using AlAshmar.Application.UseCases.Teachers.CreateTeacher;
 using AlAshmar.Domain.Commons;
 
 namespace AlAshmar.Application.Interfaces;
@@ -8,7 +11,9 @@ namespace AlAshmar.Application.Interfaces;
 public interface IAuthenticationService
 {
     Task<Result<AuthResult>> LoginAsync(string username, string password, CancellationToken cancellationToken = default);
-    Task<Result<AuthResult>> RegisterAsync(string username, string password, Guid roleId, CancellationToken cancellationToken = default);
+    Task<Result<AuthResult>> RegisterManagerAsync(CreateManagerCommand request, CancellationToken cancellationToken = default);
+    Task<Result<AuthResult>> RegisterTeacherAsync(CreateTeacherCommand createTeacherCommand, CancellationToken cancellationToken = default);
+    Task<Result<AuthResult>> RegisterStudentAsync(CreateStudentCommand command, CancellationToken cancellationToken = default);
 }
 
 /// <summary>

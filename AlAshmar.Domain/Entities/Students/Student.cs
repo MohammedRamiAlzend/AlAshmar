@@ -41,7 +41,13 @@ public class Student : EntityWithEvents<Guid>
         Points.Add(point);
     }
 
-    public static Student Create(string name, string fatherName, string motherName, string? nationalityNumber, string? email, Guid? userId = null)
+    public static Student Create(string name,
+                                 string fatherName,
+                                 string motherName,
+                                 string? nationalityNumber,
+                                 string? email,
+                                 string userName,
+                                 string password)
     {
         var student = new Student
         {
@@ -50,7 +56,7 @@ public class Student : EntityWithEvents<Guid>
             MotherName = motherName,
             NationalityNumber = nationalityNumber,
             Email = email,
-            UserId = userId
+            User = User.Create(userName, password, Constants.DefaultStudentRoleId)
         };
         student.AddDomainEvent(new StudentCreatedEvent(student.Id, name));
         return student;

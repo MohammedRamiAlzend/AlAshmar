@@ -16,7 +16,7 @@ public record CreateTeacherCommand(
     string Password
 ) : ICommand<Result<TeacherDto>>;
 
-public class CreateTeacherHandler(IRepositoryBase<Teacher, Guid> repository) : 
+public class CreateTeacherHandler(IRepositoryBase<Teacher, Guid> repository) :
     ICommandHandler<CreateTeacherCommand, Result<TeacherDto>>
 {
     public async Task<Result<TeacherDto>> Handle(CreateTeacherCommand command, CancellationToken cancellationToken = default)
@@ -27,7 +27,8 @@ public class CreateTeacherHandler(IRepositoryBase<Teacher, Guid> repository) :
             command.MotherName,
             command.NationalityNumber,
             command.Email,
-            command.UserId
+            command.UserName,
+            PasswordHasher.Hash(command.Password)
         );
 
         var addResult = await repository.AddAsync(teacher);
