@@ -36,7 +36,7 @@ public class TeacherConfiguration : IEntityTypeConfiguration<Teacher>
         builder.HasOne(t => t.RelatedUser)
             .WithMany()
             .HasForeignKey(t => t.UserId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.Restrict);
         
         builder.HasMany(t => t.TeacherContactInfos)
             .WithOne(tci => tci.Teacher)
