@@ -60,6 +60,8 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
                     j.ToTable("RolePermissions");
                 });
         builder.HasData(Constants.DefaultSuperAdminRole);
+        builder.HasData(Constants.DefaultStudentRole);
+        builder.HasData(Constants.DefaultTeacherRole);
     }
 }
 

@@ -67,12 +67,11 @@ public class AuthenticationService(
         if (!existingUser.IsError && existingUser.Value != null)
             return new Error("400", "Username already exists", ErrorKind.Validation);
 
-        var user = new User
-        {
-            UserName = command.UserName,
-            HashedPassword = PasswordHasher.Hash(command.Password),
-            RoleId = Constants.DefaultStudentRoleId
-        };
+        var user = User.Create(
+         command.UserName,
+         PasswordHasher.Hash(command.Password),
+         Constants.DefaultStudentRoleId
+        );
 
         var result = await userRepository.AddAsync(user);
         if (result.IsError)
