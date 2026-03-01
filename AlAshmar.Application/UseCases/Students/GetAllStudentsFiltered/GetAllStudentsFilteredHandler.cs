@@ -6,25 +6,35 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using ExpressionBuilderLib.src.Core;
 using ExpressionBuilderLib.src.Core.Enums;
+using AlAshmar.Application.DTOs.Domain;
 
 namespace AlAshmar.Application.UseCases.Students.GetAllStudentsFiltered;
 
-public class GetAllStudentsFilteredHandler : IQueryHandler<GetAllStudentsFilteredQuery, Result<List<DTOs.Domain.StudentDto>>>
+/// <summary>
+/// Query for getting filtered students with support for OR operations on filter parameters.
+/// All filter parameters are nullable to support flexible filtering.
+/// </summary>
+/// <param name="PageNumber">Page number for pagination (1-based)</param>
+/// <param name="PageSize">Number of items per page</param>
+/// <param name="ClassId">Filter by class ID (nullable </param>
+/// <param name="SemesterId">Filter by semester ID (nullable </param>
+/// <param name="EventId">Filter by event ID (nullable </param>
+/// <param name="TeacherId">Filter by teacher ID (nullable </param>
+public record GetAllStudentsFilteredQuery(
+    int? PageNumber = null,
+    int? PageSize = null,
+    Guid? ClassId = null,
+    Guid? SemesterId = null,
+    Guid? EventId = null,
+    Guid? TeacherId = null
+) : IQuery<Result<List<StudentDto>>>;
+
+public class GetAllStudentsFilteredHandler(IRepositoryBase<Student, Guid> repository) : IQueryHandler<GetAllStudentsFilteredQuery, Result<List<StudentDto>>>
 {
-    private readonly IRepositoryBase<Student, Guid> _repository;
-
-    public GetAllStudentsFilteredHandler(IRepositoryBase<Student, Guid> repository)
+    public async Task<Result<List<StudentDto>>> Handle(GetAllStudentsFilteredQuery query, CancellationToken cancellationToken = default)
     {
-        _repository = repository;
-    }
-
-    public async Task<Result<List<DTOs.Domain.StudentDto>>> Handle(GetAllStudentsFilteredQuery query, CancellationToken cancellationToken = default)
-    {
-        // Build the filter expression using ExpressionBuilderLib
-        // Only non-null parameters are included (OR operation support)
         var filterExpression = BuildFilterExpression(query);
 
-        // Create transform function to include related data
         Func<IQueryable<Student>, IQueryable<Student>> transform = q => q
             .Include(s => s.User)
             .Include(s => s.StudentContactInfos).ThenInclude(sc => sc.ContactInfo)
@@ -36,13 +46,12 @@ public class GetAllStudentsFilteredHandler : IQueryHandler<GetAllStudentsFiltere
 
         List<Student> students;
 
-        // Apply pagination if parameters are provided
         if (query.PageNumber.HasValue && query.PageSize.HasValue)
         {
             var pageNumber = query.PageNumber.Value;
             var pageSize = query.PageSize.Value;
 
-            var pagedResult = await _repository.GetPagedAsync(
+            var pagedResult = await repository.GetPagedAsync(
                 pageNumber,
                 pageSize,
                 filterExpression,
@@ -52,21 +61,19 @@ public class GetAllStudentsFilteredHandler : IQueryHandler<GetAllStudentsFiltere
             if (pagedResult.IsError)
                 return pagedResult.Errors;
 
-            students = pagedResult.Value.Items.ToList();
+            students = [.. pagedResult.Value!.Items];
         }
         else
         {
-            // No pagination - return all filtered results
-            var result = await _repository.GetAllAsync(filterExpression, transform);
+            var result = await repository.GetAllAsync(filterExpression, transform);
 
             if (result.IsError)
                 return result.Errors;
 
-            students = result.Value.ToList();
+            students = [.. result.Value!];
         }
 
-        // Map to DTOs
-        var studentDtos = students.Select(s => new DTOs.Domain.StudentDto(
+        var studentDtos = students.Select(s => new StudentDto(
             s.Id,
             s.Name,
             s.FatherName,
@@ -74,20 +81,20 @@ public class GetAllStudentsFilteredHandler : IQueryHandler<GetAllStudentsFiltere
             s.NationalityNumber,
             s.Email,
             s.UserId,
-            s.User != null ? new DTOs.Domain.UserDto(s.User.Id, s.User.UserName, s.User.RoleId, null) : null,
-            s.StudentContactInfos.Select(sc => new DTOs.Domain.StudentContactInfoDto(
+            s.User != null ? new UserDto(s.User.Id, s.User.UserName, s.User.RoleId, null) : null,
+            s.StudentContactInfos.Select(sc => new StudentContactInfoDto(
                 sc.StudentId, 
                 sc.ContactInfoId, 
                 null, 
-                sc.ContactInfo != null ? new DTOs.Domain.ContactInfoDto(sc.ContactInfo.Id, sc.ContactInfo.Number, sc.ContactInfo.Email, sc.ContactInfo.IsActive) : null)).ToList(),
-            s.StudentAttachments.Select(sa => new DTOs.Domain.StudentAttachmentDto(
+                sc.ContactInfo != null ? new ContactInfoDto(sc.ContactInfo.Id, sc.ContactInfo.Number, sc.ContactInfo.Email, sc.ContactInfo.IsActive) : null)).ToList(),
+            s.StudentAttachments.Select(sa => new StudentAttachmentDto(
                 sa.StudentId, 
                 sa.AttachmentId, 
                 null,
-                sa.Attachment != null ? new DTOs.Domain.AttacmentDto(sa.Attachment.Id, sa.Attachment.Path, sa.Attachment.Type, sa.Attachment.SafeName, sa.Attachment.OriginalName, sa.Attachment.ExtentionId, null) : null)).ToList(),
-            s.StudentHadiths.Select(h => new DTOs.Domain.StudentHadithDto(h.Id, h.HadithId, h.StudentId, h.TeacherId, h.ClassId, h.MemorizedAt, h.Status, h.Notes)).ToList(),
-            s.StudentQuraanPages.Select(q => new DTOs.Domain.StudentQuraanPageDto(q.Id, q.PageNumber, q.StudentId, q.TeacherId, q.ClassId, q.MemorizedAt, q.Status, q.Notes)).ToList(),
-            s.StudentClassEventsPoints.Select(p => new DTOs.Domain.StudentClassEventsPointDto(p.Id, p.StudentId, p.ClassId, p.SmesterId, p.EventId, p.QuranPoints, p.HadithPoints, p.AttendancePoints, p.BehaviorPoints, p.TotalPoints)).ToList()
+                sa.Attachment != null ? new AttacmentDto(sa.Attachment.Id, sa.Attachment.Path, sa.Attachment.Type, sa.Attachment.SafeName, sa.Attachment.OriginalName, sa.Attachment.ExtentionId, null) : null)).ToList(),
+            s.StudentHadiths.Select(h => new StudentHadithDto(h.Id, h.HadithId, h.StudentId, h.TeacherId, h.ClassId, h.MemorizedAt, h.Status, h.Notes)).ToList(),
+            s.StudentQuraanPages.Select(q => new StudentQuraanPageDto(q.Id, q.PageNumber, q.StudentId, q.TeacherId, q.ClassId, q.MemorizedAt, q.Status, q.Notes)).ToList(),
+            s.StudentClassEventsPoints.Select(p => new StudentClassEventsPointDto(p.Id, p.StudentId, p.ClassId, p.SmesterId, p.EventId, p.QuranPoints, p.HadithPoints, p.AttendancePoints, p.BehaviorPoints, p.TotalPoints)).ToList()
         )).ToList();
 
         return studentDtos;
