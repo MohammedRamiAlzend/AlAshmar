@@ -41,7 +41,13 @@ public class AuthorizationSeeder
             await _context.Roles.AddRangeAsync(roles);
             await _context.SaveChangesAsync();
 
+            // Create default super admin user
+            var superAdminRole = roles.First(r => r.Type == "SuperAdmin");
+            CreateDefaultUser(superAdminRole);
+            await _context.SaveChangesAsync();
+
             _logger.LogInformation("Authorization data seeded successfully.");
+            _logger.LogInformation("Default SuperAdmin user created: Username='admin', Password='Admin@123'");
         }
         catch (Exception ex)
         {
@@ -174,5 +180,25 @@ public class AuthorizationSeeder
         roles.Add(student);
 
         return roles;
+    }
+
+    private void CreateDefaultUser(Role superAdminRole)
+    {
+        if (_context.Users.Any())
+        {
+            return;
+        }
+
+        var defaultPassword = "Admin@123";
+        var hashedPassword = Domain.Commons.PasswordHasher.Hash(defaultPassword);
+
+        var superAdminUser = new User
+        {
+            UserName = "admin",
+            HashedPassword = hashedPassword,
+            RoleId = superAdminRole.Id
+        };
+
+        _context.Users.Add(superAdminUser);
     }
 }
