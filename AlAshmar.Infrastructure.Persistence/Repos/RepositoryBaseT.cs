@@ -221,6 +221,7 @@ public class RepositoryBase<TEntity, TKey>(AppDbContext dbcontext, ILogger<Repos
                 $"Something went wrong while retrieving entity of type {typeof(TEntity).Name} with id {id}. Exception: {e.Message}", ErrorKind.Failure);
         }
     }
+
     private static string? ExtractForeignKeyName(DbUpdateException ex)
     {
         var message = ex.InnerException?.Message ?? ex.Message;
