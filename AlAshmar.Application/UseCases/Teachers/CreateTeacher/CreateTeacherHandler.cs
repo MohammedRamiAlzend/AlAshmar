@@ -1,8 +1,8 @@
 using AlAshmar.Application.Common;
-using AlAshmar.Application.DTOs;
 using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Teachers;
 using AlAshmar.Application.Repos;
+using AlAshmar.Application.DTOs.Domain;
 
 namespace AlAshmar.Application.UseCases.Teachers.CreateTeacher;
 
@@ -42,7 +42,8 @@ public class CreateTeacherHandler(IRepositoryBase<Teacher, Guid> repository) :
             teacher.MotherName,
             teacher.NationalityNumber,
             teacher.Email,
-            teacher.UserId
+            teacher.UserId,
+            null, [], [], []
         );
     }
 }

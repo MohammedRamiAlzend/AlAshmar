@@ -7,4 +7,4 @@ namespace AlAshmar.Application.UseCases.Students.GetAttachments;
 /// <summary>
 /// Query to get student's attachments.
 /// </summary>
-public record GetAttachmentsQuery(Guid StudentId) : IQuery<Result<List<StudentAttachmentDto>>>;
+public record GetAttachmentsQuery(Guid StudentId) : IQuery<Result<List<StudentAttachmentDetailDto>>>;

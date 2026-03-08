@@ -11,9 +11,9 @@ namespace AlAshmar.Application.UseCases.Students.GetPoints;
 public class GetPointsHandler(
     IRepositoryBase<Point, Guid> repository,
     IRepositoryBase<StudentClassEventsPoint, Guid> classEventsRepository)
-    : IQueryHandler<GetPointsQuery, Result<List<PointDto>>>
+    : IQueryHandler<GetPointsQuery, Result<List<StudentPointDto>>>
 {
-    public async Task<Result<List<PointDto>>> Handle(GetPointsQuery query, CancellationToken cancellationToken = default)
+    public async Task<Result<List<StudentPointDto>>> Handle(GetPointsQuery query, CancellationToken cancellationToken = default)
     {
         var pointsQuery = await repository.GetAllAsync(
             p => p.StudentId == query.StudentId &&
@@ -22,17 +22,11 @@ public class GetPointsHandler(
 
         if (pointsQuery.IsError) return pointsQuery.Errors;
 
-        var classEventsQuery = await classEventsRepository.GetAllAsync(
-            p => p.StudentId == query.StudentId &&
-                 (!query.SemesterId.HasValue || p.SmesterId == query.SemesterId.Value));
-
-        if (classEventsQuery.IsError) return classEventsQuery.Errors;
-
         var pointDtos = pointsQuery.Value
-            .Select(p => new PointDto(
+            .Select(p => new StudentPointDto(
                 p.Id, p.StudentId, p.EventId, p.ClassId, p.SmesterId,
                 p.PointValue, p.CategoryId,
-                p.Category != null ? new PointCategoryDto(p.Category.Id, p.Category.Type) : null,
+                p.Category != null ? new PointCategorySummaryDto(p.Category.Id, p.Category.Type) : null,
                 p.GivenByTeacherId)).ToList();
 
         return pointDtos;

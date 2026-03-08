@@ -15,12 +15,12 @@ public record CreateStudentCommand(
     string? Email,
     string UserName,
     string Password
-) : ICommand<Result<StudentDto>>;
+) : ICommand<Result<StudentBasicInfoDto>>;
 
-public class CreateStudentHandler(IRepositoryBase<Student, Guid> repository) 
-    : ICommandHandler<CreateStudentCommand, Result<StudentDto>>
+public class CreateStudentHandler(IRepositoryBase<Student, Guid> repository)
+    : ICommandHandler<CreateStudentCommand, Result<StudentBasicInfoDto>>
 {
-    public async Task<Result<StudentDto>> Handle(CreateStudentCommand command, CancellationToken cancellationToken = default)
+    public async Task<Result<StudentBasicInfoDto>> Handle(CreateStudentCommand command, CancellationToken cancellationToken = default)
     {
         var student = Student.Create(
             command.Name,
@@ -36,15 +36,9 @@ public class CreateStudentHandler(IRepositoryBase<Student, Guid> repository)
         if (addResult.IsError)
             return addResult.Errors;
 
-        return new StudentDto(
+        return new StudentBasicInfoDto(
             student.Id,
-            student.Name,
-            student.FatherName,
-            student.MotherName,
-            student.NationalityNumber,
-            student.Email,
-            student.UserId,
-            null, [], [], [], [], []
+            student.Name
         );
     }
 }

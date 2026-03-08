@@ -14,9 +14,9 @@ public record UpdateStudentCommand(
     string MotherName,
     string? NationalityNumber,
     string? Email
-) : ICommand<Result<StudentDto>>;
+) : ICommand<Result<Success>>;
 
-public class UpdateStudentHandler : ICommandHandler<UpdateStudentCommand, Result<StudentDto>>
+public class UpdateStudentHandler : ICommandHandler<UpdateStudentCommand, Result<Success>>
 {
     private readonly IRepositoryBase<Student, Guid> _repository;
 
@@ -25,7 +25,7 @@ public class UpdateStudentHandler : ICommandHandler<UpdateStudentCommand, Result
         _repository = repository;
     }
 
-    public async Task<Result<StudentDto>> Handle(UpdateStudentCommand command, CancellationToken cancellationToken = default)
+    public async Task<Result<Success>> Handle(UpdateStudentCommand command, CancellationToken cancellationToken = default)
     {
         var studentResult = await _repository.GetByIdAsync(command.Id);
         if (studentResult.Value == null)
@@ -44,16 +44,6 @@ public class UpdateStudentHandler : ICommandHandler<UpdateStudentCommand, Result
         if (updateResult.IsError)
             return updateResult.Errors;
 
-        return new StudentDto(
-            student.Id,
-            student.Name,
-            student.FatherName,
-            student.MotherName,
-            student.NationalityNumber,
-            student.Email,
-            student.UserId,
-            null,
-            [], [], [], [], []
-        );
+        return new Success("Student updated successfully");
     }
 }

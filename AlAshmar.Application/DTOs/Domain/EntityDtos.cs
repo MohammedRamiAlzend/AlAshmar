@@ -117,87 +117,6 @@ public record ClassTeacherEnrollmentDto(
     Guid ClassId
 );
 
-// ==================== STUDENTS DOMAIN ====================
-
-public record StudentDto(
-    Guid Id,
-    string Name,
-    string FatherName,
-    string MotherName,
-    string? NationalityNumber,
-    string? Email,
-    Guid? UserId,
-    UserDto? User,
-    List<StudentContactInfoDto> StudentContactInfos,
-    List<StudentAttachmentDto> StudentAttachments,
-    List<StudentHadithDto> StudentHadiths,
-    List<StudentQuraanPageDto> StudentQuraanPages,
-    List<StudentClassEventsPointDto> StudentClassEventsPoints
-);
-
-public record StudentContactInfoDto(
-    Guid StudentId,
-    Guid ContactInfoId,
-    StudentDto? Student,
-    ContactInfoDto? ContactInfo
-);
-
-public record StudentAttachmentDto(
-    Guid StudentId,
-    Guid AttachmentId,
-    StudentDto? Student,
-    AttacmentDto? Attachment
-);
-
-public record StudentAttendanceDto(
-    Guid Id,
-    DateTime StartDate,
-    DateTime EndDate,
-    Guid ClassStudentId
-);
-
-public record ClassStudentEnrollmentDto(
-    Guid Id,
-    Guid StudentId,
-    StudentDto? Student,
-    Guid ClassId
-);
-
-public record StudentHadithDto(
-    Guid Id,
-    Guid HadithId,
-    Guid StudentId,
-    Guid? TeacherId,
-    Guid? ClassId,
-    DateTime? MemorizedAt,
-    string? Status,
-    string? Notes
-);
-
-public record StudentQuraanPageDto(
-    Guid Id,
-    int PageNumber,
-    Guid StudentId,
-    Guid? TeacherId,
-    Guid? ClassId,
-    DateTime? MemorizedAt,
-    string? Status,
-    string? Notes
-);
-
-public record StudentClassEventsPointDto(
-    Guid Id,
-    Guid StudentId,
-    Guid ClassId,
-    Guid SmesterId,
-    Guid EventId,
-    int QuranPoints,
-    int HadithPoints,
-    int AttendancePoints,
-    int BehaviorPoints,
-    int TotalPoints
-);
-
 // ==================== ACADEMIC DOMAIN ====================
 
 public record BookDto(
@@ -260,10 +179,6 @@ public record UpdateManagerDto(string Name, Guid? UserId);
 // Teachers
 public record CreateTeacherDto(string Name, string FatherName, string MotherName, string? NationalityNumber, string? Email, Guid? UserId);
 public record UpdateTeacherDto(string Name, string FatherName, string MotherName, string? NationalityNumber, string? Email);
-
-// Students
-public record CreateStudentDto(string Name, string FatherName, string MotherName, string? NationalityNumber, string? Email, Guid? UserId);
-public record UpdateStudentDto(string Name, string FatherName, string MotherName, string? NationalityNumber, string? Email);
 
 // Academic
 public record CreateBookDto(string Name);

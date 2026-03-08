@@ -7,4 +7,4 @@ namespace AlAshmar.Application.UseCases.Students.GetClassEnrollments;
 /// <summary>
 /// Query to get student's class enrollments.
 /// </summary>
-public record GetClassEnrollmentsQuery(Guid StudentId) : IQuery<Result<List<ClassStudentEnrollmentDto>>>;
+public record GetClassEnrollmentsQuery(Guid StudentId) : IQuery<Result<List<ClassEnrollmentWithStudentDto>>>;

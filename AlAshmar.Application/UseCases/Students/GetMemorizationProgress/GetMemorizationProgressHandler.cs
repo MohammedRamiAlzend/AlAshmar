@@ -25,14 +25,14 @@ public class GetMemorizationProgressHandler(
         if (quranPages.IsError) return quranPages.Errors;
 
         var hadithDtos = hadiths.Value
-            .Select(h => new StudentHadithDto(
-                h.Id, h.HadithId, h.StudentId, h.TeacherId, h.ClassId,
-                h.MemorizedAt, h.Status, h.Notes)).ToList();
+            .Select(h => new StudentHadithSummaryDto(
+                h.Id, h.HadithId, h.Hadith?.Text, h.Hadith?.Book?.Name, h.Hadith?.Chapter,
+                h.MemorizedAt, h.Status)).ToList();
 
         var quranDtos = quranPages.Value
-            .Select(q => new StudentQuraanPageDto(
-                q.Id, q.PageNumber, q.StudentId, q.TeacherId, q.ClassId,
-                q.MemorizedAt, q.Status, q.Notes)).ToList();
+            .Select(q => new StudentQuraanPageSummaryDto(
+                q.Id, q.PageNumber, q.StudentId,
+                q.MemorizedAt, q.Status)).ToList();
 
         return new StudentMemorizationProgressDto(
             query.StudentId,

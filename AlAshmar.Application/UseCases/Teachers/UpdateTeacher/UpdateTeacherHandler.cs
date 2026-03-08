@@ -1,8 +1,8 @@
 using AlAshmar.Application.Common;
-using AlAshmar.Application.DTOs;
 using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Teachers;
 using AlAshmar.Application.Repos;
+using AlAshmar.Application.DTOs.Domain;
 
 namespace AlAshmar.Application.UseCases.Teachers.UpdateTeacher;
 
@@ -50,7 +50,8 @@ public class UpdateTeacherHandler : ICommandHandler<UpdateTeacherCommand, Result
             teacher.MotherName,
             teacher.NationalityNumber,
             teacher.Email,
-            teacher.UserId
+            teacher.UserId,
+            null, [], [], []
         );
     }
 }

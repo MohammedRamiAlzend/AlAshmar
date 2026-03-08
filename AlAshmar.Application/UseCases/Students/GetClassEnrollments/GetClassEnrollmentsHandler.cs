@@ -3,21 +3,30 @@ using AlAshmar.Application.DTOs.Domain;
 using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Application.Repos;
+using Microsoft.EntityFrameworkCore;
 
 namespace AlAshmar.Application.UseCases.Students.GetClassEnrollments;
 
 public class GetClassEnrollmentsHandler(IRepositoryBase<ClassStudentEnrollment, Guid> repository)
-    : IQueryHandler<GetClassEnrollmentsQuery, Result<List<ClassStudentEnrollmentDto>>>
+    : IQueryHandler<GetClassEnrollmentsQuery, Result<List<ClassEnrollmentWithStudentDto>>>
 {
-    public async Task<Result<List<ClassStudentEnrollmentDto>>> Handle(GetClassEnrollmentsQuery query, CancellationToken cancellationToken = default)
+    public async Task<Result<List<ClassEnrollmentWithStudentDto>>> Handle(GetClassEnrollmentsQuery query, CancellationToken cancellationToken = default)
     {
-        var enrollments = await repository.GetAllAsync(e => e.StudentId == query.StudentId);
+        var enrollments = await repository.GetAllAsync(
+            e => e.StudentId == query.StudentId,
+            q => q.Include(e => e.Student)
+        );
 
         if (enrollments.IsError) return enrollments.Errors;
 
         var enrollmentDtos = enrollments.Value
-            .Select(e => new ClassStudentEnrollmentDto(
-                e.Id, e.StudentId, null, e.ClassId)).ToList();
+            .Select(e => new ClassEnrollmentWithStudentDto(
+                e.Id,
+                e.ClassId,
+                "Class", // Class entity not available - using placeholder
+                e.StudentId,
+                e.Student?.Name ?? "Unknown",
+                true)).ToList();
 
         return enrollmentDtos;
     }

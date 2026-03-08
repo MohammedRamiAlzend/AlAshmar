@@ -4,12 +4,13 @@ using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Application.Repos;
 using AlAshmar.Application.DTOs.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace AlAshmar.Application.UseCases.Students.GetAllStudents;
 
-public record GetAllStudentsQuery : IQuery<Result<List<StudentDto>>>;
+public record GetAllStudentsQuery : IQuery<Result<List<StudentListItemDto>>>;
 
-public class GetAllStudentsHandler : IQueryHandler<GetAllStudentsQuery, Result<List<StudentDto>>>
+public class GetAllStudentsHandler : IQueryHandler<GetAllStudentsQuery, Result<List<StudentListItemDto>>>
 {
     private readonly IRepositoryBase<Student, Guid> _repository;
 
@@ -18,30 +19,34 @@ public class GetAllStudentsHandler : IQueryHandler<GetAllStudentsQuery, Result<L
         _repository = repository;
     }
 
-    public async Task<Result<List<StudentDto>>> Handle(GetAllStudentsQuery query, CancellationToken cancellationToken = default)
+    public async Task<Result<List<StudentListItemDto>>> Handle(GetAllStudentsQuery query, CancellationToken cancellationToken = default)
     {
-        var studentsResult = await _repository.GetAllAsync();
+        var studentsResult = await _repository.GetAllAsync(
+            transform: q => q.Include(s => s.User)
+        );
+
         if (studentsResult.IsError)
             return studentsResult.Errors;
 
         var students = studentsResult.Value
-            .Select(s => new StudentDto(
+            .Select(s => new StudentListItemDto(
                 s.Id,
                 s.Name,
                 s.FatherName,
                 s.MotherName,
                 s.NationalityNumber,
                 s.Email,
-                s.UserId,
-                null,
-                [],
-                [],
-                [],
-                [],
-                []
+                s.User?.UserName,
+                s.User?.RoleId != null ? GetRoleType(s.User.RoleId) : null
             ))
             .ToList();
 
         return students;
+    }
+
+    private static string GetRoleType(Guid roleId)
+    {
+        // Default student role ID (matches Constants.DefaultStudentRoleId)
+        return roleId == Guid.Parse("00000000-0000-0000-0000-000000000001") ? "Student" : "Unknown";
     }
 }

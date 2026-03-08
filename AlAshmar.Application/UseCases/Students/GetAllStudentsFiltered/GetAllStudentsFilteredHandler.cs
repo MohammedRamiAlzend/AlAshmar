@@ -27,22 +27,16 @@ public record GetAllStudentsFilteredQuery(
     Guid? SemesterId = null,
     Guid? EventId = null,
     Guid? TeacherId = null
-) : IQuery<Result<List<StudentDto>>>;
+) : IQuery<Result<List<StudentListItemDto>>>;
 
-public class GetAllStudentsFilteredHandler(IRepositoryBase<Student, Guid> repository) : IQueryHandler<GetAllStudentsFilteredQuery, Result<List<StudentDto>>>
+public class GetAllStudentsFilteredHandler(IRepositoryBase<Student, Guid> repository) : IQueryHandler<GetAllStudentsFilteredQuery, Result<List<StudentListItemDto>>>
 {
-    public async Task<Result<List<StudentDto>>> Handle(GetAllStudentsFilteredQuery query, CancellationToken cancellationToken = default)
+    public async Task<Result<List<StudentListItemDto>>> Handle(GetAllStudentsFilteredQuery query, CancellationToken cancellationToken = default)
     {
         var filterExpression = BuildFilterExpression(query);
 
         Func<IQueryable<Student>, IQueryable<Student>> transform = q => q
-            .Include(s => s.User)
-            .Include(s => s.StudentContactInfos).ThenInclude(sc => sc.ContactInfo)
-            .Include(s => s.StudentAttachments).ThenInclude(sa => sa.Attachment)
-            .Include(s => s.StudentHadiths).ThenInclude(h => h.Hadith).ThenInclude(h => h.Book)
-            .Include(s => s.StudentQuraanPages)
-            .Include(s => s.StudentClassEventsPoints)
-            .Include(s => s.Points).ThenInclude(p => p.Category);
+            .Include(s => s.User);
 
         List<Student> students;
 
@@ -73,31 +67,24 @@ public class GetAllStudentsFilteredHandler(IRepositoryBase<Student, Guid> reposi
             students = [.. result.Value!];
         }
 
-        var studentDtos = students.Select(s => new StudentDto(
+        var studentDtos = students.Select(s => new StudentListItemDto(
             s.Id,
             s.Name,
             s.FatherName,
             s.MotherName,
             s.NationalityNumber,
             s.Email,
-            s.UserId,
-            s.User != null ? new UserDto(s.User.Id, s.User.UserName, s.User.RoleId, null) : null,
-            s.StudentContactInfos.Select(sc => new StudentContactInfoDto(
-                sc.StudentId, 
-                sc.ContactInfoId, 
-                null, 
-                sc.ContactInfo != null ? new ContactInfoDto(sc.ContactInfo.Id, sc.ContactInfo.Number, sc.ContactInfo.Email, sc.ContactInfo.IsActive) : null)).ToList(),
-            s.StudentAttachments.Select(sa => new StudentAttachmentDto(
-                sa.StudentId, 
-                sa.AttachmentId, 
-                null,
-                sa.Attachment != null ? new AttacmentDto(sa.Attachment.Id, sa.Attachment.Path, sa.Attachment.Type, sa.Attachment.SafeName, sa.Attachment.OriginalName, sa.Attachment.ExtentionId, null) : null)).ToList(),
-            s.StudentHadiths.Select(h => new StudentHadithDto(h.Id, h.HadithId, h.StudentId, h.TeacherId, h.ClassId, h.MemorizedAt, h.Status, h.Notes)).ToList(),
-            s.StudentQuraanPages.Select(q => new StudentQuraanPageDto(q.Id, q.PageNumber, q.StudentId, q.TeacherId, q.ClassId, q.MemorizedAt, q.Status, q.Notes)).ToList(),
-            s.StudentClassEventsPoints.Select(p => new StudentClassEventsPointDto(p.Id, p.StudentId, p.ClassId, p.SmesterId, p.EventId, p.QuranPoints, p.HadithPoints, p.AttendancePoints, p.BehaviorPoints, p.TotalPoints)).ToList()
+            s.User?.UserName,
+            s.User?.RoleId != null ? GetRoleType(s.User.RoleId) : null
         )).ToList();
 
         return studentDtos;
+    }
+
+    private static string GetRoleType(Guid roleId)
+    {
+        // Default student role ID (matches Constants.DefaultStudentRoleId)
+        return roleId == Guid.Parse("00000000-0000-0000-0000-000000000001") ? "Student" : "Unknown";
     }
 
     private static Expression<Func<Student, bool>>? BuildFilterExpression(GetAllStudentsFilteredQuery query)

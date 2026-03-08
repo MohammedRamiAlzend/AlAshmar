@@ -26,32 +26,32 @@ namespace AlAshmar.Controllers.Students;
 [Authorize]
 public class StudentManagementController : ControllerBase
 {
-    private readonly IQueryHandler<GetAllStudentsFilteredQuery, Result<List<StudentDto>>> _filterHandler;
-    private readonly IQueryHandler<GetStudentByIdQuery, Result<StudentDto?>> _getByIdHandler;
-    private readonly ICommandHandler<CreateStudentCommand, Result<StudentDto>> _createHandler;
-    private readonly ICommandHandler<UpdateStudentCommand, Result<StudentDto>> _updateHandler;
+    private readonly IQueryHandler<GetAllStudentsFilteredQuery, Result<List<StudentListItemDto>>> _filterHandler;
+    private readonly IQueryHandler<GetStudentByIdQuery, Result<StudentDetailDto?>> _getByIdHandler;
+    private readonly ICommandHandler<CreateStudentCommand, Result<StudentBasicInfoDto>> _createHandler;
+    private readonly ICommandHandler<UpdateStudentCommand, Result<Success>> _updateHandler;
     private readonly ICommandHandler<DeleteStudentCommand, Result<Success>> _deleteHandler;
     private readonly IQueryHandler<GetMemorizationProgressQuery, Result<StudentMemorizationProgressDto>> _memorizationHandler;
     private readonly IQueryHandler<GetAttendanceRecordsQuery, Result<List<StudentAttendanceDto>>> _attendanceHandler;
-    private readonly IQueryHandler<GetPointsQuery, Result<List<PointDto>>> _pointsHandler;
+    private readonly IQueryHandler<GetPointsQuery, Result<List<StudentPointDto>>> _pointsHandler;
     private readonly ICommandHandler<EnrollInClassCommand, Result<Success>> _enrollHandler;
-    private readonly IQueryHandler<GetClassEnrollmentsQuery, Result<List<ClassStudentEnrollmentDto>>> _enrollmentsHandler;
+    private readonly IQueryHandler<GetClassEnrollmentsQuery, Result<List<ClassEnrollmentWithStudentDto>>> _enrollmentsHandler;
     private readonly ICommandHandler<AddAttachmentCommand, Result<Success>> _addAttachmentHandler;
-    private readonly IQueryHandler<GetAttachmentsQuery, Result<List<StudentAttachmentDto>>> _attachmentsHandler;
+    private readonly IQueryHandler<GetAttachmentsQuery, Result<List<StudentAttachmentDetailDto>>> _attachmentsHandler;
 
     public StudentManagementController(
-        IQueryHandler<GetAllStudentsFilteredQuery, Result<List<StudentDto>>> filterHandler,
-        IQueryHandler<GetStudentByIdQuery, Result<StudentDto?>> getByIdHandler,
-        ICommandHandler<CreateStudentCommand, Result<StudentDto>> createHandler,
-        ICommandHandler<UpdateStudentCommand, Result<StudentDto>> updateHandler,
+        IQueryHandler<GetAllStudentsFilteredQuery, Result<List<StudentListItemDto>>> filterHandler,
+        IQueryHandler<GetStudentByIdQuery, Result<StudentDetailDto?>> getByIdHandler,
+        ICommandHandler<CreateStudentCommand, Result<StudentBasicInfoDto>> createHandler,
+        ICommandHandler<UpdateStudentCommand, Result<Success>> updateHandler,
         ICommandHandler<DeleteStudentCommand, Result<Success>> deleteHandler,
         IQueryHandler<GetMemorizationProgressQuery, Result<StudentMemorizationProgressDto>> memorizationHandler,
         IQueryHandler<GetAttendanceRecordsQuery, Result<List<StudentAttendanceDto>>> attendanceHandler,
-        IQueryHandler<GetPointsQuery, Result<List<PointDto>>> pointsHandler,
+        IQueryHandler<GetPointsQuery, Result<List<StudentPointDto>>> pointsHandler,
         ICommandHandler<EnrollInClassCommand, Result<Success>> enrollHandler,
-        IQueryHandler<GetClassEnrollmentsQuery, Result<List<ClassStudentEnrollmentDto>>> enrollmentsHandler,
+        IQueryHandler<GetClassEnrollmentsQuery, Result<List<ClassEnrollmentWithStudentDto>>> enrollmentsHandler,
         ICommandHandler<AddAttachmentCommand, Result<Success>> addAttachmentHandler,
-        IQueryHandler<GetAttachmentsQuery, Result<List<StudentAttachmentDto>>> attachmentsHandler)
+        IQueryHandler<GetAttachmentsQuery, Result<List<StudentAttachmentDetailDto>>> attachmentsHandler)
     {
         _filterHandler = filterHandler;
         _getByIdHandler = getByIdHandler;
@@ -121,14 +121,35 @@ public class StudentManagementController : ControllerBase
     {
         // Generate username from email or nationality number
         var userName = dto.Email ?? dto.NationalityNumber ?? $"student_{Guid.NewGuid():N}".Substring(0, 20);
-        // Note: Password should be hashed before sending
+        // Generate a secure random password
+        var password = GenerateSecurePassword();
+        
         var command = new CreateStudentCommand(
             dto.Name, dto.FatherName, dto.MotherName,
             dto.NationalityNumber, dto.Email,
-            userName, "defaultPassword123" // TODO: Use proper password generation
+            userName, password
         );
         var result = await _createHandler.Handle(command, cancellationToken);
         return result.ToActionResult();
+    }
+
+    /// <summary>
+    /// Generates a secure random password with 12 characters.
+    /// </summary>
+    private static string GenerateSecurePassword(int length = 12)
+    {
+        const string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*";
+        var randomBytes = new byte[length];
+        using var rng = System.Security.Cryptography.RandomNumberGenerator.Create();
+        rng.GetBytes(randomBytes);
+        
+        var password = new char[length];
+        for (int i = 0; i < length; i++)
+        {
+            password[i] = validChars[randomBytes[i] % validChars.Length];
+        }
+        
+        return new string(password);
     }
 
     /// <summary>

@@ -52,18 +52,14 @@ public class EntityMappingProfile : Profile
         CreateMap<ClassTeacherEnrollment, ClassTeacherEnrollmentDto>().ReverseMap();
 
         // Students Domain
-        CreateMap<Student, StudentDto>().ReverseMap();
+        // Note: Student entity uses specialized DTOs (StudentListItemDto, StudentDetailDto, etc.)
+        // Direct mapping is not used. Use manual mapping in handlers.
         CreateMap<CreateStudentDto, Student>();
         CreateMap<UpdateStudentDto, Student>();
 
-        CreateMap<StudentContactInfo, StudentContactInfoDto>().ReverseMap();
-        CreateMap<StudentAttachment, StudentAttachmentDto>().ReverseMap();
+        // StudentAttendance uses the StudentAttendanceDto for CRUD operations
         CreateMap<StudentAttendance, StudentAttendanceDto>().ReverseMap();
-        CreateMap<ClassStudentEnrollment, ClassStudentEnrollmentDto>().ReverseMap();
-        CreateMap<StudentHadith, StudentHadithDto>().ReverseMap();
-        CreateMap<StudentQuraanPage, StudentQuraanPageDto>().ReverseMap();
-        CreateMap<StudentClassEventsPoint, StudentClassEventsPointDto>().ReverseMap();
-
+        
         // Academic Domain
         CreateMap<Book, BookDto>().ReverseMap();
         CreateMap<CreateBookDto, Book>();
