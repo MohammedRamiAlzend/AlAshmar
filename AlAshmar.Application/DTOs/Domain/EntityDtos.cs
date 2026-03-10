@@ -195,3 +195,111 @@ public record UpdatePointCategoryDto(string Type);
 
 public record CreatePointDto(Guid StudentId, Guid EventId, Guid ClassId, Guid SmesterId, int PointValue, Guid? CategoryId, Guid? GivenByTeacherId);
 public record UpdatePointDto(int PointValue, Guid? CategoryId, Guid? GivenByTeacherId);
+
+// ==================== ADDITIONAL DTOs ====================
+
+/// <summary>
+/// General-purpose Student DTO for service operations.
+/// </summary>
+public record StudentDto(
+    Guid Id,
+    string Name,
+    string FatherName,
+    string MotherName,
+    string? NationalityNumber,
+    string? Email,
+    Guid? UserId,
+    UserDto? User,
+    List<StudentContactInfoDto> StudentContactInfos,
+    List<StudentAttachmentDto> StudentAttachments,
+    List<StudentHadithDto> StudentHadiths,
+    List<StudentQuraanPageDto> StudentQuraanPages,
+    List<StudentClassEventsPointDto> StudentClassEventsPoints,
+    List<PointDto> Points
+);
+
+/// <summary>
+/// Student contact info DTO.
+/// </summary>
+public record StudentContactInfoDto(
+    Guid StudentId,
+    Guid ContactInfoId,
+    StudentDto? Student,
+    ContactInfoDto? ContactInfo
+);
+
+/// <summary>
+/// Student attachment DTO.
+/// </summary>
+public record StudentAttachmentDto(
+    Guid StudentId,
+    Guid AttachmentId,
+    StudentDto? Student,
+    AttacmentDto? Attachment
+);
+
+/// <summary>
+/// Student hadith DTO.
+/// </summary>
+public record StudentHadithDto(
+    Guid Id,
+    Guid HadithId,
+    Guid StudentId,
+    Guid? TeacherId,
+    Guid? ClassId,
+    DateTime? MemorizedAt,
+    string? Status,
+    string? Notes
+);
+
+/// <summary>
+/// Student Quran page DTO.
+/// </summary>
+public record StudentQuraanPageDto(
+    Guid Id,
+    int PageNumber,
+    Guid StudentId,
+    Guid? TeacherId,
+    Guid? ClassId,
+    DateTime? MemorizedAt,
+    string? Status,
+    string? Notes
+);
+
+/// <summary>
+/// Student class events point DTO.
+/// </summary>
+public record StudentClassEventsPointDto(
+    Guid Id,
+    Guid StudentId,
+    Guid ClassId,
+    Guid SmesterId,
+    Guid EventId,
+    int QuranPoints,
+    int HadithPoints,
+    int AttendancePoints,
+    int BehaviorPoints,
+    int TotalPoints
+);
+
+/// <summary>
+/// Class student enrollment DTO.
+/// </summary>
+public record ClassStudentEnrollmentDto(
+    Guid Id,
+    Guid StudentId,
+    StudentDto? Student,
+    Guid ClassId
+);
+
+/// <summary>
+/// Teacher statistics DTO.
+/// </summary>
+public record TeacherStatisticsDto(
+    Guid TeacherId,
+    int TotalClasses,
+    int IsMainTeacherCount,
+    int TotalPointsGiven,
+    int TotalPointsCount,
+    int TotalContactInfos
+);

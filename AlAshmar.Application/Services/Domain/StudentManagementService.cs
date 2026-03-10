@@ -187,7 +187,8 @@ public class StudentManagementService : IStudentManagementService
                 sa.Attachment != null ? new AttacmentDto(sa.Attachment.Id, sa.Attachment.Path, sa.Attachment.Type, sa.Attachment.SafeName, sa.Attachment.OriginalName, sa.Attachment.ExtentionId, null) : null)).ToList(),
             s.StudentHadiths.Select(h => new StudentHadithDto(h.Id, h.HadithId, h.StudentId, h.TeacherId, h.ClassId, h.MemorizedAt, h.Status, h.Notes)).ToList(),
             s.StudentQuraanPages.Select(q => new StudentQuraanPageDto(q.Id, q.PageNumber, q.StudentId, q.TeacherId, q.ClassId, q.MemorizedAt, q.Status, q.Notes)).ToList(),
-            s.StudentClassEventsPoints.Select(p => new StudentClassEventsPointDto(p.Id, p.StudentId, p.ClassId, p.SmesterId, p.EventId, p.QuranPoints, p.HadithPoints, p.AttendancePoints, p.BehaviorPoints, p.TotalPoints)).ToList()
+            s.StudentClassEventsPoints.Select(p => new StudentClassEventsPointDto(p.Id, p.StudentId, p.ClassId, p.SmesterId, p.EventId, p.QuranPoints, p.HadithPoints, p.AttendancePoints, p.BehaviorPoints, p.TotalPoints)).ToList(),
+            s.Points.Select(p => new PointDto(p.Id, p.StudentId, p.EventId, p.ClassId, p.SmesterId, p.PointValue, p.CategoryId, p.Category != null ? new PointCategoryDto(p.Category.Id, p.Category.Type) : null, p.GivenByTeacherId)).ToList()
         )).ToList();
 
         return studentDtos;
@@ -209,6 +210,7 @@ public class StudentManagementService : IStudentManagementService
             student.Value.Email,
             student.Value.UserId,
             null,
+            [],
             [],
             [],
             [],
@@ -250,6 +252,7 @@ public class StudentManagementService : IStudentManagementService
             student.Email,
             student.UserId,
             null,
+            [],
             [],
             [],
             [],
@@ -297,6 +300,7 @@ public class StudentManagementService : IStudentManagementService
             [],
             [],
             [],
+            [],
             []
         );
     }
@@ -329,14 +333,17 @@ public class StudentManagementService : IStudentManagementService
         if (quranPages.IsError) return quranPages.Errors;
 
         var hadithDtos = hadiths.Value
-            .Select(h => new StudentHadithDto(
-                h.Id, h.HadithId, h.StudentId, h.TeacherId, h.ClassId,
-                h.MemorizedAt, h.Status, h.Notes)).ToList();
+            .Select(h => new StudentHadithSummaryDto(
+                h.Id, h.HadithId,
+                h.Hadith != null ? h.Hadith.Text : null,
+                h.Hadith != null && h.Hadith.Book != null ? h.Hadith.Book.Name : null,
+                h.Hadith != null ? h.Hadith.Chapter : null,
+                h.MemorizedAt, h.Status)).ToList();
 
         var quranDtos = quranPages.Value
-            .Select(q => new StudentQuraanPageDto(
-                q.Id, q.PageNumber, q.StudentId, q.TeacherId, q.ClassId,
-                q.MemorizedAt, q.Status, q.Notes)).ToList();
+            .Select(q => new StudentQuraanPageSummaryDto(
+                q.Id, q.PageNumber, q.StudentId,
+                q.MemorizedAt, q.Status)).ToList();
 
         return new StudentMemorizationProgressDto(
             studentId,

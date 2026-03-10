@@ -8,49 +8,37 @@ using AlAshmar.Domain.Entities.Students;
 
 namespace AlAshmar.Controllers;
 
-public class UsersController : BaseController<User, UserDto, CreateUserDto, UpdateUserDto, Guid>
+public class UsersController(IRepositoryBase<User, Guid> repository, IMapper mapper) : BaseController<User, UserDto, CreateUserDto, UpdateUserDto, Guid>(repository, mapper)
 {
-    public UsersController(IRepositoryBase<User, Guid> repository, IMapper mapper) : base(repository, mapper) { }
     protected override Guid GetId(UserDto dto) => dto.Id;
 }
 
-public class RolesController : BaseController<Role, RoleDto, RoleDto, RoleDto, Guid>
+public class RolesController(IRepositoryBase<Role, Guid> repository, IMapper mapper) : BaseController<Role, RoleDto, RoleDto, RoleDto, Guid>(repository, mapper)
 {
-    public RolesController(IRepositoryBase<Role, Guid> repository, IMapper mapper) : base(repository, mapper) { }
     protected override Guid GetId(RoleDto dto) => dto.Id;
 }
 
-public class ManagersController : BaseController<Manager, ManagerDto, CreateManagerDto, UpdateManagerDto, Guid>
+public class ManagersController(IRepositoryBase<Manager, Guid> repository, IMapper mapper) : BaseController<Manager, ManagerDto, CreateManagerDto, UpdateManagerDto, Guid>(repository, mapper)
 {
-    public ManagersController(IRepositoryBase<Manager, Guid> repository, IMapper mapper) : base(repository, mapper) { }
     protected override Guid GetId(ManagerDto dto) => dto.Id;
 }
 
-public class TeachersController : BaseController<Teacher, TeacherDto, CreateTeacherDto, UpdateTeacherDto, Guid>
+public class TeachersController(IRepositoryBase<Teacher, Guid> repository, IMapper mapper) : BaseController<Teacher, TeacherDto, CreateTeacherDto, UpdateTeacherDto, Guid>(repository, mapper)
 {
-    public TeachersController(IRepositoryBase<Teacher, Guid> repository, IMapper mapper) : base(repository, mapper) { }
     protected override Guid GetId(TeacherDto dto) => dto.Id;
 }
 
-public class TeacherAttencancesController : BaseController<TeacherAttencance, TeacherAttencanceDto, TeacherAttencanceDto, TeacherAttencanceDto, Guid>
+public class TeacherAttencancesController(IRepositoryBase<TeacherAttencance, Guid> repository, IMapper mapper) : BaseController<TeacherAttencance, TeacherAttencanceDto, TeacherAttencanceDto, TeacherAttencanceDto, Guid>(repository, mapper)
 {
-    public TeacherAttencancesController(IRepositoryBase<TeacherAttencance, Guid> repository, IMapper mapper) : base(repository, mapper) { }
     protected override Guid GetId(TeacherAttencanceDto dto) => dto.Id;
 }
 
-public class ClassTeacherEnrollmentsController : BaseController<ClassTeacherEnrollment, ClassTeacherEnrollmentDto, ClassTeacherEnrollmentDto, ClassTeacherEnrollmentDto, Guid>
+public class ClassTeacherEnrollmentsController(IRepositoryBase<ClassTeacherEnrollment, Guid> repository, IMapper mapper) : BaseController<ClassTeacherEnrollment, ClassTeacherEnrollmentDto, ClassTeacherEnrollmentDto, ClassTeacherEnrollmentDto, Guid>(repository, mapper)
 {
-    public ClassTeacherEnrollmentsController(IRepositoryBase<ClassTeacherEnrollment, Guid> repository, IMapper mapper) : base(repository, mapper) { }
     protected override Guid GetId(ClassTeacherEnrollmentDto dto) => dto.Id;
 }
-
-// Note: Student CRUD operations are now handled by StudentManagementController
-// which provides specialized endpoints for different student scenarios.
-// - Use StudentManagementController for student operations (GET, POST, PUT, DELETE with specialized DTOs)
-// - Use StudentAttendancesController for student attendance CRUD operations
-
-public class StudentAttendancesController : BaseController<StudentAttendance, StudentAttendanceDto, StudentAttendanceDto, StudentAttendanceDto, Guid>
+public class StudentAttendancesController(IRepositoryBase<StudentAttendance, Guid> repository, IMapper mapper)
+    : BaseController<StudentAttendance, StudentAttendanceDto, StudentAttendanceDto, StudentAttendanceDto, Guid>(repository, mapper)
 {
-    public StudentAttendancesController(IRepositoryBase<StudentAttendance, Guid> repository, IMapper mapper) : base(repository, mapper) { }
     protected override Guid GetId(StudentAttendanceDto dto) => dto.Id;
 }

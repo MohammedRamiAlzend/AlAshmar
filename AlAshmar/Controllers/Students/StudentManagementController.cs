@@ -1,21 +1,3 @@
-using AlAshmar.Application.DTOs;
-using AlAshmar.Application.DTOs.Domain;
-using AlAshmar.Application.UseCases.Students.GetAllStudentsFiltered;
-using AlAshmar.Application.UseCases.Students.GetStudentById;
-using AlAshmar.Application.UseCases.Students.CreateStudent;
-using AlAshmar.Application.UseCases.Students.UpdateStudent;
-using AlAshmar.Application.UseCases.Students.DeleteStudent;
-using AlAshmar.Application.UseCases.Students.GetMemorizationProgress;
-using AlAshmar.Application.UseCases.Students.GetAttendanceRecords;
-using AlAshmar.Application.UseCases.Students.GetPoints;
-using AlAshmar.Application.UseCases.Students.EnrollInClass;
-using AlAshmar.Application.UseCases.Students.GetClassEnrollments;
-using AlAshmar.Application.UseCases.Students.AddAttachment;
-using AlAshmar.Application.UseCases.Students.GetAttachments;
-using AlAshmar.Infrastructure.Extensions;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-
 namespace AlAshmar.Controllers.Students;
 
 /// <summary>

@@ -1,20 +1,5 @@
-using AlAshmar.Application.DTOs.Domain;
-using AlAshmar.Application.UseCases.Teachers.GetAllTeachersFiltered;
-using AlAshmar.Application.UseCases.Teachers.GetTeacherById;
-using AlAshmar.Application.UseCases.Teachers.CreateTeacher;
-using AlAshmar.Application.UseCases.Teachers.UpdateTeacher;
-using AlAshmar.Application.UseCases.Teachers.DeleteTeacher;
-using AlAshmar.Domain.Commons;
-using AlAshmar.Infrastructure.Extensions;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography;
-
 namespace AlAshmar.Controllers.Teachers;
 
-/// <summary>
-/// Controller for teacher management operations including filtering, enrollment, and academic tracking.
-/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
@@ -40,10 +25,6 @@ public class TeacherManagementController : ControllerBase
         _deleteHandler = deleteHandler;
     }
 
-    /// <summary>
-    /// Get all teachers filtered by various criteria with support for OR operations.
-    /// All filter parameters are optional - null values are ignored in filtering.
-    /// </summary>
     [HttpGet("filtered")]
     public async Task<IActionResult> GetAllTeachersFiltered(
         [FromQuery] int? pageNumber = null,
@@ -58,9 +39,6 @@ public class TeacherManagementController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Get a teacher by ID with full details including contact info, attachments, and academic records.
-    /// </summary>
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetTeacherById(
         [FromRoute] Guid id,
@@ -71,17 +49,12 @@ public class TeacherManagementController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Create a new teacher with basic info and optional contact details.
-    /// </summary>
     [HttpPost]
     public async Task<IActionResult> CreateTeacher(
         [FromBody] CreateTeacherDto dto,
         CancellationToken cancellationToken = default)
     {
-        // Generate username from email or nationality number
         var userName = dto.Email ?? dto.NationalityNumber ?? $"teacher_{Guid.NewGuid():N}".Substring(0, 20);
-        // Generate a secure random password
         var password = GenerateSecurePassword();
         
         var command = new CreateTeacherCommand(
@@ -93,9 +66,6 @@ public class TeacherManagementController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Update an existing teacher's basic information.
-    /// </summary>
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateTeacher(
         [FromRoute] Guid id,
@@ -110,9 +80,6 @@ public class TeacherManagementController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Delete a teacher by ID.
-    /// </summary>
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteTeacher(
         [FromRoute] Guid id,
@@ -123,21 +90,14 @@ public class TeacherManagementController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Get teacher's class enrollments.
-    /// </summary>
     [HttpGet("{id:guid}/enrollments")]
     public async Task<IActionResult> GetClassEnrollments(
         [FromRoute] Guid id,
         CancellationToken cancellationToken = default)
     {
-        // Note: This endpoint can be implemented by creating a GetTeacherClassEnrollments query
         return Ok(new List<ClassTeacherEnrollmentDto>());
     }
 
-    /// <summary>
-    /// Get teacher's attendance records.
-    /// </summary>
     [HttpGet("{id:guid}/attendance")]
     public async Task<IActionResult> GetAttendanceRecords(
         [FromRoute] Guid id,
@@ -145,26 +105,18 @@ public class TeacherManagementController : ControllerBase
         [FromQuery] DateTime? toDate = null,
         CancellationToken cancellationToken = default)
     {
-        // Note: This endpoint can be implemented by creating a GetTeacherAttendanceRecords query
         return Ok(new List<TeacherAttencanceDto>());
     }
 
-    /// <summary>
-    /// Get points given by teacher.
-    /// </summary>
     [HttpGet("{id:guid}/points-given")]
     public async Task<IActionResult> GetPointsGiven(
         [FromRoute] Guid id,
         [FromQuery] Guid? semesterId = null,
         CancellationToken cancellationToken = default)
     {
-        // Note: This endpoint can be implemented by creating a GetTeacherPointsGiven query
         return Ok(new List<PointDto>());
     }
 
-    /// <summary>
-    /// Add attachment to a teacher's profile.
-    /// </summary>
     [HttpPost("{id:guid}/attachments")]
     public async Task<IActionResult> AddAttachment(
         [FromRoute] Guid id,
@@ -174,25 +126,17 @@ public class TeacherManagementController : ControllerBase
         if (formFile == null || formFile.Length == 0)
             return BadRequest("No file provided");
 
-        // Note: This endpoint can be implemented by creating an AddTeacherAttachment command
         return Ok(new { Message = "Attachment upload not yet implemented" });
     }
 
-    /// <summary>
-    /// Get teacher's attachments.
-    /// </summary>
     [HttpGet("{id:guid}/attachments")]
     public async Task<IActionResult> GetAttachments(
         [FromRoute] Guid id,
         CancellationToken cancellationToken = default)
     {
-        // Note: This endpoint can be implemented by creating a GetTeacherAttachments query
         return Ok(new List<TeacherAttachmentDto>());
     }
 
-    /// <summary>
-    /// Generates a secure random password with 12 characters.
-    /// </summary>
     private static string GenerateSecurePassword(int length = 12)
     {
         const string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*";
