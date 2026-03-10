@@ -1,8 +1,8 @@
 using AlAshmar.Application.Common;
-using AlAshmar.Application.DTOs;
 using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Teachers;
 using AlAshmar.Application.Repos;
+using AlAshmar.Application.DTOs.Domain;
 
 namespace AlAshmar.Application.UseCases.Teachers.CreateTeacher;
 
@@ -12,18 +12,13 @@ public record CreateTeacherCommand(
     string MotherName,
     string? NationalityNumber,
     string? Email,
-    Guid? UserId
+    string UserName,
+    string Password
 ) : ICommand<Result<TeacherDto>>;
 
-public class CreateTeacherHandler : ICommandHandler<CreateTeacherCommand, Result<TeacherDto>>
+public class CreateTeacherHandler(IRepositoryBase<Teacher, Guid> repository) :
+    ICommandHandler<CreateTeacherCommand, Result<TeacherDto>>
 {
-    private readonly IRepositoryBase<Teacher, Guid> _repository;
-
-    public CreateTeacherHandler(IRepositoryBase<Teacher, Guid> repository)
-    {
-        _repository = repository;
-    }
-
     public async Task<Result<TeacherDto>> Handle(CreateTeacherCommand command, CancellationToken cancellationToken = default)
     {
         var teacher = Teacher.Create(
@@ -32,10 +27,11 @@ public class CreateTeacherHandler : ICommandHandler<CreateTeacherCommand, Result
             command.MotherName,
             command.NationalityNumber,
             command.Email,
-            command.UserId
+            command.UserName,
+            PasswordHasher.Hash(command.Password)
         );
 
-        var addResult = await _repository.AddAsync(teacher);
+        var addResult = await repository.AddAsync(teacher);
         if (addResult.IsError)
             return addResult.Errors;
 
@@ -46,7 +42,8 @@ public class CreateTeacherHandler : ICommandHandler<CreateTeacherCommand, Result
             teacher.MotherName,
             teacher.NationalityNumber,
             teacher.Email,
-            teacher.UserId
+            teacher.UserId,
+            null, [], [], []
         );
     }
 }

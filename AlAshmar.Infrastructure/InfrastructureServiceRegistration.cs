@@ -1,7 +1,9 @@
 using FileManager.Extensions;
 using AlAshmar.Infrastructure.Services;
 using AlAshmar.Application.Interfaces;
+using AlAshmar.Application.Common;
 using AlAshmar.Infrastructure.Persistence;
+using AlAshmar.Application.Services.Domain;
 
 namespace AlAshmar.Infrastructure;
 
@@ -31,6 +33,16 @@ public static class InfrastructureServiceRegistration
 
         // Register Authorization Service
         services.AddScoped<Application.Interfaces.IAuthorizationService, AuthorizationService>();
+
+        // Register Authorization Seeder
+        services.AddScoped<AuthorizationSeeder>();
+
+        // Register student and teacher management services
+        services.AddScoped<IStudentManagementService, StudentManagementService>();
+        services.AddScoped<ITeacherManagementService, TeacherManagementService>();
+
+        // Register all command and query handlers
+        services.RegisterHandlers();
 
         return services;
     }

@@ -8,8 +8,16 @@ using AlAshmar.Domain.Entities.Common;
 
 namespace AlAshmar.Infrastructure.Persistence;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
+public class AppDbContext : DbContext
 {
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    {
+    }
+
+    public AppDbContext()
+    {
+        
+    }
     // Core Entities
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
@@ -51,18 +59,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     {
         base.OnModelCreating(modelBuilder);
 
-        // Configure Role-Permission many-to-many relationship
-        modelBuilder.Entity<Role>()
-            .HasMany(r => r.Permissions)
-            .WithMany(p => p.Roles)
-            .UsingEntity<Dictionary<string, object>>(
-                "RolePermission",
-                j => j.HasOne<Permission>().WithMany().HasForeignKey("PermissionId"),
-                j => j.HasOne<Role>().WithMany().HasForeignKey("RoleId"),
-                j =>
-                {
-                    j.HasKey("RoleId", "PermissionId");
-                    j.ToTable("RolePermissions");
-                });
+        // Apply all configurations from the assembly
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+        
+        // Ignore DomainEvent type (it's not an entity, just a base class)
+        modelBuilder.Ignore<Domain.Events.DomainEvent>();
     }
 }

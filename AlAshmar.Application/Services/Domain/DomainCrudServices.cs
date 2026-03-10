@@ -82,13 +82,11 @@ public class ClassTeacherEnrollmentService : CrudServiceBase<ClassTeacherEnrollm
 }
 
 // ==================== STUDENTS DOMAIN SERVICES ====================
-
-public interface IStudentService : IAdvancedCrudService<Student, StudentDto, Guid> { }
-public class StudentService : CrudServiceBase<Student, StudentDto, Guid>, IStudentService
-{
-    public StudentService(IRepositoryBase<Student, Guid> repository, IMapper mapper)
-        : base(repository, mapper) { }
-}
+// Note: For student operations, use the specialized student DTOs:
+// - StudentListItemDto for lists
+// - StudentDetailDto for full details
+// - StudentBasicInfoDto for creation responses
+// The legacy StudentDto has been deprecated and split into specialized DTOs.
 
 public interface IStudentAttendanceService : IAdvancedCrudService<StudentAttendance, StudentAttendanceDto, Guid> { }
 public class StudentAttendanceService : CrudServiceBase<StudentAttendance, StudentAttendanceDto, Guid>, IStudentAttendanceService
@@ -97,8 +95,8 @@ public class StudentAttendanceService : CrudServiceBase<StudentAttendance, Stude
         : base(repository, mapper) { }
 }
 
-public interface IClassStudentEnrollmentService : IAdvancedCrudService<ClassStudentEnrollment, ClassStudentEnrollmentDto, Guid> { }
-public class ClassStudentEnrollmentService : CrudServiceBase<ClassStudentEnrollment, ClassStudentEnrollmentDto, Guid>, IClassStudentEnrollmentService
+public interface IClassStudentEnrollmentService : IAdvancedCrudService<ClassStudentEnrollment, ClassEnrollmentWithStudentDto, Guid> { }
+public class ClassStudentEnrollmentService : CrudServiceBase<ClassStudentEnrollment, ClassEnrollmentWithStudentDto, Guid>, IClassStudentEnrollmentService
 {
     public ClassStudentEnrollmentService(IRepositoryBase<ClassStudentEnrollment, Guid> repository, IMapper mapper)
         : base(repository, mapper) { }

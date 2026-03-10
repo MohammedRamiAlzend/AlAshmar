@@ -1,4 +1,7 @@
 using AlAshmar.Application.Interfaces;
+using AlAshmar.Application.UseCases.Managers.CreateManager;
+using AlAshmar.Application.UseCases.Students.CreateStudent;
+using AlAshmar.Application.UseCases.Teachers.CreateTeacher;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,30 +9,33 @@ namespace AlAshmar.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController : ControllerBase
+public class AuthController(IAuthenticationService authenticationService) : ControllerBase
 {
-    private readonly IAuthenticationService _authenticationService;
-
-    public AuthController(IAuthenticationService authenticationService)
-    {
-        _authenticationService = authenticationService;
-    }
-
     [HttpPost("login")]
     public async Task<ActionResult<AuthResult>> Login([FromBody] LoginRequest request, CancellationToken cancellationToken)
     {
-        var result = await _authenticationService.LoginAsync(request.Username, request.Password, cancellationToken);
+        var result = await authenticationService.LoginAsync(request.Username, request.Password, cancellationToken);
         return result.IsError ? Unauthorized(result.Errors) : Ok(result.Value);
     }
 
-    [HttpPost("register")]
-    public async Task<ActionResult<AuthResult>> Register([FromBody] RegisterRequest request, CancellationToken cancellationToken)
+    [HttpPost("register-student")]
+    public async Task<ActionResult<AuthResult>> RegisterStudent([FromBody] CreateStudentCommand request, CancellationToken cancellationToken)
     {
-        var result = await _authenticationService.RegisterAsync(request.Username, request.Password, request.RoleId, cancellationToken);
+        var result = await authenticationService.RegisterStudentAsync(request, cancellationToken);
+        return result.IsError ? BadRequest(result.Errors) : Ok(result.Value);
+    }
+    [HttpPost("register-manager")]
+    public async Task<ActionResult<AuthResult>> RegisterManeger([FromBody] CreateManagerCommand request, CancellationToken cancellationToken)
+    {
+        var result = await authenticationService.RegisterManagerAsync(request, cancellationToken);
+        return result.IsError ? BadRequest(result.Errors) : Ok(result.Value);
+    }
+    [HttpPost("register-teacher")]
+    public async Task<ActionResult<AuthResult>> Register([FromBody] CreateTeacherCommand request, CancellationToken cancellationToken)
+    {
+        var result = await authenticationService.RegisterTeacherAsync(request, cancellationToken);
         return result.IsError ? BadRequest(result.Errors) : Ok(result.Value);
     }
 }
 
 public record LoginRequest(string Username, string Password);
-
-public record RegisterRequest(string Username, string Password, Guid RoleId);

@@ -44,20 +44,13 @@ public class ClassTeacherEnrollmentsController : BaseController<ClassTeacherEnro
     protected override Guid GetId(ClassTeacherEnrollmentDto dto) => dto.Id;
 }
 
-public class StudentsController : BaseController<Student, StudentDto, CreateStudentDto, UpdateStudentDto, Guid>
-{
-    public StudentsController(IRepositoryBase<Student, Guid> repository, IMapper mapper) : base(repository, mapper) { }
-    protected override Guid GetId(StudentDto dto) => dto.Id;
-}
+// Note: Student CRUD operations are now handled by StudentManagementController
+// which provides specialized endpoints for different student scenarios.
+// - Use StudentManagementController for student operations (GET, POST, PUT, DELETE with specialized DTOs)
+// - Use StudentAttendancesController for student attendance CRUD operations
 
 public class StudentAttendancesController : BaseController<StudentAttendance, StudentAttendanceDto, StudentAttendanceDto, StudentAttendanceDto, Guid>
 {
     public StudentAttendancesController(IRepositoryBase<StudentAttendance, Guid> repository, IMapper mapper) : base(repository, mapper) { }
     protected override Guid GetId(StudentAttendanceDto dto) => dto.Id;
-}
-
-public class ClassStudentEnrollmentsController : BaseController<ClassStudentEnrollment, ClassStudentEnrollmentDto, ClassStudentEnrollmentDto, ClassStudentEnrollmentDto, Guid>
-{
-    public ClassStudentEnrollmentsController(IRepositoryBase<ClassStudentEnrollment, Guid> repository, IMapper mapper) : base(repository, mapper) { }
-    protected override Guid GetId(ClassStudentEnrollmentDto dto) => dto.Id;
 }

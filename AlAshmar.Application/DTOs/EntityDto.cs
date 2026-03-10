@@ -1,14 +1,7 @@
 namespace AlAshmar.Application.DTOs;
 
-public record StudentDto(
-    Guid Id,
-    string Name,
-    string FatherName,
-    string MotherName,
-    string? NationalityNumber,
-    string? Email,
-    Guid? UserId
-);
+// Simple DTOs for basic operations
+// Note: Full DTOs with navigation properties are in AlAshmar.Application.DTOs.Domain namespace
 
 public record TeacherDto(
     Guid Id,

@@ -5,6 +5,6 @@ namespace AlAshmar.Domain.Entities.Abstraction
     public class Entity<TKey>
     {
         [Key]
-        public virtual TKey Id { get; set; }
+        public virtual TKey Id { get; set; } = default!;
     }
 }
