@@ -3,12 +3,13 @@ using AlAshmar.Application.DTOs;
 using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Managers;
 using AlAshmar.Application.Repos;
+using MediatR;
 
 namespace AlAshmar.Application.UseCases.Managers.GetManagerById;
 
 public record GetManagerByIdQuery(Guid Id) : IQuery<Result<ManagerDto?>>;
 
-public class GetManagerByIdHandler : IQueryHandler<GetManagerByIdQuery, Result<ManagerDto?>>
+public class GetManagerByIdHandler : IRequestHandler<GetManagerByIdQuery, Result<ManagerDto?>>
 {
     private readonly IRepositoryBase<Manager, Guid> _repository;
 

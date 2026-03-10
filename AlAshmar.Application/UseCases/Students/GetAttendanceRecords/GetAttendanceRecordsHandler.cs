@@ -3,11 +3,12 @@ using AlAshmar.Application.DTOs.Domain;
 using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Application.Repos;
+using MediatR;
 
 namespace AlAshmar.Application.UseCases.Students.GetAttendanceRecords;
 
 public class GetAttendanceRecordsHandler(IRepositoryBase<StudentAttendance, Guid> repository)
-    : IQueryHandler<GetAttendanceRecordsQuery, Result<List<StudentAttendanceDto>>>
+    : IRequestHandler<GetAttendanceRecordsQuery, Result<List<StudentAttendanceDto>>>
 {
     public async Task<Result<List<StudentAttendanceDto>>> Handle(GetAttendanceRecordsQuery query, CancellationToken cancellationToken = default)
     {

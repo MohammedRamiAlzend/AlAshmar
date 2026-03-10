@@ -5,11 +5,12 @@ using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Application.Repos;
 using Microsoft.EntityFrameworkCore;
 using Attacment = AlAshmar.Domain.Entities.Common.Attacment;
+using MediatR;
 
 namespace AlAshmar.Application.UseCases.Students.GetAttachments;
 
 public class GetAttachmentsHandler(IRepositoryBase<Student, Guid> repository)
-    : IQueryHandler<GetAttachmentsQuery, Result<List<StudentAttachmentDetailDto>>>
+    : IRequestHandler<GetAttachmentsQuery, Result<List<StudentAttachmentDetailDto>>>
 {
     public async Task<Result<List<StudentAttachmentDetailDto>>> Handle(GetAttachmentsQuery query, CancellationToken cancellationToken = default)
     {

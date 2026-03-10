@@ -5,13 +5,14 @@ using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Domain.Entities.Academic;
 using AlAshmar.Application.Repos;
 using Microsoft.EntityFrameworkCore;
+using MediatR;
 
 namespace AlAshmar.Application.UseCases.Students.GetPoints;
 
 public class GetPointsHandler(
     IRepositoryBase<Point, Guid> repository,
     IRepositoryBase<StudentClassEventsPoint, Guid> classEventsRepository)
-    : IQueryHandler<GetPointsQuery, Result<List<StudentPointDto>>>
+    : IRequestHandler<GetPointsQuery, Result<List<StudentPointDto>>>
 {
     public async Task<Result<List<StudentPointDto>>> Handle(GetPointsQuery query, CancellationToken cancellationToken = default)
     {

@@ -5,24 +5,11 @@ namespace AlAshmar.Controllers.Teachers;
 [Authorize]
 public class TeacherManagementController : ControllerBase
 {
-    private readonly IQueryHandler<GetAllTeachersFilteredQuery, Result<List<TeacherDto>>> _filterHandler;
-    private readonly IQueryHandler<GetTeacherByIdQuery, Result<TeacherDto?>> _getByIdHandler;
-    private readonly ICommandHandler<CreateTeacherCommand, Result<TeacherDto>> _createHandler;
-    private readonly ICommandHandler<UpdateTeacherCommand, Result<TeacherDto>> _updateHandler;
-    private readonly ICommandHandler<DeleteTeacherCommand, Result<Success>> _deleteHandler;
+    private readonly ISender _sender;
 
-    public TeacherManagementController(
-        IQueryHandler<GetAllTeachersFilteredQuery, Result<List<TeacherDto>>> filterHandler,
-        IQueryHandler<GetTeacherByIdQuery, Result<TeacherDto?>> getByIdHandler,
-        ICommandHandler<CreateTeacherCommand, Result<TeacherDto>> createHandler,
-        ICommandHandler<UpdateTeacherCommand, Result<TeacherDto>> updateHandler,
-        ICommandHandler<DeleteTeacherCommand, Result<Success>> deleteHandler)
+    public TeacherManagementController(ISender sender)
     {
-        _filterHandler = filterHandler;
-        _getByIdHandler = getByIdHandler;
-        _createHandler = createHandler;
-        _updateHandler = updateHandler;
-        _deleteHandler = deleteHandler;
+        _sender = sender;
     }
 
     [HttpGet("filtered")]
@@ -35,7 +22,7 @@ public class TeacherManagementController : ControllerBase
         CancellationToken cancellationToken = default)
     {
         var query = new GetAllTeachersFilteredQuery(pageNumber, pageSize, classId, semesterId, eventId);
-        var result = await _filterHandler.Handle(query, cancellationToken);
+        var result = await _sender.Send(query, cancellationToken);
         return result.ToActionResult();
     }
 
@@ -45,7 +32,7 @@ public class TeacherManagementController : ControllerBase
         CancellationToken cancellationToken = default)
     {
         var query = new GetTeacherByIdQuery(id);
-        var result = await _getByIdHandler.Handle(query, cancellationToken);
+        var result = await _sender.Send(query, cancellationToken);
         return result.ToActionResult();
     }
 
@@ -56,13 +43,13 @@ public class TeacherManagementController : ControllerBase
     {
         var userName = dto.Email ?? dto.NationalityNumber ?? $"teacher_{Guid.NewGuid():N}".Substring(0, 20);
         var password = GenerateSecurePassword();
-        
+
         var command = new CreateTeacherCommand(
             dto.Name, dto.FatherName, dto.MotherName,
             dto.NationalityNumber, dto.Email,
             userName, password
         );
-        var result = await _createHandler.Handle(command, cancellationToken);
+        var result = await _sender.Send(command, cancellationToken);
         return result.ToActionResult();
     }
 
@@ -76,7 +63,7 @@ public class TeacherManagementController : ControllerBase
             id, dto.Name, dto.FatherName, dto.MotherName,
             dto.NationalityNumber, dto.Email
         );
-        var result = await _updateHandler.Handle(command, cancellationToken);
+        var result = await _sender.Send(command, cancellationToken);
         return result.ToActionResult();
     }
 
@@ -86,7 +73,7 @@ public class TeacherManagementController : ControllerBase
         CancellationToken cancellationToken = default)
     {
         var command = new DeleteTeacherCommand(id);
-        var result = await _deleteHandler.Handle(command, cancellationToken);
+        var result = await _sender.Send(command, cancellationToken);
         return result.ToActionResult();
     }
 

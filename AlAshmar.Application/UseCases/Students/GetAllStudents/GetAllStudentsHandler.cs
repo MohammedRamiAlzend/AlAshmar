@@ -5,12 +5,13 @@ using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Application.Repos;
 using AlAshmar.Application.DTOs.Domain;
 using Microsoft.EntityFrameworkCore;
+using MediatR;
 
 namespace AlAshmar.Application.UseCases.Students.GetAllStudents;
 
 public record GetAllStudentsQuery : IQuery<Result<List<StudentListItemDto>>>;
 
-public class GetAllStudentsHandler : IQueryHandler<GetAllStudentsQuery, Result<List<StudentListItemDto>>>
+public class GetAllStudentsHandler : IRequestHandler<GetAllStudentsQuery, Result<List<StudentListItemDto>>>
 {
     private readonly IRepositoryBase<Student, Guid> _repository;
 

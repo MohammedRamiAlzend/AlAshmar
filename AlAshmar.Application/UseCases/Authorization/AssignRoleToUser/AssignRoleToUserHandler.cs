@@ -2,12 +2,13 @@ using AlAshmar.Application.Common;
 using AlAshmar.Application.DTOs.Authorization;
 using AlAshmar.Application.Interfaces;
 using AlAshmar.Domain.Commons;
+using MediatR;
 
 namespace AlAshmar.Application.UseCases.Authorization.AssignRoleToUser;
 
 public record AssignRoleToUserCommand(AssignRoleToUserDto Dto) : ICommand<Result<Success>>;
 
-public class AssignRoleToUserHandler : ICommandHandler<AssignRoleToUserCommand, Result<Success>>
+public class AssignRoleToUserHandler : IRequestHandler<AssignRoleToUserCommand, Result<Success>>
 {
     private readonly IAuthorizationService _authorizationService;
 

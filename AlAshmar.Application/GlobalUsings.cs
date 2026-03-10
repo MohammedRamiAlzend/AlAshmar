@@ -8,3 +8,4 @@ global using AutoMapper;
 global using AlAshmar.Domain.Entities.Abstraction;
 global using AlAshmar.Domain.Commons;
 global using AlAshmar.Application.Common;
+global using MediatR;

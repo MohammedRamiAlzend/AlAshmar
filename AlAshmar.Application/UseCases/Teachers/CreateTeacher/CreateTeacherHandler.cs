@@ -3,6 +3,7 @@ using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Teachers;
 using AlAshmar.Application.Repos;
 using AlAshmar.Application.DTOs.Domain;
+using MediatR;
 
 namespace AlAshmar.Application.UseCases.Teachers.CreateTeacher;
 
@@ -17,7 +18,7 @@ public record CreateTeacherCommand(
 ) : ICommand<Result<TeacherDto>>;
 
 public class CreateTeacherHandler(IRepositoryBase<Teacher, Guid> repository) :
-    ICommandHandler<CreateTeacherCommand, Result<TeacherDto>>
+    IRequestHandler<CreateTeacherCommand, Result<TeacherDto>>
 {
     public async Task<Result<TeacherDto>> Handle(CreateTeacherCommand command, CancellationToken cancellationToken = default)
     {

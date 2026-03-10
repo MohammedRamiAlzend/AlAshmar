@@ -1,21 +1,23 @@
+using MediatR;
+
 namespace AlAshmar.Application.Common;
 
 /// <summary>
 /// Marker interface for all commands.
 /// </summary>
-public interface ICommand;
+public partial interface ICommand;
 
 /// <summary>
 /// Marker interface for all commands that return a result.
 /// </summary>
-public interface ICommand<TResult> : ICommand;
+public partial interface ICommand<TResult> : ICommand, IRequest<TResult>;
 
 /// <summary>
 /// Marker interface for all queries.
 /// </summary>
-public interface IQuery;
+public partial interface IQuery;
 
 /// <summary>
 /// Marker interface for all queries that return a result.
 /// </summary>
-public interface IQuery<TResult> : IQuery;
+public partial interface IQuery<TResult> : IQuery, IRequest<TResult>;

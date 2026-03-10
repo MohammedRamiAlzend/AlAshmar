@@ -2,12 +2,13 @@ using AlAshmar.Application.Common;
 using AlAshmar.Application.DTOs.Authorization;
 using AlAshmar.Application.Interfaces;
 using AlAshmar.Domain.Commons;
+using MediatR;
 
 namespace AlAshmar.Application.UseCases.Authorization.GetAllRoles;
 
 public record GetAllRolesQuery : IQuery<Result<List<RoleDto>>>;
 
-public class GetAllRolesHandler : IQueryHandler<GetAllRolesQuery, Result<List<RoleDto>>>
+public class GetAllRolesHandler : IRequestHandler<GetAllRolesQuery, Result<List<RoleDto>>>
 {
     private readonly IAuthorizationService _authorizationService;
 

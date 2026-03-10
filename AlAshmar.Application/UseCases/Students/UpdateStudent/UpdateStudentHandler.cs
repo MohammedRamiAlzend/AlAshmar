@@ -4,6 +4,7 @@ using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Application.Repos;
 using AlAshmar.Application.DTOs.Domain;
+using MediatR;
 
 namespace AlAshmar.Application.UseCases.Students.UpdateStudent;
 
@@ -16,7 +17,7 @@ public record UpdateStudentCommand(
     string? Email
 ) : ICommand<Result<Success>>;
 
-public class UpdateStudentHandler : ICommandHandler<UpdateStudentCommand, Result<Success>>
+public class UpdateStudentHandler : IRequestHandler<UpdateStudentCommand, Result<Success>>
 {
     private readonly IRepositoryBase<Student, Guid> _repository;
 

@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using ExpressionBuilderLib.src.Core;
 using ExpressionBuilderLib.src.Core.Enums;
 using AlAshmar.Application.DTOs.Domain;
+using MediatR;
 
 namespace AlAshmar.Application.UseCases.Students.GetAllStudentsFiltered;
 
@@ -29,7 +30,7 @@ public record GetAllStudentsFilteredQuery(
     Guid? TeacherId = null
 ) : IQuery<Result<List<StudentListItemDto>>>;
 
-public class GetAllStudentsFilteredHandler(IRepositoryBase<Student, Guid> repository) : IQueryHandler<GetAllStudentsFilteredQuery, Result<List<StudentListItemDto>>>
+public class GetAllStudentsFilteredHandler(IRepositoryBase<Student, Guid> repository) : IRequestHandler<GetAllStudentsFilteredQuery, Result<List<StudentListItemDto>>>
 {
     public async Task<Result<List<StudentListItemDto>>> Handle(GetAllStudentsFilteredQuery query, CancellationToken cancellationToken = default)
     {

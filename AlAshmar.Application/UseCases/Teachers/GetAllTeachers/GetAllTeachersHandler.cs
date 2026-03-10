@@ -3,12 +3,13 @@ using AlAshmar.Application.DTOs;
 using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Teachers;
 using AlAshmar.Application.Repos;
+using MediatR;
 
 namespace AlAshmar.Application.UseCases.Teachers.GetAllTeachers;
 
 public record GetAllTeachersQuery : IQuery<Result<List<TeacherDto>>>;
 
-public class GetAllTeachersHandler : IQueryHandler<GetAllTeachersQuery, Result<List<TeacherDto>>>
+public class GetAllTeachersHandler : IRequestHandler<GetAllTeachersQuery, Result<List<TeacherDto>>>
 {
     private readonly IRepositoryBase<Teacher, Guid> _repository;
 

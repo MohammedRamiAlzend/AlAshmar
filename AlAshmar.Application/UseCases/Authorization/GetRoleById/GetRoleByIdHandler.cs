@@ -2,12 +2,13 @@ using AlAshmar.Application.Common;
 using AlAshmar.Application.DTOs.Authorization;
 using AlAshmar.Application.Interfaces;
 using AlAshmar.Domain.Commons;
+using MediatR;
 
 namespace AlAshmar.Application.UseCases.Authorization.GetRoleById;
 
 public record GetRoleByIdQuery(Guid Id) : IQuery<Result<RoleDto?>>;
 
-public class GetRoleByIdHandler : IQueryHandler<GetRoleByIdQuery, Result<RoleDto?>>
+public class GetRoleByIdHandler : IRequestHandler<GetRoleByIdQuery, Result<RoleDto?>>
 {
     private readonly IAuthorizationService _authorizationService;
 

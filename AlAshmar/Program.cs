@@ -5,6 +5,7 @@ global using AlAshmar.Application.Interfaces;
 global using AlAshmar.Application.Common;
 global using AlAshmar.Domain.Commons;
 global using AlAshmar.Infrastructure.Authorization.Policies;
+global using MediatR;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
@@ -19,6 +20,11 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 AuthorizationPolicies.AddAuthorizationPolicies(builder.Services);
 
 builder.Services.AddAutoMapper(typeof(EntityMappingProfile).Assembly);
+
+// Register MediatR
+builder.Services.AddMediatR(cfg => {
+    cfg.RegisterServicesFromAssembly(typeof(ICommand<>).Assembly);
+});
 
 builder.Services.AddCors(options =>
 {

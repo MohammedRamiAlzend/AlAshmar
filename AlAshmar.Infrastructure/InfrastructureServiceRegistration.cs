@@ -3,7 +3,18 @@ using AlAshmar.Infrastructure.Services;
 using AlAshmar.Application.Interfaces;
 using AlAshmar.Application.Common;
 using AlAshmar.Infrastructure.Persistence;
-using AlAshmar.Application.Services.Domain;
+using AlAshmar.Infrastructure.Services.Domain;
+using AlAshmar.Infrastructure.Services.Reports;
+using AlAshmar.Application.Interfaces.Reports;
+using AlAshmar.Infrastructure.Services.Crud;
+using AlAshmar.Application.Services.Crud;
+using AlAshmar.Domain.Entities.Academic;
+using AlAshmar.Domain.Entities.Common;
+using AlAshmar.Domain.Entities.Managers;
+using AlAshmar.Domain.Entities.Students;
+using AlAshmar.Domain.Entities.Teachers;
+using AlAshmar.Domain.Entities.Users;
+using AlAshmar.Application.DTOs.Domain;
 
 namespace AlAshmar.Infrastructure;
 
@@ -41,8 +52,33 @@ public static class InfrastructureServiceRegistration
         services.AddScoped<IStudentManagementService, StudentManagementService>();
         services.AddScoped<ITeacherManagementService, TeacherManagementService>();
 
-        // Register all command and query handlers
-        services.RegisterHandlers();
+        // Register Domain CRUD Services
+        services.AddScoped<IAllowableExtentionService, AllowableExtentionService>();
+        services.AddScoped<IAttacmentService, AttacmentService>();
+        services.AddScoped<IContactInfoService, ContactInfoService>();
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<IManagerService, ManagerService>();
+        services.AddScoped<ITeacherService, TeacherService>();
+        services.AddScoped<ITeacherAttencanceService, TeacherAttencanceService>();
+        services.AddScoped<IClassTeacherEnrollmentService, ClassTeacherEnrollmentService>();
+        services.AddScoped<IStudentAttendanceService, StudentAttendanceService>();
+        services.AddScoped<IClassStudentEnrollmentService, ClassStudentEnrollmentService>();
+        services.AddScoped<IBookService, BookService>();
+        services.AddScoped<IHadithService, HadithService>();
+        services.AddScoped<ISemesterService, SemesterService>();
+        services.AddScoped<IPointCategoryService, PointCategoryService>();
+        services.AddScoped<IPointService, PointService>();
+
+        // Register Report Services
+        services.AddScoped<IStudentReportService, StudentReportService>();
+        services.AddScoped<ITeacherReportService, TeacherReportService>();
+        services.AddScoped<IClassReportService, ClassReportService>();
+        services.AddScoped<ISemesterReportService, SemesterReportService>();
+        services.AddScoped<IAttendanceReportService, AttendanceReportService>();
+        services.AddScoped<IPointsReportService, PointsReportService>();
+
+        // Note: MediatR handlers are registered via AddMediatR() in Program.cs
 
         return services;
     }

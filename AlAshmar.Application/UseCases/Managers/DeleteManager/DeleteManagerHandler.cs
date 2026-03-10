@@ -2,12 +2,13 @@ using AlAshmar.Application.Common;
 using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Managers;
 using AlAshmar.Application.Repos;
+using MediatR;
 
 namespace AlAshmar.Application.UseCases.Managers.DeleteManager;
 
 public record DeleteManagerCommand(Guid Id) : ICommand<Result<Success>>;
 
-public class DeleteManagerHandler : ICommandHandler<DeleteManagerCommand, Result<Success>>
+public class DeleteManagerHandler : IRequestHandler<DeleteManagerCommand, Result<Success>>
 {
     private readonly IRepositoryBase<Manager, Guid> _repository;
 

@@ -7,13 +7,14 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using ExpressionBuilderLib.src.Core;
 using ExpressionBuilderLib.src.Core.Enums;
+using MediatR;
 
 namespace AlAshmar.Application.UseCases.Teachers.GetAllTeachersFiltered;
 
 /// <summary>
 /// Handler for getting filtered teachers with support for OR operations on filter parameters.
 /// </summary>
-public class GetAllTeachersFilteredHandler(IRepositoryBase<Teacher, Guid> repository) : IQueryHandler<GetAllTeachersFilteredQuery, Result<List<TeacherDto>>>
+public class GetAllTeachersFilteredHandler(IRepositoryBase<Teacher, Guid> repository) : IRequestHandler<GetAllTeachersFilteredQuery, Result<List<TeacherDto>>>
 {
     public async Task<Result<List<TeacherDto>>> Handle(GetAllTeachersFilteredQuery query, CancellationToken cancellationToken = default)
     {

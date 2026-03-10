@@ -4,13 +4,14 @@ using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Application.Repos;
 using Microsoft.EntityFrameworkCore;
+using MediatR;
 
 namespace AlAshmar.Application.UseCases.Students.GetMemorizationProgress;
 
 public class GetMemorizationProgressHandler(
     IRepositoryBase<StudentHadith, Guid> hadithRepository,
     IRepositoryBase<StudentQuraanPage, Guid> quranRepository)
-    : IQueryHandler<GetMemorizationProgressQuery, Result<StudentMemorizationProgressDto>>
+    : IRequestHandler<GetMemorizationProgressQuery, Result<StudentMemorizationProgressDto>>
 {
     public async Task<Result<StudentMemorizationProgressDto>> Handle(GetMemorizationProgressQuery query, CancellationToken cancellationToken = default)
     {

@@ -2,12 +2,13 @@ using AlAshmar.Application.Common;
 using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Teachers;
 using AlAshmar.Application.Repos;
+using MediatR;
 
 namespace AlAshmar.Application.UseCases.Teachers.DeleteTeacher;
 
 public record DeleteTeacherCommand(Guid Id) : ICommand<Result<Success>>;
 
-public class DeleteTeacherHandler : ICommandHandler<DeleteTeacherCommand, Result<Success>>
+public class DeleteTeacherHandler : IRequestHandler<DeleteTeacherCommand, Result<Success>>
 {
     private readonly IRepositoryBase<Teacher, Guid> _repository;
 

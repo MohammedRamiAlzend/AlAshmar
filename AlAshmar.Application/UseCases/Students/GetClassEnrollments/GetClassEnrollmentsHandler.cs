@@ -4,11 +4,12 @@ using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Application.Repos;
 using Microsoft.EntityFrameworkCore;
+using MediatR;
 
 namespace AlAshmar.Application.UseCases.Students.GetClassEnrollments;
 
 public class GetClassEnrollmentsHandler(IRepositoryBase<ClassStudentEnrollment, Guid> repository)
-    : IQueryHandler<GetClassEnrollmentsQuery, Result<List<ClassEnrollmentWithStudentDto>>>
+    : IRequestHandler<GetClassEnrollmentsQuery, Result<List<ClassEnrollmentWithStudentDto>>>
 {
     public async Task<Result<List<ClassEnrollmentWithStudentDto>>> Handle(GetClassEnrollmentsQuery query, CancellationToken cancellationToken = default)
     {
