@@ -9,10 +9,12 @@ namespace AlAshmar.Controllers.Students;
 public class StudentManagementController : ControllerBase
 {
     private readonly ISender _sender;
+    private readonly IFilesManagerService _filesManager;
 
-    public StudentManagementController(ISender sender)
+    public StudentManagementController(ISender sender, IFilesManagerService filesManager)
     {
         _sender = sender;
+        _filesManager = filesManager;
     }
 
     /// <summary>
@@ -58,13 +60,16 @@ public class StudentManagementController : ControllerBase
     }
 
     /// <summary>
-    /// Create a new student with basic info and optional contact details.
+    /// Create a new student with basic info and optional photo attachments.
     /// </summary>
     /// <param name="dto">Student creation data</param>
+    /// <param name="photos">Optional photos to attach to the student's profile (one or more)</param>
     /// <param name="cancellationToken">Cancellation token</param>
     [HttpPost]
+    [Consumes("multipart/form-data")]
     public async Task<IActionResult> CreateStudent(
-        [FromBody] CreateStudentDto dto,
+        [FromForm] CreateStudentDto dto,
+        [FromForm] List<IFormFile>? photos,
         CancellationToken cancellationToken = default)
     {
         // Generate username from email or nationality number
@@ -78,6 +83,46 @@ public class StudentManagementController : ControllerBase
             userName, password
         );
         var result = await _sender.Send(command, cancellationToken);
+        if (result.IsError)
+            return result.ToActionResult();
+
+        var studentId = result.Value.Id;
+
+        // Save any provided photos as attachments
+        if (photos != null && photos.Count > 0)
+        {
+            var photoErrors = new List<string>();
+
+            foreach (var photo in photos)
+            {
+                if (photo == null || photo.Length == 0)
+                    continue;
+
+                var saveResult = await _filesManager.SaveFileAsync(photo, $"students/{studentId}");
+                if (saveResult.IsError)
+                {
+                    photoErrors.Add($"Failed to save photo '{photo.FileName}': {saveResult.TopError.Description}");
+                    continue;
+                }
+
+                var metadata = saveResult.Value;
+                var attachmentCommand = new AddAttachmentCommand(
+                    studentId,
+                    metadata.FilePath,
+                    metadata.ContentType,
+                    metadata.StoredFileName,
+                    metadata.OriginalFileName,
+                    null
+                );
+                var attachResult = await _sender.Send(attachmentCommand, cancellationToken);
+                if (attachResult.IsError)
+                    photoErrors.Add($"Failed to register photo '{photo.FileName}': {attachResult.TopError.Description}");
+            }
+
+            if (photoErrors.Count > 0)
+                return Ok(new { data = result.Value, photoUploadWarnings = photoErrors });
+        }
+
         return result.ToActionResult();
     }
 
@@ -233,17 +278,18 @@ public class StudentManagementController : ControllerBase
         if (formFile == null || formFile.Length == 0)
             return BadRequest("No file provided");
 
-        // Generate safe file name and path
-        var fileName = $"{Guid.NewGuid():N}_{formFile.FileName}";
-        var path = Path.Combine("uploads", "students", id.ToString(), fileName);
+        var saveResult = await _filesManager.SaveFileAsync(formFile, $"students/{id}");
+        if (saveResult.IsError)
+            return BadRequest(new { errors = saveResult.Errors });
 
+        var metadata = saveResult.Value;
         var command = new AddAttachmentCommand(
             id,
-            path,
-            formFile.ContentType,
-            fileName,
-            formFile.FileName,
-            null // ExtensionId can be added based on file type
+            metadata.FilePath,
+            metadata.ContentType,
+            metadata.StoredFileName,
+            metadata.OriginalFileName,
+            null
         );
         var result = await _sender.Send(command, cancellationToken);
         return result.ToActionResult();

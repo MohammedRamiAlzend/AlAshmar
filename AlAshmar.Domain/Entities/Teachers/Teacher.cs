@@ -45,7 +45,7 @@ public class Teacher : EntityWithEvents<Guid>
         string? nationalityNumber,
         string? email,
         string userName,
-        string hashedPassword
+        string password
         )
     {
         var teacher = new Teacher
@@ -55,7 +55,7 @@ public class Teacher : EntityWithEvents<Guid>
             MotherName = motherName,
             NationalityNumber = nationalityNumber,
             Email = email,
-            RelatedUser = User.Create(userName, hashedPassword, Constants.DefaultTeacherRoleId),
+            RelatedUser = User.Create(userName, password, Constants.DefaultTeacherRoleId),
         };
         teacher.AddDomainEvent(new TeacherCreatedEvent(teacher.Id, name));
         return teacher;

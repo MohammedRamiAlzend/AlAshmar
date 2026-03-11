@@ -22,6 +22,7 @@
     <ProjectReference Include="..\AlAshmar.Domain\AlAshmar.Domain.csproj" />
     <ProjectReference Include="..\AlAshmar.Infrastructure.Persistence\AlAshmar.Infrastructure.Persistence.csproj" />
     <ProjectReference Include="..\AlAshmar.Infrastructure\AlAshmar.Infrastructure.csproj" />
+    <ProjectReference Include="..\FileManager\FileManager.csproj" />
   </ItemGroup>
 
   <ItemGroup>

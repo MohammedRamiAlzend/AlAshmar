@@ -8,7 +8,6 @@ using AlAshmar.Domain.Entities.Common;
 using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Domain.Entities.Teachers;
 using Microsoft.EntityFrameworkCore;
-using AlAshmar.Infrastructure.Services.Crud;
 
 namespace AlAshmar.Infrastructure.Services.Domain;
 

@@ -22,4 +22,6 @@ global using AlAshmar.Application.UseCases.Teachers.GetTeacherById;
 global using AlAshmar.Application.UseCases.Teachers.CreateTeacher;
 global using AlAshmar.Application.UseCases.Teachers.UpdateTeacher;
 global using AlAshmar.Application.UseCases.Teachers.DeleteTeacher;
+global using AlAshmar.Application.UseCases.Teachers.AddAttachment;
 global using System.Security.Cryptography;
+global using FileManager.Services.Abstraction;
