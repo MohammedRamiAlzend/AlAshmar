@@ -3,8 +3,8 @@ using AlAshmar.Application.DTOs;
 using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Application.Repos;
+using AlAshmar.Application.Repos.Includes;
 using AlAshmar.Application.DTOs.Domain;
-using Microsoft.EntityFrameworkCore;
 using MediatR;
 
 namespace AlAshmar.Application.UseCases.Students.GetAllStudents;
@@ -23,7 +23,7 @@ public class GetAllStudentsHandler : IRequestHandler<GetAllStudentsQuery, Result
     public async Task<Result<List<StudentListItemDto>>> Handle(GetAllStudentsQuery query, CancellationToken cancellationToken = default)
     {
         var studentsResult = await _repository.GetAllAsync(
-            transform: q => q.Include(s => s.User)
+            transform: StudentIncludes.Instance.Apply()
         );
 
         if (studentsResult.IsError)

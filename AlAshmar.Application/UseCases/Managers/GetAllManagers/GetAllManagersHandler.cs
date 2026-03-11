@@ -3,6 +3,7 @@ using AlAshmar.Application.DTOs;
 using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Managers;
 using AlAshmar.Application.Repos;
+using AlAshmar.Application.Repos.Includes;
 using MediatR;
 
 namespace AlAshmar.Application.UseCases.Managers.GetAllManagers;
@@ -20,7 +21,7 @@ public class GetAllManagersHandler : IRequestHandler<GetAllManagersQuery, Result
 
     public async Task<Result<List<ManagerDto>>> Handle(GetAllManagersQuery query, CancellationToken cancellationToken = default)
     {
-        var managersResult = await _repository.GetAllAsync();
+        var managersResult = await _repository.GetAllAsync(transform: ManagerIncludes.Instance.Apply());
         if (managersResult.IsError)
             return managersResult.Errors;
 

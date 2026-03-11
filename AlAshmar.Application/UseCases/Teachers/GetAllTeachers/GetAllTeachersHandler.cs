@@ -3,6 +3,7 @@ using AlAshmar.Application.DTOs;
 using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Teachers;
 using AlAshmar.Application.Repos;
+using AlAshmar.Application.Repos.Includes;
 using MediatR;
 
 namespace AlAshmar.Application.UseCases.Teachers.GetAllTeachers;
@@ -20,7 +21,7 @@ public class GetAllTeachersHandler : IRequestHandler<GetAllTeachersQuery, Result
 
     public async Task<Result<List<TeacherDto>>> Handle(GetAllTeachersQuery query, CancellationToken cancellationToken = default)
     {
-        var teachersResult = await _repository.GetAllAsync();
+        var teachersResult = await _repository.GetAllAsync(transform: TeacherIncludes.Instance.Apply());
         if (teachersResult.IsError)
             return teachersResult.Errors;
 

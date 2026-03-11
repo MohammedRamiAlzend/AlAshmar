@@ -2,8 +2,8 @@ using AlAshmar.Application.Common;
 using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Teachers;
 using AlAshmar.Application.Repos;
+using AlAshmar.Application.Repos.Includes;
 using AlAshmar.Application.DTOs.Domain;
-using Microsoft.EntityFrameworkCore;
 using MediatR;
 
 namespace AlAshmar.Application.UseCases.Teachers.GetTeacherById;
@@ -23,10 +23,7 @@ public class GetTeacherByIdHandler : IRequestHandler<GetTeacherByIdQuery, Result
     {
         var teacherResult = await _repository.GetAllAsync(
             t => t.Id == query.Id,
-            q => q.Include(t => t.RelatedUser)
-                  .Include(t => t.TeacherContactInfos).ThenInclude(tc => tc.ContactInfo)
-                  .Include(t => t.TeacherAttachments).ThenInclude(ta => ta.Attachment)
-                  .Include(t => t.ClassTeacherEnrollments)
+            TeacherIncludes.Instance.Apply()
         );
 
         if (teacherResult.IsError)

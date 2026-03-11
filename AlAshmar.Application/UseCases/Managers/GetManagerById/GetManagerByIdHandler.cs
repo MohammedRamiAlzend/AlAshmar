@@ -3,6 +3,7 @@ using AlAshmar.Application.DTOs;
 using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Managers;
 using AlAshmar.Application.Repos;
+using AlAshmar.Application.Repos.Includes;
 using MediatR;
 
 namespace AlAshmar.Application.UseCases.Managers.GetManagerById;
@@ -20,15 +21,23 @@ public class GetManagerByIdHandler : IRequestHandler<GetManagerByIdQuery, Result
 
     public async Task<Result<ManagerDto?>> Handle(GetManagerByIdQuery query, CancellationToken cancellationToken = default)
     {
-        var manager = await _repository.GetByIdAsync(query.Id);
+        var managerResult = await _repository.GetAllAsync(
+            m => m.Id == query.Id,
+            ManagerIncludes.Instance.Apply()
+        );
 
-        if (manager.Value == null)
+        if (managerResult.IsError)
+            return managerResult.Errors;
+
+        var manager = managerResult.Value.FirstOrDefault();
+
+        if (manager == null)
             return new Error("404", "Manager not found", ErrorKind.NotFound);
 
         return new ManagerDto(
-            manager.Value.Id,
-            manager.Value.Name,
-            manager.Value.UserId
+            manager.Id,
+            manager.Name,
+            manager.UserId
         );
     }
 }

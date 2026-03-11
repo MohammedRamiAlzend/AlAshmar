@@ -2,6 +2,7 @@ using AlAshmar.Application.Common;
 using AlAshmar.Application.DTOs;
 using AlAshmar.Application.DTOs.Domain;
 using AlAshmar.Application.Repos;
+using AlAshmar.Application.Repos.Includes;
 using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Academic;
 using AlAshmar.Domain.Entities.Common;
@@ -203,12 +204,7 @@ public class TeacherManagementService : ITeacherManagementService
     {
         var filterExpression = BuildFilterExpression(filter.ClassId, filter.SemesterId, filter.EventId);
 
-        Func<IQueryable<Teacher>, IQueryable<Teacher>> transform = q => q
-            .Include(t => t.RelatedUser)
-            .Include(t => t.TeacherContactInfos).ThenInclude(tc => tc.ContactInfo)
-            .Include(t => t.TeacherAttachments).ThenInclude(ta => ta.Attachment)
-            .Include(t => t.ClassTeacherEnrollments)
-            .Include(t => t.GivenPoints).ThenInclude(p => p.Category);
+        var transform = TeacherIncludes.Instance.Apply();
 
         List<Teacher> teachers;
 

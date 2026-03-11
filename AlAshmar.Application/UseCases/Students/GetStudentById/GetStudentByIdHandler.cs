@@ -3,8 +3,8 @@ using AlAshmar.Application.DTOs;
 using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Application.Repos;
+using AlAshmar.Application.Repos.Includes;
 using AlAshmar.Application.DTOs.Domain;
-using Microsoft.EntityFrameworkCore;
 using MediatR;
 
 namespace AlAshmar.Application.UseCases.Students.GetStudentById;
@@ -24,14 +24,7 @@ public class GetStudentByIdHandler : IRequestHandler<GetStudentByIdQuery, Result
     {
         var studentResult = await _repository.GetAllAsync(
             s => s.Id == query.Id,
-            q => q
-                .Include(s => s.User)
-                .Include(s => s.StudentContactInfos).ThenInclude(sc => sc.ContactInfo)
-                .Include(s => s.StudentAttachments).ThenInclude(sa => sa.Attachment).ThenInclude(a => a.Extention)
-                .Include(s => s.StudentHadiths).ThenInclude(h => h.Hadith).ThenInclude(h => h.Book)
-                .Include(s => s.StudentQuraanPages)
-                .Include(s => s.StudentClassEventsPoints)
-                .Include(s => s.Points).ThenInclude(p => p.Category)
+            StudentIncludes.Instance.Apply()
         );
 
         if (studentResult.IsError)
