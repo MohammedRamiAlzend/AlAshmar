@@ -29,7 +29,7 @@ public class CreateTeacherHandler(IRepositoryBase<Teacher, Guid> repository) :
             command.NationalityNumber,
             command.Email,
             command.UserName,
-            PasswordHasher.Hash(command.Password)
+            command.Password
         );
 
         var addResult = await repository.AddAsync(teacher);

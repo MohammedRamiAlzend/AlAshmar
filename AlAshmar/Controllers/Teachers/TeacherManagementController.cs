@@ -6,10 +6,12 @@ namespace AlAshmar.Controllers.Teachers;
 public class TeacherManagementController : ControllerBase
 {
     private readonly ISender _sender;
+    private readonly IFilesManagerService _filesManager;
 
-    public TeacherManagementController(ISender sender)
+    public TeacherManagementController(ISender sender, IFilesManagerService filesManager)
     {
         _sender = sender;
+        _filesManager = filesManager;
     }
 
     [HttpGet("filtered")]
@@ -113,7 +115,21 @@ public class TeacherManagementController : ControllerBase
         if (formFile == null || formFile.Length == 0)
             return BadRequest("No file provided");
 
-        return Ok(new { Message = "Attachment upload not yet implemented" });
+        var saveResult = await _filesManager.SaveFileAsync(formFile, $"teachers/{id}");
+        if (saveResult.IsError)
+            return BadRequest(new { errors = saveResult.Errors });
+
+        var metadata = saveResult.Value;
+        var command = new AddTeacherAttachmentCommand(
+            id,
+            metadata.FilePath,
+            metadata.ContentType,
+            metadata.StoredFileName,
+            metadata.OriginalFileName,
+            null
+        );
+        var result = await _sender.Send(command, cancellationToken);
+        return result.ToActionResult();
     }
 
     [HttpGet("{id:guid}/attachments")]

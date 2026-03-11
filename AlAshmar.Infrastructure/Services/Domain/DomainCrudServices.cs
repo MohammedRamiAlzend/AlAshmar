@@ -7,7 +7,6 @@ using AlAshmar.Domain.Entities.Managers;
 using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Domain.Entities.Teachers;
 using AlAshmar.Domain.Entities.Users;
-using AlAshmar.Infrastructure.Services.Crud;
 
 namespace AlAshmar.Infrastructure.Services.Domain;
 
@@ -43,8 +42,8 @@ public class UserService : CrudServiceBase<User, UserDto, Guid>, IUserService
         : base(repository, mapper) { }
 }
 
-public interface IRoleService : IAdvancedCrudService<Role, RoleDto, Guid> { }
-public class RoleService : CrudServiceBase<Role, RoleDto, Guid>, IRoleService
+public interface IRoleService : IAdvancedCrudService<Role, AlAshmar.Application.DTOs.Domain.RoleDto, Guid> { }
+public class RoleService : CrudServiceBase<Role, AlAshmar.Application.DTOs.Domain.RoleDto, Guid>, IRoleService
 {
     public RoleService(IRepositoryBase<Role, Guid> repository, IMapper mapper)
         : base(repository, mapper) { }
@@ -52,8 +51,8 @@ public class RoleService : CrudServiceBase<Role, RoleDto, Guid>, IRoleService
 
 // ==================== MANAGERS DOMAIN SERVICES ====================
 
-public interface IManagerService : IAdvancedCrudService<Manager, ManagerDto, Guid> { }
-public class ManagerService : CrudServiceBase<Manager, ManagerDto, Guid>, IManagerService
+public interface IManagerService : IAdvancedCrudService<Manager, AlAshmar.Application.DTOs.ManagerDto, Guid> { }
+public class ManagerService : CrudServiceBase<Manager, AlAshmar.Application.DTOs.ManagerDto, Guid>, IManagerService
 {
     public ManagerService(IRepositoryBase<Manager, Guid> repository, IMapper mapper)
         : base(repository, mapper) { }
@@ -61,8 +60,8 @@ public class ManagerService : CrudServiceBase<Manager, ManagerDto, Guid>, IManag
 
 // ==================== TEACHERS DOMAIN SERVICES ====================
 
-public interface ITeacherService : IAdvancedCrudService<Teacher, TeacherDto, Guid> { }
-public class TeacherService : CrudServiceBase<Teacher, TeacherDto, Guid>, ITeacherService
+public interface ITeacherService : IAdvancedCrudService<Teacher, AlAshmar.Application.DTOs.TeacherDto, Guid> { }
+public class TeacherService : CrudServiceBase<Teacher, AlAshmar.Application.DTOs.TeacherDto, Guid>, ITeacherService
 {
     public TeacherService(IRepositoryBase<Teacher, Guid> repository, IMapper mapper)
         : base(repository, mapper) { }

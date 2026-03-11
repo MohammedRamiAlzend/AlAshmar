@@ -8,7 +8,6 @@ using AlAshmar.Domain.Entities.Common;
 using AlAshmar.Domain.Entities.Students;
 using Microsoft.EntityFrameworkCore;
 using AlAshmar.Application.UseCases.Students.GetMemorizationProgress;
-using AlAshmar.Infrastructure.Services.Crud;
 
 namespace AlAshmar.Infrastructure.Services.Domain;
 

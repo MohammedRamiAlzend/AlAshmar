@@ -6,7 +6,6 @@ using AlAshmar.Infrastructure.Persistence;
 using AlAshmar.Infrastructure.Services.Domain;
 using AlAshmar.Infrastructure.Services.Reports;
 using AlAshmar.Application.Interfaces.Reports;
-using AlAshmar.Infrastructure.Services.Crud;
 using AlAshmar.Application.Services.Crud;
 using AlAshmar.Domain.Entities.Academic;
 using AlAshmar.Domain.Entities.Common;
