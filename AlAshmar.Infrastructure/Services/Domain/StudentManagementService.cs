@@ -132,7 +132,7 @@ public class StudentManagementService : IStudentManagementService
     {
         var filterExpression = BuildFilterExpression(classId, semesterId, eventId, teacherId);
 
-        var transform = StudentIncludes.Instance.Apply();
+        var transform = StudentIncludes.Full.Apply();
 
         List<Student> students;
 

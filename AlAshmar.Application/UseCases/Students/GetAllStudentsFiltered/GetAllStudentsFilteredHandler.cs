@@ -36,7 +36,7 @@ public class GetAllStudentsFilteredHandler(IRepositoryBase<Student, Guid> reposi
     {
         var filterExpression = BuildFilterExpression(query);
 
-        var transform = StudentIncludes.Instance.Apply();
+        var transform = StudentIncludes.Basic.Apply();
 
         List<Student> students;
 

@@ -24,7 +24,7 @@ public class GetStudentByIdHandler : IRequestHandler<GetStudentByIdQuery, Result
     {
         var studentResult = await _repository.GetAllAsync(
             s => s.Id == query.Id,
-            StudentIncludes.Instance.Apply()
+            StudentIncludes.Full.Apply()
         );
 
         if (studentResult.IsError)

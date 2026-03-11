@@ -23,7 +23,7 @@ public class GetManagerByIdHandler : IRequestHandler<GetManagerByIdQuery, Result
     {
         var managerResult = await _repository.GetAllAsync(
             m => m.Id == query.Id,
-            ManagerIncludes.Instance.Apply()
+            ManagerIncludes.Full.Apply()
         );
 
         if (managerResult.IsError)

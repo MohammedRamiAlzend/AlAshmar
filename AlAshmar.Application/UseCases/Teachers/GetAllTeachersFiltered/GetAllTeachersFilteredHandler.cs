@@ -20,7 +20,7 @@ public class GetAllTeachersFilteredHandler(IRepositoryBase<Teacher, Guid> reposi
     {
         var filterExpression = BuildFilterExpression(query);
 
-        var transform = TeacherIncludes.Instance.Apply();
+        var transform = TeacherIncludes.Full.Apply();
 
         List<Teacher> teachers;
 

@@ -21,7 +21,7 @@ public class GetAllTeachersHandler : IRequestHandler<GetAllTeachersQuery, Result
 
     public async Task<Result<List<TeacherDto>>> Handle(GetAllTeachersQuery query, CancellationToken cancellationToken = default)
     {
-        var teachersResult = await _repository.GetAllAsync(transform: TeacherIncludes.Instance.Apply());
+        var teachersResult = await _repository.GetAllAsync(transform: TeacherIncludes.None.Apply());
         if (teachersResult.IsError)
             return teachersResult.Errors;
 

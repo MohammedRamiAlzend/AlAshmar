@@ -23,7 +23,7 @@ public class GetTeacherByIdHandler : IRequestHandler<GetTeacherByIdQuery, Result
     {
         var teacherResult = await _repository.GetAllAsync(
             t => t.Id == query.Id,
-            TeacherIncludes.Instance.Apply()
+            TeacherIncludes.Full.Apply()
         );
 
         if (teacherResult.IsError)

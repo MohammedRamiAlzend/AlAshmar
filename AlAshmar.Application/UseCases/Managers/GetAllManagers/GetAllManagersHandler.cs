@@ -21,7 +21,7 @@ public class GetAllManagersHandler : IRequestHandler<GetAllManagersQuery, Result
 
     public async Task<Result<List<ManagerDto>>> Handle(GetAllManagersQuery query, CancellationToken cancellationToken = default)
     {
-        var managersResult = await _repository.GetAllAsync(transform: ManagerIncludes.Instance.Apply());
+        var managersResult = await _repository.GetAllAsync(transform: ManagerIncludes.None.Apply());
         if (managersResult.IsError)
             return managersResult.Errors;
 

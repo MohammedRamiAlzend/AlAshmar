@@ -204,7 +204,7 @@ public class TeacherManagementService : ITeacherManagementService
     {
         var filterExpression = BuildFilterExpression(filter.ClassId, filter.SemesterId, filter.EventId);
 
-        var transform = TeacherIncludes.Instance.Apply();
+        var transform = TeacherIncludes.Full.Apply();
 
         List<Teacher> teachers;
 

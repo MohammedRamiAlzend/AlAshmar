@@ -23,7 +23,7 @@ public class GetAllStudentsHandler : IRequestHandler<GetAllStudentsQuery, Result
     public async Task<Result<List<StudentListItemDto>>> Handle(GetAllStudentsQuery query, CancellationToken cancellationToken = default)
     {
         var studentsResult = await _repository.GetAllAsync(
-            transform: StudentIncludes.Instance.Apply()
+            transform: StudentIncludes.Basic.Apply()
         );
 
         if (studentsResult.IsError)
