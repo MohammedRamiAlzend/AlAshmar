@@ -29,10 +29,9 @@ public class AuthenticationService(
             return new Error("401", "Invalid username or password", ErrorKind.Unauthorized);
 
         var token = await tokenService.GenerateTokenAsync(user.Value.UserName, user.Value.Id, user.Value.RoleId, cancellationToken);
-        var refreshToken = tokenService.GenerateRefreshToken();
         var expiresAt = DateTime.UtcNow.AddHours(24);
 
-        return new AuthResult(token, refreshToken, expiresAt);
+        return new AuthResult(token, expiresAt);
     }
 
     public async Task<Result<AuthResult>> RegisterManagerAsync(CreateManagerCommand command, CancellationToken cancellationToken = default)
@@ -54,10 +53,9 @@ public class AuthenticationService(
             return result.Errors;
 
         var token = await tokenService.GenerateTokenAsync(user.UserName, user.Id, user.RoleId, cancellationToken);
-        var refreshToken = tokenService.GenerateRefreshToken();
         var expiresAt = DateTime.UtcNow.AddHours(24);
 
-        return new AuthResult(token, refreshToken, expiresAt);
+        return new AuthResult(token, expiresAt);
     }
 
     public async Task<Result<AuthResult>> RegisterStudentAsync(CreateStudentCommand command, CancellationToken cancellationToken = default)
@@ -78,10 +76,9 @@ public class AuthenticationService(
             return result.Errors;
 
         var token = await tokenService.GenerateTokenAsync(user.UserName, user.Id, user.RoleId, cancellationToken);
-        var refreshToken = tokenService.GenerateRefreshToken();
         var expiresAt = DateTime.UtcNow.AddHours(24);
 
-        return new AuthResult(token, refreshToken, expiresAt);
+        return new AuthResult(token, expiresAt);
     }
 
     public async Task<Result<AuthResult>> RegisterTeacherAsync(CreateTeacherCommand command, CancellationToken cancellationToken = default)
@@ -103,9 +100,8 @@ public class AuthenticationService(
             return result.Errors;
 
         var token = await tokenService.GenerateTokenAsync(user.UserName, user.Id, user.RoleId, cancellationToken);
-        var refreshToken = tokenService.GenerateRefreshToken();
         var expiresAt = DateTime.UtcNow.AddHours(24);
 
-        return new AuthResult(token, refreshToken, expiresAt);
+        return new AuthResult(token, expiresAt);
     }
 }

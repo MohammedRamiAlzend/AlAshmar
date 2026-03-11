@@ -19,4 +19,4 @@ public interface IAuthenticationService
 /// <summary>
 /// Result of an authentication operation.
 /// </summary>
-public record AuthResult(string Token, string RefreshToken, DateTime ExpiresAt);
+public record AuthResult(string Token, DateTime ExpiresAt);

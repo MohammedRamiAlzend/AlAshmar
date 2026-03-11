@@ -1,3 +1,5 @@
+using AlAshmar.Application.UseCases.Teachers.UpdateTeacherPassword;
+
 namespace AlAshmar.Controllers.Teachers;
 
 [ApiController]
@@ -44,7 +46,7 @@ public class TeacherManagementController : ControllerBase
         CancellationToken cancellationToken = default)
     {
         var userName = dto.Email ?? dto.NationalityNumber ?? $"teacher_{Guid.NewGuid():N}".Substring(0, 20);
-        var password = GenerateSecurePassword();
+        var password = dto.NationalityNumber ?? userName;
 
         var command = new CreateTeacherCommand(
             dto.Name, dto.FatherName, dto.MotherName,
@@ -140,19 +142,17 @@ public class TeacherManagementController : ControllerBase
         return Ok(new List<TeacherAttachmentDto>());
     }
 
-    private static string GenerateSecurePassword(int length = 12)
+    /// <summary>
+    /// Update a teacher's password.
+    /// </summary>
+    [HttpPut("{id:guid}/password")]
+    public async Task<IActionResult> UpdatePassword(
+        [FromRoute] Guid id,
+        [FromBody] UpdatePasswordDto dto,
+        CancellationToken cancellationToken = default)
     {
-        const string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*";
-        var randomBytes = new byte[length];
-        using var rng = RandomNumberGenerator.Create();
-        rng.GetBytes(randomBytes);
-        
-        var password = new char[length];
-        for (int i = 0; i < length; i++)
-        {
-            password[i] = validChars[randomBytes[i] % validChars.Length];
-        }
-        
-        return new string(password);
+        var command = new UpdateTeacherPasswordCommand(id, dto.NewPassword);
+        var result = await _sender.Send(command, cancellationToken);
+        return result.ToActionResult();
     }
 }

@@ -168,6 +168,8 @@ public record UpdateAttacmentDto(string Path, string Type, string SafeName, stri
 public record CreateContactInfoDto(string Number, string? Email, bool IsActive);
 public record UpdateContactInfoDto(string Number, string? Email, bool IsActive);
 
+public record UpdatePasswordDto(string NewPassword);
+
 // Users
 public record CreateUserDto(string UserName, string Password, Guid? RoleId);
 public record UpdateUserDto(string UserName, Guid? RoleId);
