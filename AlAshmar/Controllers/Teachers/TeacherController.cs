@@ -1,21 +1,24 @@
-using AlAshmar.Application.UseCases.Teachers.UpdateTeacherPassword;
-
 namespace AlAshmar.Controllers.Teachers;
 
+/// <summary>
+/// Controller for core teacher CRUD operations.
+/// </summary>
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/teachers")]
 [Authorize]
-public class TeacherManagementController : ControllerBase
+public class TeacherController : ControllerBase
 {
     private readonly ISender _sender;
-    private readonly IFilesManagerService _filesManager;
 
-    public TeacherManagementController(ISender sender, IFilesManagerService filesManager)
+    public TeacherController(ISender sender)
     {
         _sender = sender;
-        _filesManager = filesManager;
     }
 
+    /// <summary>
+    /// Get all teachers filtered by various criteria with support for OR operations.
+    /// All filter parameters are optional - null values are ignored in filtering.
+    /// </summary>
     [HttpGet("filtered")]
     public async Task<IActionResult> GetAllTeachersFiltered(
         [FromQuery] int? pageNumber = null,
@@ -30,6 +33,9 @@ public class TeacherManagementController : ControllerBase
         return result.ToActionResult();
     }
 
+    /// <summary>
+    /// Get a teacher by ID with full details including contact info, attachments, and enrollment records.
+    /// </summary>
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetTeacherById(
         [FromRoute] Guid id,
@@ -40,6 +46,9 @@ public class TeacherManagementController : ControllerBase
         return result.ToActionResult();
     }
 
+    /// <summary>
+    /// Create a new teacher. The default password is set to the teacher's NationalityNumber.
+    /// </summary>
     [HttpPost]
     public async Task<IActionResult> CreateTeacher(
         [FromBody] CreateTeacherDto dto,
@@ -57,6 +66,9 @@ public class TeacherManagementController : ControllerBase
         return result.ToActionResult();
     }
 
+    /// <summary>
+    /// Update an existing teacher's basic information.
+    /// </summary>
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateTeacher(
         [FromRoute] Guid id,
@@ -71,6 +83,9 @@ public class TeacherManagementController : ControllerBase
         return result.ToActionResult();
     }
 
+    /// <summary>
+    /// Delete a teacher by ID.
+    /// </summary>
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteTeacher(
         [FromRoute] Guid id,
@@ -79,67 +94,6 @@ public class TeacherManagementController : ControllerBase
         var command = new DeleteTeacherCommand(id);
         var result = await _sender.Send(command, cancellationToken);
         return result.ToActionResult();
-    }
-
-    [HttpGet("{id:guid}/enrollments")]
-    public async Task<IActionResult> GetClassEnrollments(
-        [FromRoute] Guid id,
-        CancellationToken cancellationToken = default)
-    {
-        return Ok(new List<ClassTeacherEnrollmentDto>());
-    }
-
-    [HttpGet("{id:guid}/attendance")]
-    public async Task<IActionResult> GetAttendanceRecords(
-        [FromRoute] Guid id,
-        [FromQuery] DateTime? fromDate = null,
-        [FromQuery] DateTime? toDate = null,
-        CancellationToken cancellationToken = default)
-    {
-        return Ok(new List<TeacherAttencanceDto>());
-    }
-
-    [HttpGet("{id:guid}/points-given")]
-    public async Task<IActionResult> GetPointsGiven(
-        [FromRoute] Guid id,
-        [FromQuery] Guid? semesterId = null,
-        CancellationToken cancellationToken = default)
-    {
-        return Ok(new List<PointDto>());
-    }
-
-    [HttpPost("{id:guid}/attachments")]
-    public async Task<IActionResult> AddAttachment(
-        [FromRoute] Guid id,
-        IFormFile formFile,
-        CancellationToken cancellationToken = default)
-    {
-        if (formFile == null || formFile.Length == 0)
-            return BadRequest("No file provided");
-
-        var saveResult = await _filesManager.SaveFileAsync(formFile, $"teachers/{id}");
-        if (saveResult.IsError)
-            return BadRequest(new { errors = saveResult.Errors });
-
-        var metadata = saveResult.Value;
-        var command = new AddTeacherAttachmentCommand(
-            id,
-            metadata.FilePath,
-            metadata.ContentType,
-            metadata.StoredFileName,
-            metadata.OriginalFileName,
-            null
-        );
-        var result = await _sender.Send(command, cancellationToken);
-        return result.ToActionResult();
-    }
-
-    [HttpGet("{id:guid}/attachments")]
-    public async Task<IActionResult> GetAttachments(
-        [FromRoute] Guid id,
-        CancellationToken cancellationToken = default)
-    {
-        return Ok(new List<TeacherAttachmentDto>());
     }
 
     /// <summary>

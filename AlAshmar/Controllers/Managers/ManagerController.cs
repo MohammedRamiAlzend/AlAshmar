@@ -1,23 +1,16 @@
-using AlAshmar.Application.UseCases.Managers.CreateManager;
-using AlAshmar.Application.UseCases.Managers.UpdateManager;
-using AlAshmar.Application.UseCases.Managers.DeleteManager;
-using AlAshmar.Application.UseCases.Managers.GetManagerById;
-using AlAshmar.Application.UseCases.Managers.GetAllManagers;
-using AlAshmar.Application.UseCases.Managers.UpdateManagerPassword;
-
 namespace AlAshmar.Controllers.Managers;
 
 /// <summary>
-/// Controller for manager management operations.
+/// Controller for core manager CRUD operations.
 /// </summary>
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/managers")]
 [Authorize]
-public class ManagerManagementController : ControllerBase
+public class ManagerController : ControllerBase
 {
     private readonly ISender _sender;
 
-    public ManagerManagementController(ISender sender)
+    public ManagerController(ISender sender)
     {
         _sender = sender;
     }
