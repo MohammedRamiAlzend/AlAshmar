@@ -18,6 +18,8 @@ public class CreateTeacherHandlerTests
     [Fact]
     public async Task Handle_ValidCommand_ReturnsTeacherDto()
     {
+        _repoMock.Setup(r => r.AnyAsync(It.IsAny<Expression<Func<Teacher, bool>>>(), It.IsAny<Func<IQueryable<Teacher>, IQueryable<Teacher>>?>()))
+            .ReturnsAsync(false);
         _repoMock.Setup(r => r.AddAsync(It.IsAny<Teacher>()))
             .ReturnsAsync(new Success());
 
@@ -34,11 +36,13 @@ public class CreateTeacherHandlerTests
     [Fact]
     public async Task Handle_RepositoryFailure_ReturnsError()
     {
+        _repoMock.Setup(r => r.AnyAsync(It.IsAny<Expression<Func<Teacher, bool>>>(), It.IsAny<Func<IQueryable<Teacher>, IQueryable<Teacher>>?>()))
+            .ReturnsAsync(false);
         _repoMock.Setup(r => r.AddAsync(It.IsAny<Teacher>()))
             .ReturnsAsync(new Error("DB_ERROR", "Database failure"));
 
         var handler = new CreateTeacherHandler(_repoMock.Object);
-        var command = new CreateTeacherCommand("Khalid", "Ahmad", "Sara", null, null, "khalid_user", "Secure@456");
+        var command = new CreateTeacherCommand("Khalid", "Ahmad", "Sara", "8888888881", null, "khalid_user", "Secure@456");
 
         var result = await handler.Handle(command, CancellationToken.None);
 
@@ -244,10 +248,12 @@ public class UpdateTeacherHandlerTests
         };
 
         _repoMock.Setup(r => r.GetByIdAsync(teacherId)).ReturnsAsync(teacher);
+        _repoMock.Setup(r => r.AnyAsync(It.IsAny<Expression<Func<Teacher, bool>>>(), It.IsAny<Func<IQueryable<Teacher>, IQueryable<Teacher>>?>()))
+            .ReturnsAsync(false);
         _repoMock.Setup(r => r.UpdateAsync(It.IsAny<Teacher>())).ReturnsAsync(new Updated());
 
         var handler = new UpdateTeacherHandler(_repoMock.Object);
-        var command = new UpdateTeacherCommand(teacherId, "New Name", "Ahmad", "Sara", null, null);
+        var command = new UpdateTeacherCommand(teacherId, "New Name", "Ahmad", "Sara", "8888888882", null);
         var result = await handler.Handle(command, CancellationToken.None);
 
         Assert.False(result.IsError);
@@ -260,7 +266,7 @@ public class UpdateTeacherHandlerTests
         _repoMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(new Error("NOT_FOUND", "Teacher not found", ErrorKind.NotFound));
 
         var handler = new UpdateTeacherHandler(_repoMock.Object);
-        var command = new UpdateTeacherCommand(Guid.NewGuid(), "Name", "Father", "Mother", null, null);
+        var command = new UpdateTeacherCommand(Guid.NewGuid(), "Name", "Father", "Mother", "8888888883", null);
         var result = await handler.Handle(command, CancellationToken.None);
 
         Assert.True(result.IsError);

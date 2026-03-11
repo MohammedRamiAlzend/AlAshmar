@@ -168,6 +168,8 @@ public record UpdateAttacmentDto(string Path, string Type, string SafeName, stri
 public record CreateContactInfoDto(string Number, string? Email, bool IsActive);
 public record UpdateContactInfoDto(string Number, string? Email, bool IsActive);
 
+public record UpdatePasswordDto(string NewPassword);
+
 // Users
 public record CreateUserDto(string UserName, string Password, Guid? RoleId);
 public record UpdateUserDto(string UserName, Guid? RoleId);
@@ -177,8 +179,8 @@ public record CreateManagerDto(string Name, Guid? UserId);
 public record UpdateManagerDto(string Name, Guid? UserId);
 
 // Teachers
-public record CreateTeacherDto(string Name, string FatherName, string MotherName, string? NationalityNumber, string? Email, Guid? UserId);
-public record UpdateTeacherDto(string Name, string FatherName, string MotherName, string? NationalityNumber, string? Email);
+public record CreateTeacherDto(string Name, string FatherName, string MotherName, string NationalityNumber, string? Email, Guid? UserId);
+public record UpdateTeacherDto(string Name, string FatherName, string MotherName, string NationalityNumber, string? Email);
 
 // Academic
 public record CreateBookDto(string Name);

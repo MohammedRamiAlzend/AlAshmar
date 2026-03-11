@@ -28,6 +28,7 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
             .HasMaxLength(200);
         
         builder.Property(s => s.NationalityNumber)
+            .IsRequired()
             .HasMaxLength(50);
         
         builder.Property(s => s.Email)

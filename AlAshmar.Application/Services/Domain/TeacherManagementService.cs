@@ -78,7 +78,7 @@ public interface ITeacherManagementService
         string name,
         string fatherName,
         string motherName,
-        string? nationalityNumber,
+        string nationalityNumber,
         string? email,
         string userName,
         string password,
@@ -89,7 +89,7 @@ public interface ITeacherManagementService
         string name,
         string fatherName,
         string motherName,
-        string? nationalityNumber,
+        string nationalityNumber,
         string? email,
         CancellationToken cancellationToken = default);
 

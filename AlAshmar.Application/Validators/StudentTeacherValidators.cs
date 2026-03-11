@@ -38,8 +38,9 @@ public static class CreateStudentCommandValidator
                 errors.Add("Email must not exceed 256 characters.");
         }
         
-        if (!string.IsNullOrWhiteSpace(command.NationalityNumber) && 
-            command.NationalityNumber.Length > 50)
+        if (string.IsNullOrWhiteSpace(command.NationalityNumber))
+            errors.Add("Nationality number is required.");
+        else if (command.NationalityNumber.Length > 50)
             errors.Add("Nationality number must not exceed 50 characters.");
         
         if (string.IsNullOrWhiteSpace(command.UserName))
@@ -105,8 +106,9 @@ public static class UpdateStudentCommandValidator
                 errors.Add("Email must not exceed 256 characters.");
         }
         
-        if (!string.IsNullOrWhiteSpace(command.NationalityNumber) && 
-            command.NationalityNumber.Length > 50)
+        if (string.IsNullOrWhiteSpace(command.NationalityNumber))
+            errors.Add("Nationality number is required.");
+        else if (command.NationalityNumber.Length > 50)
             errors.Add("Nationality number must not exceed 50 characters.");
         
         return errors;
@@ -159,8 +161,9 @@ public static class CreateTeacherCommandValidator
                 errors.Add("Email must not exceed 256 characters.");
         }
         
-        if (!string.IsNullOrWhiteSpace(command.NationalityNumber) && 
-            command.NationalityNumber.Length > 50)
+        if (string.IsNullOrWhiteSpace(command.NationalityNumber))
+            errors.Add("Nationality number is required.");
+        else if (command.NationalityNumber.Length > 50)
             errors.Add("Nationality number must not exceed 50 characters.");
         
         if (string.IsNullOrWhiteSpace(command.UserName))
@@ -226,8 +229,9 @@ public static class UpdateTeacherCommandValidator
                 errors.Add("Email must not exceed 256 characters.");
         }
         
-        if (!string.IsNullOrWhiteSpace(command.NationalityNumber) && 
-            command.NationalityNumber.Length > 50)
+        if (string.IsNullOrWhiteSpace(command.NationalityNumber))
+            errors.Add("Nationality number is required.");
+        else if (command.NationalityNumber.Length > 50)
             errors.Add("Nationality number must not exceed 50 characters.");
         
         return errors;

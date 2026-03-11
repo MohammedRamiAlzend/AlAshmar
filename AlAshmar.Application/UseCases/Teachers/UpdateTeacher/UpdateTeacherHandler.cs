@@ -12,7 +12,7 @@ public record UpdateTeacherCommand(
     string Name,
     string FatherName,
     string MotherName,
-    string? NationalityNumber,
+    string NationalityNumber,
     string? Email
 ) : ICommand<Result<TeacherDto>>;
 
@@ -32,6 +32,11 @@ public class UpdateTeacherHandler : IRequestHandler<UpdateTeacherCommand, Result
             return new Error("404", "Teacher not found", ErrorKind.NotFound);
 
         var teacher = teacherResult.Value;
+
+        var duplicate = await _repository.AnyAsync(t => t.NationalityNumber == command.NationalityNumber && t.Id != command.Id);
+        if (duplicate)
+            return new Error("409", "Nationality number already exists", ErrorKind.Conflict);
+
         teacher.UpdateBasicInfo(
             command.Name,
             command.FatherName,

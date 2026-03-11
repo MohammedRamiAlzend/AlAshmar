@@ -12,7 +12,7 @@ public record CreateStudentCommand(
     string Name,
     string FatherName,
     string MotherName,
-    string? NationalityNumber,
+    string NationalityNumber,
     string? Email,
     string UserName,
     string Password
@@ -23,6 +23,10 @@ public class CreateStudentHandler(IRepositoryBase<Student, Guid> repository)
 {
     public async Task<Result<StudentBasicInfoDto>> Handle(CreateStudentCommand command, CancellationToken cancellationToken = default)
     {
+        var duplicate = await repository.AnyAsync(s => s.NationalityNumber == command.NationalityNumber);
+        if (duplicate)
+            return new Error("409", "Nationality number already exists", ErrorKind.Conflict);
+
         var student = Student.Create(
             command.Name,
             command.FatherName,
