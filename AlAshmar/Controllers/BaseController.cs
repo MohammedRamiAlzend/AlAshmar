@@ -9,6 +9,7 @@ namespace AlAshmar.Controllers;
 
 /// <summary>
 /// Base controller with common CRUD operations.
+/// Depends on the <see cref="IAdvancedCrudService{TEntity,TDto,TKey}"/> service abstraction.
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
@@ -20,20 +21,20 @@ public abstract class BaseController<TEntity, TDto, TCreateDto, TUpdateDto, TKey
     where TUpdateDto : class
     where TKey : struct
 {
-    protected readonly IRepositoryBase<TEntity, TKey> _repository;
+    protected readonly IAdvancedCrudService<TEntity, TDto, TKey> _crudService;
     protected readonly IMapper _mapper;
 
-    protected BaseController(IRepositoryBase<TEntity, TKey> repository, IMapper mapper)
+    protected BaseController(IAdvancedCrudService<TEntity, TDto, TKey> crudService, IMapper mapper)
     {
-        _repository = repository;
+        _crudService = crudService;
         _mapper = mapper;
     }
 
     [HttpGet]
     public virtual async Task<ActionResult<List<TDto>>> GetAll(CancellationToken cancellationToken)
     {
-        var result = await _repository.GetAllAsync();
-        return result.IsError ? BadRequest(result.Errors) : Ok(result.Value.Select(_mapper.Map<TDto>).ToList());
+        var result = await _crudService.GetAllAsync(cancellationToken);
+        return result.IsError ? BadRequest(result.Errors) : Ok(result.Value);
     }
 
     [HttpGet("paged")]
@@ -42,56 +43,44 @@ public abstract class BaseController<TEntity, TDto, TCreateDto, TUpdateDto, TKey
         [FromQuery] int pageSize = 10,
         CancellationToken cancellationToken = default)
     {
-        var result = await _repository.GetPagedAsync(page, pageSize);
-        if (result.IsError)
-            return BadRequest(result.Errors);
-
-        var pagedList = new PagedList<TDto>(
-            result.Value.Items.Select(_mapper.Map<TDto>),
-            result.Value.TotalItems,
-            result.Value.Page,
-            result.Value.PageSize
-        );
-
-        return Ok(pagedList);
+        var result = await _crudService.GetPagedAsync(page, pageSize, cancellationToken);
+        return result.IsError ? BadRequest(result.Errors) : Ok(result.Value);
     }
 
     [HttpGet("{id}")]
     public virtual async Task<ActionResult<TDto>> GetById(TKey id, CancellationToken cancellationToken)
     {
-        var result = await _repository.GetByIdAsync(id);
-        if (result.Value == null)
-            return NotFound();
-        return Ok(_mapper.Map<TDto>(result.Value));
+        var result = await _crudService.GetByIdAsync(id, cancellationToken);
+        if (result.IsError)
+            return result.TopError.Type == ErrorKind.NotFound ? NotFound(result.Errors) : BadRequest(result.Errors);
+        return Ok(result.Value);
     }
 
     [HttpPost]
     public virtual async Task<ActionResult<TDto>> Create([FromBody] TCreateDto dto, CancellationToken cancellationToken)
     {
-        var entity = _mapper.Map<TEntity>(dto);
-        var result = await _repository.AddAsync(entity);
-        return result.IsError ? BadRequest(result.Errors) : CreatedAtAction(nameof(GetById), new { id = GetId(_mapper.Map<TDto>(entity)) }, _mapper.Map<TDto>(entity));
+        var mapped = _mapper.Map<TDto>(dto);
+        var result = await _crudService.CreateAsync(mapped, cancellationToken);
+        return result.IsError ? BadRequest(result.Errors) : CreatedAtAction(nameof(GetById), new { id = GetId(result.Value) }, result.Value);
     }
 
     [HttpPut("{id}")]
     public virtual async Task<ActionResult<TDto>> Update(TKey id, [FromBody] TUpdateDto dto, CancellationToken cancellationToken)
     {
-        var existing = await _repository.GetByIdAsync(id);
-        if (existing.Value == null)
-            return NotFound();
-        
-        _mapper.Map(dto, existing.Value);
-        var result = await _repository.UpdateAsync(existing.Value);
-        return result.IsError ? BadRequest(result.Errors) : Ok(_mapper.Map<TDto>(existing.Value));
+        var mapped = _mapper.Map<TDto>(dto);
+        var result = await _crudService.UpdateAsync(id, mapped, cancellationToken);
+        if (result.IsError)
+            return result.TopError.Type == ErrorKind.NotFound ? NotFound(result.Errors) : BadRequest(result.Errors);
+        return Ok(result.Value);
     }
 
     [HttpDelete("{id}")]
     public virtual async Task<ActionResult> Delete(TKey id, CancellationToken cancellationToken)
     {
-        var result = await _repository.RemoveAsync(e => e.Id!.Equals(id));
-        return result.IsError
-            ? (result.Errors.First().Type == ErrorKind.NotFound ? NotFound(result.Errors) : BadRequest(result.Errors))
-            : NoContent();
+        var result = await _crudService.DeleteAsync(id, cancellationToken);
+        if (result.IsError)
+            return result.TopError.Type == ErrorKind.NotFound ? NotFound(result.Errors) : BadRequest(result.Errors);
+        return NoContent();
     }
 
     protected abstract TKey GetId(TDto dto);
