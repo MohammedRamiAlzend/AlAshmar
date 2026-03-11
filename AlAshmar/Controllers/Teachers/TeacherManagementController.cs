@@ -45,8 +45,8 @@ public class TeacherManagementController : ControllerBase
         [FromBody] CreateTeacherDto dto,
         CancellationToken cancellationToken = default)
     {
-        var userName = dto.Email ?? dto.NationalityNumber ?? $"teacher_{Guid.NewGuid():N}".Substring(0, 20);
-        var password = dto.NationalityNumber ?? userName;
+        var userName = dto.Email ?? dto.NationalityNumber;
+        var password = dto.NationalityNumber;
 
         var command = new CreateTeacherCommand(
             dto.Name, dto.FatherName, dto.MotherName,

@@ -61,8 +61,8 @@ public class StudentController : ControllerBase
         [FromForm] List<IFormFile>? photos,
         CancellationToken cancellationToken = default)
     {
-        var userName = dto.Email ?? dto.NationalityNumber ?? $"student_{Guid.NewGuid():N}".Substring(0, 20);
-        var password = dto.NationalityNumber ?? userName;
+        var userName = dto.Email ?? dto.NationalityNumber;
+        var password = dto.NationalityNumber;
 
         var command = new CreateStudentCommand(
             dto.Name, dto.FatherName, dto.MotherName,

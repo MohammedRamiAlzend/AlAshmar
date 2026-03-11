@@ -11,7 +11,7 @@ public record CreateTeacherCommand(
     string Name,
     string FatherName,
     string MotherName,
-    string? NationalityNumber,
+    string NationalityNumber,
     string? Email,
     string UserName,
     string Password
@@ -22,6 +22,10 @@ public class CreateTeacherHandler(IRepositoryBase<Teacher, Guid> repository) :
 {
     public async Task<Result<TeacherDto>> Handle(CreateTeacherCommand command, CancellationToken cancellationToken = default)
     {
+        var duplicate = await repository.AnyAsync(t => t.NationalityNumber == command.NationalityNumber);
+        if (duplicate)
+            return new Error("409", "Nationality number already exists", ErrorKind.Conflict);
+
         var teacher = Teacher.Create(
             command.Name,
             command.FatherName,

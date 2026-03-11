@@ -319,7 +319,7 @@ public record CreateStudentDto(
     string Name,
     string FatherName,
     string MotherName,
-    string? NationalityNumber,
+    string NationalityNumber,
     string? Email
 );
 
@@ -331,7 +331,7 @@ public record CreateStudentWithAccountDto(
     string Name,
     string FatherName,
     string MotherName,
-    string? NationalityNumber,
+    string NationalityNumber,
     string? Email,
     string UserName,
     string Password
@@ -368,7 +368,7 @@ public record UpdateStudentDto(
     string Name,
     string FatherName,
     string MotherName,
-    string? NationalityNumber,
+    string NationalityNumber,
     string? Email
 );
 

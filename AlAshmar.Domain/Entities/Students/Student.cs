@@ -11,7 +11,7 @@ public class Student : EntityWithEvents<Guid>
     public string Name { get; set; } = null!;
     public string FatherName { get; set; } = null!;
     public string MotherName { get; set; } = null!;
-    public string? NationalityNumber { get; set; }
+    public string NationalityNumber { get; set; } = null!;
     public string? Email { get; set; }
 
     public Guid? UserId { get; set; }
@@ -26,7 +26,7 @@ public class Student : EntityWithEvents<Guid>
     public ICollection<Point> Points { get; set; } = new List<Point>();
 
     // Domain methods
-    public void UpdateBasicInfo(string name, string fatherName, string motherName, string? nationalityNumber, string? email)
+    public void UpdateBasicInfo(string name, string fatherName, string motherName, string nationalityNumber, string? email)
     {
         Name = name;
         FatherName = fatherName;
@@ -44,7 +44,7 @@ public class Student : EntityWithEvents<Guid>
     public static Student Create(string name,
                                  string fatherName,
                                  string motherName,
-                                 string? nationalityNumber,
+                                 string nationalityNumber,
                                  string? email,
                                  string userName,
                                  string password)
