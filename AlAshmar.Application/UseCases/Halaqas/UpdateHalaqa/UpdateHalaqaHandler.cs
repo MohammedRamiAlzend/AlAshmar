@@ -26,6 +26,6 @@ public class UpdateHalaqaHandler(IRepositoryBase<Halaqa, Guid> repository)
         if (updateResult.IsError)
             return updateResult.Errors;
 
-        return new HalaqaDto(halaqa.Id, halaqa.ClassName, halaqa.DawraId, null);
+        return new HalaqaDto(halaqa.Id, halaqa.ClassName, halaqa.CourseId, null);
     }
 }

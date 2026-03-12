@@ -24,10 +24,10 @@ public class GetHalaqaByIdHandler(IRepositoryBase<Halaqa, Guid> repository)
         if (halaqa == null)
             return new Error("404", "Halaqa not found", ErrorKind.NotFound);
 
-        var dawraDto = halaqa.Dawra is not null
-            ? new DawraDto(halaqa.Dawra.Id, halaqa.Dawra.EventName, halaqa.Dawra.SemesterId, null, [])
+        var courseDto = halaqa.Course is not null
+            ? new CourseDto(halaqa.Course.Id, halaqa.Course.EventName, halaqa.Course.SemesterId, null, [])
             : null;
 
-        return new HalaqaDto(halaqa.Id, halaqa.ClassName, halaqa.DawraId, dawraDto);
+        return new HalaqaDto(halaqa.Id, halaqa.ClassName, halaqa.CourseId, courseDto);
     }
 }

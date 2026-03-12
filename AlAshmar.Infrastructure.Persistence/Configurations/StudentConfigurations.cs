@@ -243,7 +243,7 @@ public class StudentClassEventsPointConfiguration : IEntityTypeConfiguration<Stu
             .HasForeignKey(sc => sc.ClassId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(sc => sc.Dawra)
+        builder.HasOne(sc => sc.Course)
             .WithMany()
             .HasForeignKey(sc => sc.EventId)
             .OnDelete(DeleteBehavior.Restrict);

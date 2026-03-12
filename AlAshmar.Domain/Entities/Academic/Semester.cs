@@ -8,5 +8,5 @@ public class Semester : Entity<Guid>
     public DateTime EndDate { get; set; }
     public string Name { get; set; } = null!;
 
-    public ICollection<Dawra> Dawras { get; set; } = new List<Dawra>();
+    public ICollection<Course> Courses { get; set; } = new List<Course>();
 }

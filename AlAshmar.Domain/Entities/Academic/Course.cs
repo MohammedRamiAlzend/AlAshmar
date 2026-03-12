@@ -3,10 +3,10 @@ using AlAshmar.Domain.Entities.Abstraction;
 namespace AlAshmar.Domain.Entities.Academic;
 
 /// <summary>
-/// Represents a Dawra (course/program) that belongs to a Semester.
-/// Each semester has many Dawras, and each Dawra has many Halaqas (learning circles).
+/// Represents a Course (course/program) that belongs to a Semester.
+/// Each semester has many Courses, and each Course has many Halaqas (learning circles).
 /// </summary>
-public class Dawra : Entity<Guid>
+public class Course : Entity<Guid>
 {
     public string EventName { get; set; } = null!;
 

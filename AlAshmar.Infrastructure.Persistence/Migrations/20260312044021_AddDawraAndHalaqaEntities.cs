@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AlAshmar.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class AddDawraAndHalaqaEntities : Migration
+    public partial class AddCourseAndHalaqaEntities : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,7 +16,7 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                 table: "StudentClassEventsPoints");
 
             migrationBuilder.CreateTable(
-                name: "Dawras",
+                name: "Courses",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -25,9 +25,9 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Dawras", x => x.Id);
+                    table.PrimaryKey("PK_Courses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Dawras_Semesters_SemesterId",
+                        name: "FK_Courses_Semesters_SemesterId",
                         column: x => x.SemesterId,
                         principalTable: "Semesters",
                         principalColumn: "Id",
@@ -40,15 +40,15 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ClassName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    DawraId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Halaqas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Halaqas_Dawras_DawraId",
-                        column: x => x.DawraId,
-                        principalTable: "Dawras",
+                        name: "FK_Halaqas_Courses_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "Courses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -94,14 +94,14 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                 column: "ClassId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Dawras_SemesterId",
-                table: "Dawras",
+                name: "IX_Courses_SemesterId",
+                table: "Courses",
                 column: "SemesterId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Halaqas_DawraId",
+                name: "IX_Halaqas_CourseId",
                 table: "Halaqas",
-                column: "DawraId");
+                column: "CourseId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_ClassStudentEnrollments_Halaqas_ClassId",
@@ -120,10 +120,10 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Points_Dawras_EventId",
+                name: "FK_Points_Courses_EventId",
                 table: "Points",
                 column: "EventId",
-                principalTable: "Dawras",
+                principalTable: "Courses",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
@@ -136,10 +136,10 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_StudentClassEventsPoints_Dawras_EventId",
+                name: "FK_StudentClassEventsPoints_Courses_EventId",
                 table: "StudentClassEventsPoints",
                 column: "EventId",
-                principalTable: "Dawras",
+                principalTable: "Courses",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
@@ -188,7 +188,7 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                 table: "ClassTeacherEnrollments");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Points_Dawras_EventId",
+                name: "FK_Points_Courses_EventId",
                 table: "Points");
 
             migrationBuilder.DropForeignKey(
@@ -196,7 +196,7 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                 table: "Points");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_StudentClassEventsPoints_Dawras_EventId",
+                name: "FK_StudentClassEventsPoints_Courses_EventId",
                 table: "StudentClassEventsPoints");
 
             migrationBuilder.DropForeignKey(
@@ -219,7 +219,7 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                 name: "Halaqas");
 
             migrationBuilder.DropTable(
-                name: "Dawras");
+                name: "Courses");
 
             migrationBuilder.DropIndex(
                 name: "IX_StudentQuraanPages_ClassId",

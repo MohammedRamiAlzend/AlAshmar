@@ -2,7 +2,7 @@ using AlAshmar.Application.UseCases.Halaqas.CreateHalaqa;
 using AlAshmar.Application.UseCases.Halaqas.DeleteHalaqa;
 using AlAshmar.Application.UseCases.Halaqas.GetAllHalaqas;
 using AlAshmar.Application.UseCases.Halaqas.GetHalaqaById;
-using AlAshmar.Application.UseCases.Halaqas.GetHalaqasByDawra;
+using AlAshmar.Application.UseCases.Halaqas.GetHalaqasByCourse;
 using AlAshmar.Application.UseCases.Halaqas.UpdateHalaqa;
 using AlAshmar.Application.DTOs.Domain;
 using Microsoft.AspNetCore.Authorization;
@@ -12,7 +12,7 @@ namespace AlAshmar.Controllers.Academic;
 
 /// <summary>
 /// Controller for Halaqa (learning circle/class) CRUD operations.
-/// Each Dawra (course) has many Halaqas; each Halaqa has many students and teachers.
+/// Each Course (course) has many Halaqas; each Halaqa has many students and teachers.
 /// </summary>
 [ApiController]
 [Route("api/halaqas")]
@@ -37,14 +37,14 @@ public class HalaqasController : ControllerBase
     }
 
     /// <summary>
-    /// Get all halaqas in a specific dawra (course).
+    /// Get all halaqas in a specific course (course).
     /// </summary>
-    [HttpGet("by-dawra/{dawraId:guid}")]
-    public async Task<IActionResult> GetByDawra(
-        [FromRoute] Guid dawraId,
+    [HttpGet("by-course/{courseId:guid}")]
+    public async Task<IActionResult> GetByCourse(
+        [FromRoute] Guid courseId,
         CancellationToken cancellationToken = default)
     {
-        var result = await _sender.Send(new GetHalaqasByDawraQuery(dawraId), cancellationToken);
+        var result = await _sender.Send(new GetHalaqasByCourseQuery(courseId), cancellationToken);
         return result.ToActionResult();
     }
 
@@ -68,7 +68,7 @@ public class HalaqasController : ControllerBase
         [FromBody] CreateHalaqaDto dto,
         CancellationToken cancellationToken = default)
     {
-        var result = await _sender.Send(new CreateHalaqaCommand(dto.ClassName, dto.DawraId), cancellationToken);
+        var result = await _sender.Send(new CreateHalaqaCommand(dto.ClassName, dto.CourseId), cancellationToken);
         return result.ToActionResult();
     }
 

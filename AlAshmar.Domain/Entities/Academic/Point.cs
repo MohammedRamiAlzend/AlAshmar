@@ -12,7 +12,7 @@ public class Point : Entity<Guid>
 
     public Guid EventId { get; set; }
     [ForeignKey(nameof(EventId))]
-    public Dawra? Dawra { get; set; }
+    public Course? Course { get; set; }
 
     public Guid ClassId { get; set; }
     [ForeignKey(nameof(ClassId))]

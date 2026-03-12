@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 namespace AlAshmar.Application.Repos.Includes;
 
 /// <summary>
-/// Composable, immutable builder for eager-loading <see cref="Dawra"/> navigation properties.
+/// Composable, immutable builder for eager-loading <see cref="Course"/> navigation properties.
 /// </summary>
-public sealed class DawraIncludes : IEntityIncludes<Dawra>
+public sealed class CourseIncludes : IEntityIncludes<Course>
 {
-    private readonly IReadOnlyList<Func<IQueryable<Dawra>, IQueryable<Dawra>>> _steps;
+    private readonly IReadOnlyList<Func<IQueryable<Course>, IQueryable<Course>>> _steps;
 
-    private DawraIncludes(IEnumerable<Func<IQueryable<Dawra>, IQueryable<Dawra>>> steps)
+    private CourseIncludes(IEnumerable<Func<IQueryable<Course>, IQueryable<Course>>> steps)
     {
         _steps = steps.ToList();
     }
@@ -18,35 +18,35 @@ public sealed class DawraIncludes : IEntityIncludes<Dawra>
     // ── Presets ──────────────────────────────────────────────────────────────
 
     /// <summary>No navigation properties are loaded.</summary>
-    public static readonly DawraIncludes None = new([]);
+    public static readonly CourseIncludes None = new([]);
 
     /// <summary>Loads only <c>Semester</c>.</summary>
-    public static readonly DawraIncludes Basic = None
+    public static readonly CourseIncludes Basic = None
         .WithSemester();
 
     /// <summary>Loads all navigation properties.</summary>
-    public static readonly DawraIncludes Full = None
+    public static readonly CourseIncludes Full = None
         .WithSemester()
         .WithHalaqas();
 
     // ── Fluent builder methods ────────────────────────────────────────────────
 
-    /// <summary>Includes <c>Dawra.Semester</c>.</summary>
-    public DawraIncludes WithSemester() =>
+    /// <summary>Includes <c>Course.Semester</c>.</summary>
+    public CourseIncludes WithSemester() =>
         Add(q => q.Include(d => d.Semester));
 
-    /// <summary>Includes <c>Dawra.Halaqas</c>.</summary>
-    public DawraIncludes WithHalaqas() =>
+    /// <summary>Includes <c>Course.Halaqas</c>.</summary>
+    public CourseIncludes WithHalaqas() =>
         Add(q => q.Include(d => d.Halaqas));
 
-    // ── IEntityIncludes<Dawra> ──────────────────────────────────────────────
+    // ── IEntityIncludes<Course> ──────────────────────────────────────────────
 
     /// <inheritdoc />
-    public Func<IQueryable<Dawra>, IQueryable<Dawra>> Apply() =>
+    public Func<IQueryable<Course>, IQueryable<Course>> Apply() =>
         q => _steps.Aggregate(q, (current, step) => step(current));
 
     // ── Private helpers ───────────────────────────────────────────────────────
 
-    private DawraIncludes Add(Func<IQueryable<Dawra>, IQueryable<Dawra>> step) =>
+    private CourseIncludes Add(Func<IQueryable<Course>, IQueryable<Course>> step) =>
         new(_steps.Append(step));
 }

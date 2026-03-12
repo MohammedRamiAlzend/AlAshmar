@@ -19,7 +19,7 @@ public class StudentClassEventsPoint : Entity<Guid>
 
     public Guid EventId { get; set; }
     [ForeignKey(nameof(EventId))]
-    public Dawra? Dawra { get; set; }
+    public Course? Course { get; set; }
 
     public int QuranPoints { get; set; }
     public int HadithPoints { get; set; }

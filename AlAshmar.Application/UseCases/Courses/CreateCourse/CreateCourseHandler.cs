@@ -3,34 +3,34 @@ using AlAshmar.Application.Repos;
 using AlAshmar.Domain.Entities.Academic;
 using MediatR;
 
-namespace AlAshmar.Application.UseCases.Dawras.CreateDawra;
+namespace AlAshmar.Application.UseCases.Courses.CreateCourse;
 
-public record CreateDawraCommand(
+public record CreateCourseCommand(
     string EventName,
     Guid SemesterId
-) : ICommand<Result<DawraDto>>;
+) : ICommand<Result<CourseDto>>;
 
-public class CreateDawraHandler(
-    IRepositoryBase<Dawra, Guid> dawraRepository,
+public class CreateCourseHandler(
+    IRepositoryBase<Course, Guid> courseRepository,
     IRepositoryBase<Semester, Guid> semesterRepository)
-    : IRequestHandler<CreateDawraCommand, Result<DawraDto>>
+    : IRequestHandler<CreateCourseCommand, Result<CourseDto>>
 {
-    public async Task<Result<DawraDto>> Handle(CreateDawraCommand command, CancellationToken cancellationToken = default)
+    public async Task<Result<CourseDto>> Handle(CreateCourseCommand command, CancellationToken cancellationToken = default)
     {
         var semesterExists = await semesterRepository.AnyAsync(s => s.Id == command.SemesterId);
         if (!semesterExists)
             return new Error("404", "Semester not found", ErrorKind.NotFound);
 
-        var dawra = new Dawra
+        var course = new Course
         {
             EventName = command.EventName,
             SemesterId = command.SemesterId
         };
 
-        var addResult = await dawraRepository.AddAsync(dawra);
+        var addResult = await courseRepository.AddAsync(course);
         if (addResult.IsError)
             return addResult.Errors;
 
-        return new DawraDto(dawra.Id, dawra.EventName, dawra.SemesterId, null, []);
+        return new CourseDto(course.Id, course.EventName, course.SemesterId, null, []);
     }
 }

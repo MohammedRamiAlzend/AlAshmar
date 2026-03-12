@@ -20,21 +20,21 @@ public sealed class HalaqaIncludes : IEntityIncludes<Halaqa>
     /// <summary>No navigation properties are loaded.</summary>
     public static readonly HalaqaIncludes None = new([]);
 
-    /// <summary>Loads only <c>Dawra</c>.</summary>
+    /// <summary>Loads only <c>Course</c>.</summary>
     public static readonly HalaqaIncludes Basic = None
-        .WithDawra();
+        .WithCourse();
 
     /// <summary>Loads all navigation properties.</summary>
     public static readonly HalaqaIncludes Full = None
-        .WithDawra()
+        .WithCourse()
         .WithTeacherEnrollments()
         .WithStudentEnrollments();
 
     // ── Fluent builder methods ────────────────────────────────────────────────
 
-    /// <summary>Includes <c>Halaqa.Dawra</c>.</summary>
-    public HalaqaIncludes WithDawra() =>
-        Add(q => q.Include(h => h.Dawra));
+    /// <summary>Includes <c>Halaqa.Course</c>.</summary>
+    public HalaqaIncludes WithCourse() =>
+        Add(q => q.Include(h => h.Course));
 
     /// <summary>Includes <c>Halaqa.ClassTeacherEnrollments → Teacher</c>.</summary>
     public HalaqaIncludes WithTeacherEnrollments() =>

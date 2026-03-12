@@ -76,18 +76,18 @@ public class SemesterConfiguration : IEntityTypeConfiguration<Semester>
         
         builder.HasQueryFilter(s => s.StartDate <= s.EndDate);
 
-        builder.HasMany(s => s.Dawras)
+        builder.HasMany(s => s.Courses)
             .WithOne(m => m.Semester)
             .HasForeignKey(m => m.SemesterId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }
 
-public class DawraConfiguration : IEntityTypeConfiguration<Dawra>
+public class CourseConfiguration : IEntityTypeConfiguration<Course>
 {
-    public void Configure(EntityTypeBuilder<Dawra> builder)
+    public void Configure(EntityTypeBuilder<Course> builder)
     {
-        builder.ToTable("Dawras");
+        builder.ToTable("Courses");
 
         builder.HasKey(m => m.Id);
 
@@ -99,13 +99,13 @@ public class DawraConfiguration : IEntityTypeConfiguration<Dawra>
             .HasMaxLength(200);
 
         builder.HasOne(m => m.Semester)
-            .WithMany(s => s.Dawras)
+            .WithMany(s => s.Courses)
             .HasForeignKey(m => m.SemesterId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(m => m.Halaqas)
-            .WithOne(h => h.Dawra)
-            .HasForeignKey(h => h.DawraId)
+            .WithOne(h => h.Course)
+            .HasForeignKey(h => h.CourseId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasIndex(m => m.SemesterId);
@@ -127,12 +127,12 @@ public class HalaqaConfiguration : IEntityTypeConfiguration<Halaqa>
             .IsRequired()
             .HasMaxLength(200);
 
-        builder.HasOne(h => h.Dawra)
+        builder.HasOne(h => h.Course)
             .WithMany(m => m.Halaqas)
-            .HasForeignKey(h => h.DawraId)
+            .HasForeignKey(h => h.CourseId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasIndex(h => h.DawraId);
+        builder.HasIndex(h => h.CourseId);
     }
 }
 
@@ -168,7 +168,7 @@ public class PointConfiguration : IEntityTypeConfiguration<Point>
             .HasForeignKey(p => p.GivenByTeacherId)
             .OnDelete(DeleteBehavior.SetNull);
 
-        builder.HasOne(p => p.Dawra)
+        builder.HasOne(p => p.Course)
             .WithMany()
             .HasForeignKey(p => p.EventId)
             .OnDelete(DeleteBehavior.Restrict);
