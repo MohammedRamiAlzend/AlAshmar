@@ -73,6 +73,14 @@ public class EntityMappingProfile : Profile
         CreateMap<CreateSemesterDto, Semester>();
         CreateMap<UpdateSemesterDto, Semester>();
 
+        CreateMap<Dawra, DawraDto>().ReverseMap();
+        CreateMap<CreateDawraDto, Dawra>();
+        CreateMap<UpdateDawraDto, Dawra>();
+
+        CreateMap<Halaqa, HalaqaDto>().ReverseMap();
+        CreateMap<CreateHalaqaDto, Halaqa>();
+        CreateMap<UpdateHalaqaDto, Halaqa>();
+
         CreateMap<PointCategory, PointCategoryDto>().ReverseMap();
         CreateMap<CreatePointCategoryDto, PointCategory>();
         CreateMap<UpdatePointCategoryDto, PointCategory>();

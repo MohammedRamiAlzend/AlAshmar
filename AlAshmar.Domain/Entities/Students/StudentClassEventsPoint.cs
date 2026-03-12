@@ -10,12 +10,16 @@ public class StudentClassEventsPoint : Entity<Guid>
     public Student? Student { get; set; }
 
     public Guid ClassId { get; set; }
+    [ForeignKey(nameof(ClassId))]
+    public Halaqa? Halaqa { get; set; }
 
     public Guid SmesterId { get; set; } // spelled as in diagram
     [ForeignKey(nameof(SmesterId))]
     public Semester? Semester { get; set; }
 
-    public Guid EventId { get; set; } // Event entity not present in diagram
+    public Guid EventId { get; set; }
+    [ForeignKey(nameof(EventId))]
+    public Dawra? Dawra { get; set; }
 
     public int QuranPoints { get; set; }
     public int HadithPoints { get; set; }
@@ -23,3 +27,4 @@ public class StudentClassEventsPoint : Entity<Guid>
     public int BehaviorPoints { get; set; }
     public int TotalPoints { get; set; }
 }
+

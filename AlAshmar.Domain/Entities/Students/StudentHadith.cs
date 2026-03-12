@@ -18,7 +18,9 @@ public class StudentHadith : Entity<Guid>
     [ForeignKey(nameof(TeacherId))]
     public Teacher? Teacher { get; set; }
 
-    public Guid? ClassId { get; set; } // class entity not in diagram
+    public Guid? ClassId { get; set; }
+    [ForeignKey(nameof(ClassId))]
+    public Halaqa? Halaqa { get; set; }
 
     public DateTime? MemorizedAt { get; set; }
     public string? Status { get; set; }

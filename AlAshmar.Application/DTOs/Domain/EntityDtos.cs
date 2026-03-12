@@ -139,6 +139,21 @@ public record SemesterDto(
     string Name
 );
 
+public record DawraDto(
+    Guid Id,
+    string EventName,
+    Guid SemesterId,
+    SemesterDto? Semester,
+    List<HalaqaDto> Halaqas
+);
+
+public record HalaqaDto(
+    Guid Id,
+    string ClassName,
+    Guid DawraId,
+    DawraDto? Dawra
+);
+
 public record PointCategoryDto(
     Guid Id,
     string Type
@@ -191,6 +206,12 @@ public record UpdateHadithDto(string Text, string? Chapter);
 
 public record CreateSemesterDto(DateTime StartDate, DateTime EndDate, string Name);
 public record UpdateSemesterDto(DateTime StartDate, DateTime EndDate, string Name);
+
+public record CreateDawraDto(string EventName, Guid SemesterId);
+public record UpdateDawraDto(string EventName);
+
+public record CreateHalaqaDto(string ClassName, Guid DawraId);
+public record UpdateHalaqaDto(string ClassName);
 
 public record CreatePointCategoryDto(string Type);
 public record UpdatePointCategoryDto(string Type);
