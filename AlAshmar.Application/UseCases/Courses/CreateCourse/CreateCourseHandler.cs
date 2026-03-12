@@ -1,0 +1,36 @@
+using AlAshmar.Application.DTOs.Domain;
+using AlAshmar.Application.Repos;
+using AlAshmar.Domain.Entities.Academic;
+using MediatR;
+
+namespace AlAshmar.Application.UseCases.Courses.CreateCourse;
+
+public record CreateCourseCommand(
+    string EventName,
+    Guid SemesterId
+) : ICommand<Result<CourseDto>>;
+
+public class CreateCourseHandler(
+    IRepositoryBase<Course, Guid> courseRepository,
+    IRepositoryBase<Semester, Guid> semesterRepository)
+    : IRequestHandler<CreateCourseCommand, Result<CourseDto>>
+{
+    public async Task<Result<CourseDto>> Handle(CreateCourseCommand command, CancellationToken cancellationToken = default)
+    {
+        var semesterExists = await semesterRepository.AnyAsync(s => s.Id == command.SemesterId);
+        if (!semesterExists)
+            return new Error("404", "Semester not found", ErrorKind.NotFound);
+
+        var course = new Course
+        {
+            EventName = command.EventName,
+            SemesterId = command.SemesterId
+        };
+
+        var addResult = await courseRepository.AddAsync(course);
+        if (addResult.IsError)
+            return addResult.Errors;
+
+        return new CourseDto(course.Id, course.EventName, course.SemesterId, null, []);
+    }
+}

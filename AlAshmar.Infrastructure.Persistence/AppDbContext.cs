@@ -52,6 +52,8 @@ public class AppDbContext : DbContext
     public DbSet<Book> Books { get; set; }
     public DbSet<Hadith> Hadiths { get; set; }
     public DbSet<Semester> Semesters { get; set; }
+    public DbSet<Course> Courses { get; set; }
+    public DbSet<Halaqa> Halaqas { get; set; }
     public DbSet<Point> Points { get; set; }
     public DbSet<PointCategory> PointCategories { get; set; }
 

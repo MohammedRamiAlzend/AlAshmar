@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using AlAshmar.Domain.Entities.Students;
+using AlAshmar.Domain.Entities.Academic;
 
 namespace AlAshmar.Domain.Entities.Teachers;
 
@@ -11,5 +11,7 @@ public class ClassTeacherEnrollment : Entity<Guid>
 
     public bool IsMainTeacher { get; set; }
 
-    public Guid ClassId { get; set; } // Class entity is not present in diagram; keep as FK Guid
+    public Guid ClassId { get; set; }
+    [ForeignKey(nameof(ClassId))]
+    public Halaqa? Halaqa { get; set; }
 }

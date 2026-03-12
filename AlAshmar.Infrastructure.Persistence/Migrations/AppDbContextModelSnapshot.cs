@@ -41,6 +41,27 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                     b.ToTable("Books", (string)null);
                 });
 
+            modelBuilder.Entity("AlAshmar.Domain.Entities.Academic.Course", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("EventName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<Guid>("SemesterId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SemesterId");
+
+                    b.ToTable("Courses", (string)null);
+                });
+
             modelBuilder.Entity("AlAshmar.Domain.Entities.Academic.Hadith", b =>
                 {
                     b.Property<Guid>("Id")
@@ -63,6 +84,27 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                     b.HasIndex("BookId");
 
                     b.ToTable("Hadiths", (string)null);
+                });
+
+            modelBuilder.Entity("AlAshmar.Domain.Entities.Academic.Halaqa", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ClassName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("Halaqas", (string)null);
                 });
 
             modelBuilder.Entity("AlAshmar.Domain.Entities.Academic.Point", b =>
@@ -99,6 +141,10 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("ClassId");
+
+                    b.HasIndex("EventId");
 
                     b.HasIndex("GivenByTeacherId");
 
@@ -298,6 +344,8 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClassId");
+
                     b.HasIndex("StudentId", "ClassId");
 
                     b.ToTable("ClassStudentEnrollments", (string)null);
@@ -430,6 +478,10 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClassId");
+
+                    b.HasIndex("EventId");
+
                     b.HasIndex("SmesterId");
 
                     b.HasIndex("StudentId", "SmesterId", "ClassId");
@@ -483,6 +535,8 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClassId");
+
                     b.HasIndex("HadithId");
 
                     b.HasIndex("TeacherId");
@@ -523,6 +577,8 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClassId");
+
                     b.HasIndex("TeacherId");
 
                     b.HasIndex("StudentId", "PageNumber");
@@ -548,6 +604,8 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClassId");
 
                     b.HasIndex("TeacherId", "ClassId");
 
@@ -773,6 +831,17 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                     b.ToTable("RolePermissions", (string)null);
                 });
 
+            modelBuilder.Entity("AlAshmar.Domain.Entities.Academic.Course", b =>
+                {
+                    b.HasOne("AlAshmar.Domain.Entities.Academic.Semester", "Semester")
+                        .WithMany("Courses")
+                        .HasForeignKey("SemesterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Semester");
+                });
+
             modelBuilder.Entity("AlAshmar.Domain.Entities.Academic.Hadith", b =>
                 {
                     b.HasOne("AlAshmar.Domain.Entities.Academic.Book", "Book")
@@ -783,12 +852,35 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                     b.Navigation("Book");
                 });
 
+            modelBuilder.Entity("AlAshmar.Domain.Entities.Academic.Halaqa", b =>
+                {
+                    b.HasOne("AlAshmar.Domain.Entities.Academic.Course", "Course")
+                        .WithMany("Halaqas")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+                });
+
             modelBuilder.Entity("AlAshmar.Domain.Entities.Academic.Point", b =>
                 {
                     b.HasOne("AlAshmar.Domain.Entities.Academic.PointCategory", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("AlAshmar.Domain.Entities.Academic.Halaqa", "Halaqa")
+                        .WithMany()
+                        .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AlAshmar.Domain.Entities.Academic.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("AlAshmar.Domain.Entities.Teachers.Teacher", "GivenByTeacher")
                         .WithMany("GivenPoints")
@@ -803,7 +895,11 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
 
                     b.Navigation("Category");
 
+                    b.Navigation("Course");
+
                     b.Navigation("GivenByTeacher");
+
+                    b.Navigation("Halaqa");
 
                     b.Navigation("Student");
                 });
@@ -868,11 +964,19 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("AlAshmar.Domain.Entities.Students.ClassStudentEnrollment", b =>
                 {
+                    b.HasOne("AlAshmar.Domain.Entities.Academic.Halaqa", "Halaqa")
+                        .WithMany("ClassStudentEnrollments")
+                        .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("AlAshmar.Domain.Entities.Students.Student", "Student")
                         .WithMany()
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Halaqa");
 
                     b.Navigation("Student");
                 });
@@ -908,10 +1012,22 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("AlAshmar.Domain.Entities.Students.StudentClassEventsPoint", b =>
                 {
+                    b.HasOne("AlAshmar.Domain.Entities.Academic.Halaqa", "Halaqa")
+                        .WithMany()
+                        .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AlAshmar.Domain.Entities.Academic.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("AlAshmar.Domain.Entities.Academic.Semester", "Semester")
                         .WithMany()
                         .HasForeignKey("SmesterId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("AlAshmar.Domain.Entities.Students.Student", "Student")
@@ -919,6 +1035,10 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Halaqa");
 
                     b.Navigation("Semester");
 
@@ -946,6 +1066,11 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("AlAshmar.Domain.Entities.Students.StudentHadith", b =>
                 {
+                    b.HasOne("AlAshmar.Domain.Entities.Academic.Halaqa", "Halaqa")
+                        .WithMany()
+                        .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("AlAshmar.Domain.Entities.Academic.Hadith", "Hadith")
                         .WithMany()
                         .HasForeignKey("HadithId")
@@ -965,6 +1090,8 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
 
                     b.Navigation("Hadith");
 
+                    b.Navigation("Halaqa");
+
                     b.Navigation("Student");
 
                     b.Navigation("Teacher");
@@ -972,6 +1099,11 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("AlAshmar.Domain.Entities.Students.StudentQuraanPage", b =>
                 {
+                    b.HasOne("AlAshmar.Domain.Entities.Academic.Halaqa", "Halaqa")
+                        .WithMany()
+                        .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("AlAshmar.Domain.Entities.Students.Student", "Student")
                         .WithMany("StudentQuraanPages")
                         .HasForeignKey("StudentId")
@@ -983,6 +1115,8 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.SetNull);
 
+                    b.Navigation("Halaqa");
+
                     b.Navigation("Student");
 
                     b.Navigation("Teacher");
@@ -990,11 +1124,19 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("AlAshmar.Domain.Entities.Teachers.ClassTeacherEnrollment", b =>
                 {
+                    b.HasOne("AlAshmar.Domain.Entities.Academic.Halaqa", "Halaqa")
+                        .WithMany("ClassTeacherEnrollments")
+                        .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("AlAshmar.Domain.Entities.Teachers.Teacher", "Teacher")
                         .WithMany("ClassTeacherEnrollments")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Halaqa");
 
                     b.Navigation("Teacher");
                 });
@@ -1072,6 +1214,23 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("AlAshmar.Domain.Entities.Academic.Course", b =>
+                {
+                    b.Navigation("Halaqas");
+                });
+
+            modelBuilder.Entity("AlAshmar.Domain.Entities.Academic.Halaqa", b =>
+                {
+                    b.Navigation("ClassStudentEnrollments");
+
+                    b.Navigation("ClassTeacherEnrollments");
+                });
+
+            modelBuilder.Entity("AlAshmar.Domain.Entities.Academic.Semester", b =>
+                {
+                    b.Navigation("Courses");
                 });
 
             modelBuilder.Entity("AlAshmar.Domain.Entities.Managers.Manager", b =>

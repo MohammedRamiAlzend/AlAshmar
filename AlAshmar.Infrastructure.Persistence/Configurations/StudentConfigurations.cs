@@ -141,6 +141,11 @@ public class StudentHadithConfiguration : IEntityTypeConfiguration<StudentHadith
             .WithMany()
             .HasForeignKey(sh => sh.TeacherId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        builder.HasOne(sh => sh.Halaqa)
+            .WithMany()
+            .HasForeignKey(sh => sh.ClassId)
+            .OnDelete(DeleteBehavior.SetNull);
         
         builder.Property(sh => sh.Status)
             .HasMaxLength(50);
@@ -174,6 +179,11 @@ public class StudentQuraanPageConfiguration : IEntityTypeConfiguration<StudentQu
         builder.HasOne(sq => sq.Teacher)
             .WithMany()
             .HasForeignKey(sq => sq.TeacherId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        builder.HasOne(sq => sq.Halaqa)
+            .WithMany()
+            .HasForeignKey(sq => sq.ClassId)
             .OnDelete(DeleteBehavior.SetNull);
         
         builder.Property(sq => sq.Status)
@@ -226,7 +236,17 @@ public class StudentClassEventsPointConfiguration : IEntityTypeConfiguration<Stu
         builder.HasOne(sc => sc.Semester)
             .WithMany()
             .HasForeignKey(sc => sc.SmesterId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(sc => sc.Halaqa)
+            .WithMany()
+            .HasForeignKey(sc => sc.ClassId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(sc => sc.Course)
+            .WithMany()
+            .HasForeignKey(sc => sc.EventId)
+            .OnDelete(DeleteBehavior.Restrict);
         
         builder.Property(sc => sc.QuranPoints)
             .HasDefaultValue(0);
@@ -261,6 +281,11 @@ public class ClassStudentEnrollmentConfiguration : IEntityTypeConfiguration<Clas
         builder.HasOne(cse => cse.Student)
             .WithMany()
             .HasForeignKey(cse => cse.StudentId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(cse => cse.Halaqa)
+            .WithMany(h => h.ClassStudentEnrollments)
+            .HasForeignKey(cse => cse.ClassId)
             .OnDelete(DeleteBehavior.Cascade);
         
         builder.HasIndex(cse => new { cse.StudentId, cse.ClassId });

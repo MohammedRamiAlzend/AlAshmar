@@ -2,7 +2,7 @@ using AlAshmar.Application.Common;
 using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Application.Repos;
-using Microsoft.EntityFrameworkCore;
+using AlAshmar.Application.Repos.Includes;
 using System.Linq.Expressions;
 using ExpressionBuilderLib.src.Core;
 using ExpressionBuilderLib.src.Core.Enums;
@@ -36,8 +36,7 @@ public class GetAllStudentsFilteredHandler(IRepositoryBase<Student, Guid> reposi
     {
         var filterExpression = BuildFilterExpression(query);
 
-        Func<IQueryable<Student>, IQueryable<Student>> transform = q => q
-            .Include(s => s.User);
+        var transform = StudentIncludes.Basic.Apply();
 
         List<Student> students;
 

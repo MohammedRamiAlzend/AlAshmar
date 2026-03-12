@@ -10,8 +10,14 @@ public class Point : Entity<Guid>
     [ForeignKey(nameof(StudentId))]
     public Student? Student { get; set; }
 
-    public Guid EventId { get; set; } // Event entity not present in diagram
+    public Guid EventId { get; set; }
+    [ForeignKey(nameof(EventId))]
+    public Course? Course { get; set; }
+
     public Guid ClassId { get; set; }
+    [ForeignKey(nameof(ClassId))]
+    public Halaqa? Halaqa { get; set; }
+
     public Guid SmesterId { get; set; } // keep spelled as in diagram
 
     public int PointValue { get; set; }
@@ -20,7 +26,7 @@ public class Point : Entity<Guid>
     [ForeignKey(nameof(CategoryId))]
     public PointCategory? Category { get; set; }
 
-    public Guid? GivenByTeacherId { get; set; } // FK to Teacher
+    public Guid? GivenByTeacherId { get; set; }
     [ForeignKey(nameof(GivenByTeacherId))]
     public Teacher? GivenByTeacher { get; set; }
 
