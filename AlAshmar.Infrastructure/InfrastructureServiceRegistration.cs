@@ -69,6 +69,13 @@ public static class InfrastructureServiceRegistration
         services.AddScoped<IPointCategoryService, PointCategoryService>();
         services.AddScoped<IPointService, PointService>();
 
+        // Register Form Services
+        services.AddScoped<AlAshmar.Application.Services.Domain.IFormService, AlAshmar.Application.Services.Domain.FormService>();
+        services.AddScoped<AlAshmar.Application.Services.Domain.IFormQuestionService, AlAshmar.Application.Services.Domain.FormQuestionService>();
+        services.AddScoped<AlAshmar.Application.Services.Domain.IFormQuestionOptionService, AlAshmar.Application.Services.Domain.FormQuestionOptionService>();
+        services.AddScoped<AlAshmar.Application.Services.Domain.IFormResponseService, AlAshmar.Application.Services.Domain.FormResponseService>();
+        services.AddScoped<AlAshmar.Application.Services.Domain.IFormAnswerService, AlAshmar.Application.Services.Domain.FormAnswerService>();
+
         // Register Report Services
         services.AddScoped<IStudentReportService, StudentReportService>();
         services.AddScoped<ITeacherReportService, TeacherReportService>();
