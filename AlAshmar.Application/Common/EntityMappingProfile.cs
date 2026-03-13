@@ -1,6 +1,7 @@
 using AlAshmar.Application.DTOs.Domain;
 using AlAshmar.Domain.Entities.Academic;
 using AlAshmar.Domain.Entities.Common;
+using AlAshmar.Domain.Entities.Forms;
 using AlAshmar.Domain.Entities.Managers;
 using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Domain.Entities.Teachers;
@@ -73,6 +74,14 @@ public class EntityMappingProfile : Profile
         CreateMap<CreateSemesterDto, Semester>();
         CreateMap<UpdateSemesterDto, Semester>();
 
+        CreateMap<Course, CourseDto>().ReverseMap();
+        CreateMap<CreateCourseDto, Course>();
+        CreateMap<UpdateCourseDto, Course>();
+
+        CreateMap<Halaqa, HalaqaDto>().ReverseMap();
+        CreateMap<CreateHalaqaDto, Halaqa>();
+        CreateMap<UpdateHalaqaDto, Halaqa>();
+
         CreateMap<PointCategory, PointCategoryDto>().ReverseMap();
         CreateMap<CreatePointCategoryDto, PointCategory>();
         CreateMap<UpdatePointCategoryDto, PointCategory>();
@@ -80,5 +89,33 @@ public class EntityMappingProfile : Profile
         CreateMap<Point, PointDto>().ReverseMap();
         CreateMap<CreatePointDto, Point>();
         CreateMap<UpdatePointDto, Point>();
+
+        // Forms Domain
+        CreateMap<Form, FormDto>().ReverseMap();
+        CreateMap<CreateFormDto, FormDto>();
+        CreateMap<UpdateFormDto, FormDto>();
+        CreateMap<CreateFormDto, Form>();
+        CreateMap<UpdateFormDto, Form>();
+
+        CreateMap<FormQuestion, FormQuestionDto>().ReverseMap();
+        CreateMap<CreateFormQuestionDto, FormQuestionDto>();
+        CreateMap<CreateFormQuestionDto, FormQuestion>()
+            .ForMember(dest => dest.Options, opt => opt.Ignore());
+        CreateMap<UpdateFormQuestionDto, FormQuestionDto>();
+        CreateMap<UpdateFormQuestionDto, FormQuestion>();
+
+        CreateMap<FormQuestionOption, FormQuestionOptionDto>().ReverseMap();
+        CreateMap<CreateFormQuestionOptionDto, FormQuestionOptionDto>();
+        CreateMap<CreateFormQuestionOptionDto, FormQuestionOption>();
+        CreateMap<UpdateFormQuestionOptionDto, FormQuestionOptionDto>();
+        CreateMap<UpdateFormQuestionOptionDto, FormQuestionOption>();
+
+        CreateMap<FormResponse, FormResponseDto>().ReverseMap();
+
+        CreateMap<FormAnswer, FormAnswerDto>()
+            .ForMember(dest => dest.SelectedOptionIds,
+                opt => opt.MapFrom(src => src.SelectedOptions.Select(so => so.FormQuestionOptionId).ToList()))
+            .ReverseMap()
+            .ForMember(dest => dest.SelectedOptions, opt => opt.Ignore());
     }
 }

@@ -5,6 +5,7 @@ using AlAshmar.Domain.Entities.Teachers;
 using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Domain.Entities.Academic;
 using AlAshmar.Domain.Entities.Common;
+using AlAshmar.Domain.Entities.Forms;
 
 namespace AlAshmar.Infrastructure.Persistence;
 
@@ -52,8 +53,18 @@ public class AppDbContext : DbContext
     public DbSet<Book> Books { get; set; }
     public DbSet<Hadith> Hadiths { get; set; }
     public DbSet<Semester> Semesters { get; set; }
+    public DbSet<Course> Courses { get; set; }
+    public DbSet<Halaqa> Halaqas { get; set; }
     public DbSet<Point> Points { get; set; }
     public DbSet<PointCategory> PointCategories { get; set; }
+
+    // Form Entities
+    public DbSet<Form> Forms { get; set; }
+    public DbSet<FormQuestion> FormQuestions { get; set; }
+    public DbSet<FormQuestionOption> FormQuestionOptions { get; set; }
+    public DbSet<FormResponse> FormResponses { get; set; }
+    public DbSet<FormAnswer> FormAnswers { get; set; }
+    public DbSet<FormAnswerSelectedOption> FormAnswerSelectedOptions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

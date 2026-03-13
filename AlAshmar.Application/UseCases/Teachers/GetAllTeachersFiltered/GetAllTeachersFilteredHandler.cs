@@ -3,7 +3,7 @@ using AlAshmar.Application.DTOs.Domain;
 using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Teachers;
 using AlAshmar.Application.Repos;
-using Microsoft.EntityFrameworkCore;
+using AlAshmar.Application.Repos.Includes;
 using System.Linq.Expressions;
 using ExpressionBuilderLib.src.Core;
 using ExpressionBuilderLib.src.Core.Enums;
@@ -20,12 +20,7 @@ public class GetAllTeachersFilteredHandler(IRepositoryBase<Teacher, Guid> reposi
     {
         var filterExpression = BuildFilterExpression(query);
 
-        Func<IQueryable<Teacher>, IQueryable<Teacher>> transform = q => q
-            .Include(t => t.RelatedUser)
-            .Include(t => t.TeacherContactInfos).ThenInclude(tc => tc.ContactInfo)
-            .Include(t => t.TeacherAttachments).ThenInclude(ta => ta.Attachment)
-            .Include(t => t.ClassTeacherEnrollments)
-            .Include(t => t.GivenPoints).ThenInclude(p => p.Category);
+        var transform = TeacherIncludes.Full.Apply();
 
         List<Teacher> teachers;
 

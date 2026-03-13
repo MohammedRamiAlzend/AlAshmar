@@ -1,0 +1,150 @@
+using AlAshmar.Domain.Entities.Forms;
+
+namespace AlAshmar.Application.DTOs.Domain;
+
+// ==================== FORMS DOMAIN ====================
+
+// ── Read DTOs ──────────────────────────────────────────────────────────────────
+
+public record FormDto(
+    Guid Id,
+    string Title,
+    string? Description,
+    FormType FormType,
+    AudienceType Audience,
+    Guid AccessToken,
+    int? TimerMinutes,
+    bool IsActive,
+    bool AllowMultipleResponses,
+    DateTime? StartsAt,
+    DateTime? EndsAt,
+    Guid? CreatedByManagerId,
+    Guid? CreatedByTeacherId,
+    Guid? HalaqaId,
+    Guid? CourseId,
+    List<FormQuestionDto> Questions
+);
+
+public record FormQuestionDto(
+    Guid Id,
+    Guid FormId,
+    string Text,
+    string? Description,
+    QuestionType QuestionType,
+    int Order,
+    bool IsRequired,
+    int? Points,
+    List<FormQuestionOptionDto> Options
+);
+
+public record FormQuestionOptionDto(
+    Guid Id,
+    Guid QuestionId,
+    string Text,
+    int Order,
+    bool IsCorrect
+);
+
+public record FormResponseDto(
+    Guid Id,
+    Guid FormId,
+    Guid? RespondedByStudentId,
+    Guid? RespondedByTeacherId,
+    DateTime SubmittedAt,
+    int? TimeSpentSeconds,
+    bool IsCompleted,
+    int? TotalScore,
+    List<FormAnswerDto> Answers
+);
+
+public record FormAnswerDto(
+    Guid Id,
+    Guid ResponseId,
+    Guid QuestionId,
+    string? TextAnswer,
+    bool? IsCorrect,
+    int? PointsAwarded,
+    List<Guid> SelectedOptionIds
+);
+
+// ── Create / Update DTOs ───────────────────────────────────────────────────────
+
+public record CreateFormDto(
+    string Title,
+    string? Description,
+    FormType FormType,
+    AudienceType Audience,
+    int? TimerMinutes,
+    bool IsActive,
+    bool AllowMultipleResponses,
+    DateTime? StartsAt,
+    DateTime? EndsAt,
+    Guid? CreatedByManagerId,
+    Guid? CreatedByTeacherId,
+    Guid? HalaqaId,
+    Guid? CourseId
+);
+
+public record UpdateFormDto(
+    string Title,
+    string? Description,
+    FormType FormType,
+    AudienceType Audience,
+    int? TimerMinutes,
+    bool IsActive,
+    bool AllowMultipleResponses,
+    DateTime? StartsAt,
+    DateTime? EndsAt,
+    Guid? HalaqaId,
+    Guid? CourseId
+);
+
+public record CreateFormQuestionDto(
+    Guid FormId,
+    string Text,
+    string? Description,
+    QuestionType QuestionType,
+    int Order,
+    bool IsRequired,
+    int? Points,
+    List<CreateFormQuestionOptionDto> Options
+);
+
+public record UpdateFormQuestionDto(
+    string Text,
+    string? Description,
+    QuestionType QuestionType,
+    int Order,
+    bool IsRequired,
+    int? Points
+);
+
+public record CreateFormQuestionOptionDto(
+    Guid QuestionId,
+    string Text,
+    int Order,
+    bool IsCorrect
+);
+
+public record UpdateFormQuestionOptionDto(
+    string Text,
+    int Order,
+    bool IsCorrect
+);
+
+/// <summary>
+/// Payload for submitting a full response to a form in one request.
+/// </summary>
+public record SubmitFormResponseDto(
+    Guid FormId,
+    Guid? RespondedByStudentId,
+    Guid? RespondedByTeacherId,
+    int? TimeSpentSeconds,
+    List<SubmitFormAnswerDto> Answers
+);
+
+public record SubmitFormAnswerDto(
+    Guid QuestionId,
+    string? TextAnswer,
+    List<Guid> SelectedOptionIds
+);

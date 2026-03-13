@@ -145,6 +145,11 @@ public class ClassTeacherEnrollmentConfiguration : IEntityTypeConfiguration<Clas
             .WithMany(t => t.ClassTeacherEnrollments)
             .HasForeignKey(cte => cte.TeacherId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(cte => cte.Halaqa)
+            .WithMany(h => h.ClassTeacherEnrollments)
+            .HasForeignKey(cte => cte.ClassId)
+            .OnDelete(DeleteBehavior.Cascade);
         
         builder.HasIndex(cte => new { cte.TeacherId, cte.ClassId });
     }
