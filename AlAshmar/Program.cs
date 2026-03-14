@@ -21,7 +21,7 @@ AuthorizationPolicies.AddAuthorizationPolicies(builder.Services);
 
 builder.Services.AddAutoMapper(typeof(EntityMappingProfile).Assembly);
 
-// Register MediatR
+
 builder.Services.AddMediatR(cfg => {
     cfg.RegisterServicesFromAssembly(typeof(ICommand<>).Assembly);
 });

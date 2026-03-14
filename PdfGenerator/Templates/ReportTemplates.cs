@@ -6,9 +6,9 @@ using QuestPDF.Infrastructure;
 
 namespace PdfGenerator.Templates;
 
-/// <summary>
-/// Base document template for all reports.
-/// </summary>
+
+
+
 public class ReportDocumentBase : IDocument
 {
     protected readonly ReportBaseModel _model;
@@ -77,7 +77,7 @@ public class ReportDocumentBase : IDocument
 
     protected virtual void ComposeContent(IContainer container)
     {
-        // Override in derived classes
+
     }
 
     protected virtual void ComposeFooter(IContainer container)
@@ -97,9 +97,9 @@ public class ReportDocumentBase : IDocument
     }
 }
 
-/// <summary>
-/// Document template for student reports.
-/// </summary>
+
+
+
 public class StudentReportDocument : ReportDocumentBase
 {
     private readonly StudentDailyReportModel _studentModel;
@@ -114,7 +114,7 @@ public class StudentReportDocument : ReportDocumentBase
     {
         container.Column(col =>
         {
-            // Student Information
+
             col.Item().PaddingBottom(10).Row(row =>
             {
                 row.RelativeItem().Column(info =>
@@ -125,7 +125,7 @@ public class StudentReportDocument : ReportDocumentBase
                 });
             });
 
-            // Summary Statistics
+
             col.Item().PaddingBottom(10).Border(1).BorderColor(Colors.Grey.Lighten1).Padding(10).Column(stats =>
             {
                 stats.Item().Text("Summary").FontSize(12).Bold().FontColor(Colors.Blue.Medium);
@@ -154,7 +154,7 @@ public class StudentReportDocument : ReportDocumentBase
                 });
             });
 
-            // Teacher Notes
+
             if (_studentModel.TeacherNotes.Any())
             {
                 col.Item().PaddingTop(10).Column(notes =>
@@ -173,9 +173,9 @@ public class StudentReportDocument : ReportDocumentBase
     }
 }
 
-/// <summary>
-/// Document template for teacher reports.
-/// </summary>
+
+
+
 public class TeacherReportDocument : ReportDocumentBase
 {
     private readonly TeacherDailyReportModel _teacherModel;
@@ -226,9 +226,9 @@ public class TeacherReportDocument : ReportDocumentBase
     }
 }
 
-/// <summary>
-/// Document template for class reports.
-/// </summary>
+
+
+
 public class ClassReportDocument : ReportDocumentBase
 {
     private readonly ClassDailyReportModel _classModel;
@@ -284,9 +284,9 @@ public class ClassReportDocument : ReportDocumentBase
     }
 }
 
-/// <summary>
-/// Document template for attendance reports.
-/// </summary>
+
+
+
 public class AttendanceReportDocument : ReportDocumentBase
 {
     private readonly AttendanceReportModel _attendanceModel;
@@ -342,9 +342,9 @@ public class AttendanceReportDocument : ReportDocumentBase
     }
 }
 
-/// <summary>
-/// Document template for points reports.
-/// </summary>
+
+
+
 public class PointsReportDocument : ReportDocumentBase
 {
     private readonly PointsReportModel _pointsModel;
@@ -377,37 +377,37 @@ public class PointsReportDocument : ReportDocumentBase
                 stats.Item().PaddingTop(5).Grid(grid =>
                 {
                     grid.Columns(2);
-                    
+
                     grid.Item().Column(total =>
                     {
                         total.Item().Text("Total Points").FontSize(9).FontColor(Colors.Grey.Medium);
                         total.Item().Text(_pointsModel.TotalPoints.ToString()).FontSize(14).Bold();
                     });
-                    
+
                     grid.Item().Column(events =>
                     {
                         events.Item().Text("Total Events").FontSize(9).FontColor(Colors.Grey.Medium);
                         events.Item().Text(_pointsModel.TotalEvents.ToString()).FontSize(14).Bold();
                     });
-                    
+
                     grid.Item().Column(quran =>
                     {
                         quran.Item().Text("Quran Points").FontSize(9).FontColor(Colors.Green.Medium);
                         quran.Item().Text(_pointsModel.QuranPoints.ToString()).FontSize(12).Bold();
                     });
-                    
+
                     grid.Item().Column(hadith =>
                     {
                         hadith.Item().Text("Hadith Points").FontSize(9).FontColor(Colors.Blue.Medium);
                         hadith.Item().Text(_pointsModel.HadithPoints.ToString()).FontSize(12).Bold();
                     });
-                    
+
                     grid.Item().Column(attendance =>
                     {
                         attendance.Item().Text("Attendance Points").FontSize(9).FontColor(Colors.Orange.Medium);
                         attendance.Item().Text(_pointsModel.AttendancePoints.ToString()).FontSize(12).Bold();
                     });
-                    
+
                     grid.Item().Column(behavior =>
                     {
                         behavior.Item().Text("Behavior Points").FontSize(9).FontColor(Colors.Purple.Medium);
@@ -419,9 +419,9 @@ public class PointsReportDocument : ReportDocumentBase
     }
 }
 
-/// <summary>
-/// Document template for semester overview reports.
-/// </summary>
+
+
+
 public class SemesterOverviewReportDocument : ReportDocumentBase
 {
     private readonly SemesterOverviewReportModel _semesterModel;
@@ -451,44 +451,44 @@ public class SemesterOverviewReportDocument : ReportDocumentBase
                 stats.Item().PaddingTop(5).Grid(grid =>
                 {
                     grid.Columns(3);
-                    
+
                     grid.Item().Column(students =>
                     {
                         students.Item().Text("Total Students").FontSize(9).FontColor(Colors.Grey.Medium);
                         students.Item().Text(_semesterModel.TotalStudents.ToString()).FontSize(14).Bold();
                     });
-                    
+
                     grid.Item().Column(teachers =>
                     {
                         teachers.Item().Text("Total Teachers").FontSize(9).FontColor(Colors.Grey.Medium);
                         teachers.Item().Text(_semesterModel.TotalTeachers.ToString()).FontSize(14).Bold();
                     });
-                    
+
                     grid.Item().Column(classes =>
                     {
                         classes.Item().Text("Total Classes").FontSize(9).FontColor(Colors.Grey.Medium);
                         classes.Item().Text(_semesterModel.TotalClasses.ToString()).FontSize(14).Bold();
                     });
-                    
+
                     grid.Item().Column(quran =>
                     {
                         quran.Item().Text("Quran Pages").FontSize(9).FontColor(Colors.Green.Medium);
                         quran.Item().Text(_semesterModel.TotalQuranPagesMemorized.ToString()).FontSize(12).Bold();
                     });
-                    
+
                     grid.Item().Column(hadith =>
                     {
                         hadith.Item().Text("Hadiths").FontSize(9).FontColor(Colors.Blue.Medium);
                         hadith.Item().Text(_semesterModel.TotalHadithsMemorized.ToString()).FontSize(12).Bold();
                     });
-                    
+
                     grid.Item().Column(points =>
                     {
                         points.Item().Text("Total Points").FontSize(9).FontColor(Colors.Orange.Medium);
                         points.Item().Text(_semesterModel.TotalPointsGiven.ToString()).FontSize(12).Bold();
                     });
                 });
-                
+
                 stats.Item().PaddingTop(10).Row(attendance =>
                 {
                     attendance.RelativeItem().AlignCenter().Column(col =>
@@ -502,9 +502,9 @@ public class SemesterOverviewReportDocument : ReportDocumentBase
     }
 }
 
-/// <summary>
-/// Document template for generic reports.
-/// </summary>
+
+
+
 public class GenericReportDocument : ReportDocumentBase
 {
     private readonly string _reportType;

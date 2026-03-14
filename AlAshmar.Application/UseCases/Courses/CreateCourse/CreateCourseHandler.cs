@@ -1,7 +1,6 @@
 using AlAshmar.Application.DTOs.Domain;
 using AlAshmar.Application.Repos;
 using AlAshmar.Domain.Entities.Academic;
-using MediatR;
 
 namespace AlAshmar.Application.UseCases.Courses.CreateCourse;
 

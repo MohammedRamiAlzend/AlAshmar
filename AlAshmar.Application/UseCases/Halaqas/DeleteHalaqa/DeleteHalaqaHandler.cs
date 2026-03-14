@@ -1,6 +1,5 @@
 using AlAshmar.Application.Repos;
 using AlAshmar.Domain.Entities.Academic;
-using MediatR;
 
 namespace AlAshmar.Application.UseCases.Halaqas.DeleteHalaqa;
 

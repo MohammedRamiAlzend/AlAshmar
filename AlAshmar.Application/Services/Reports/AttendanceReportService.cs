@@ -51,7 +51,7 @@ public class AttendanceReportService : IAttendanceReportService
             filter: a => a.StartDate.Date <= toDate && a.EndDate.Date >= fromDate);
 
         var studentRecords = studentAttendanceResult.Value?.ToList() ?? new List<StudentAttendance>();
-        
+
         var studentDetails = studentRecords
             .Select(a => new StudentAttendanceDetailDto(
                 a.ClassStudentId,

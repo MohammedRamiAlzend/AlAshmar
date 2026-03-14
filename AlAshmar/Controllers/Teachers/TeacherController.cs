@@ -1,8 +1,8 @@
 namespace AlAshmar.Controllers.Teachers;
 
-/// <summary>
-/// Controller for core teacher CRUD operations.
-/// </summary>
+
+
+
 [ApiController]
 [Route("api/teachers")]
 [Authorize]
@@ -15,10 +15,10 @@ public class TeacherController : ControllerBase
         _sender = sender;
     }
 
-    /// <summary>
-    /// Get all teachers filtered by various criteria with support for OR operations.
-    /// All filter parameters are optional - null values are ignored in filtering.
-    /// </summary>
+
+
+
+
     [HttpGet("filtered")]
     public async Task<IActionResult> GetAllTeachersFiltered(
         [FromQuery] int? pageNumber = null,
@@ -33,9 +33,9 @@ public class TeacherController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Get a teacher by ID with full details including contact info, attachments, and enrollment records.
-    /// </summary>
+
+
+
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetTeacherById(
         [FromRoute] Guid id,
@@ -46,9 +46,9 @@ public class TeacherController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Create a new teacher. The default password is set to the teacher's NationalityNumber.
-    /// </summary>
+
+
+
     [HttpPost]
     public async Task<IActionResult> CreateTeacher(
         [FromBody] CreateTeacherDto dto,
@@ -66,9 +66,9 @@ public class TeacherController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Update an existing teacher's basic information.
-    /// </summary>
+
+
+
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateTeacher(
         [FromRoute] Guid id,
@@ -83,9 +83,9 @@ public class TeacherController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Delete a teacher by ID.
-    /// </summary>
+
+
+
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteTeacher(
         [FromRoute] Guid id,
@@ -96,9 +96,9 @@ public class TeacherController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Update a teacher's password.
-    /// </summary>
+
+
+
     [HttpPut("{id:guid}/password")]
     public async Task<IActionResult> UpdatePassword(
         [FromRoute] Guid id,

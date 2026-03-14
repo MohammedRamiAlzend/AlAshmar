@@ -1,11 +1,10 @@
 using AlAshmar.Application.Repos;
-using AlAshmar.Domain.Commons;
 
 namespace AlAshmar.Application.Services.Crud;
 
-/// <summary>
-/// Base implementation of CRUD service with common operations.
-/// </summary>
+
+
+
 public abstract class CrudServiceBase<TEntity, TDto, TKey> : IAdvancedCrudService<TEntity, TDto, TKey>
     where TEntity : Entity<TKey>
     where TDto : class
@@ -80,7 +79,7 @@ public abstract class CrudServiceBase<TEntity, TDto, TKey> : IAdvancedCrudServic
         var result = await _repository.RemoveAsync(e => e.Id!.Equals(id));
         if (result.IsError)
             return result.Errors;
-        
+
         return Result.Success;
     }
 

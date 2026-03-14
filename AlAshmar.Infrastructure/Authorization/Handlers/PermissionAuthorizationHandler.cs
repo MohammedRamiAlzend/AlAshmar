@@ -1,12 +1,11 @@
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
 
 namespace AlAshmar.Infrastructure.Authorization.Handlers;
 
-/// <summary>
-/// Requirement for permission-based authorization.
-/// Usage: [Authorize(Policy = "permission:students.create")]
-/// </summary>
+
+
+
+
 public class PermissionRequirement : IAuthorizationRequirement
 {
     public string Permission { get; }
@@ -17,10 +16,10 @@ public class PermissionRequirement : IAuthorizationRequirement
     }
 }
 
-/// <summary>
-/// Handler for permission-based authorization.
-/// Checks if user has the required permission in their JWT claims.
-/// </summary>
+
+
+
+
 public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionRequirement>
 {
     protected override Task HandleRequirementAsync(
@@ -38,7 +37,7 @@ public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionReq
             }
         }
 
-        // Check for wildcard permission (e.g., "students.*" grants all students permissions)
+
         var wildcardPermission = $"{requirement.Permission.Split('.')[0]}.*";
         foreach (var claim in permissionClaims)
         {

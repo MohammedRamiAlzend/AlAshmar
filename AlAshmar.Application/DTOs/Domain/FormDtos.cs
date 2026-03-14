@@ -2,9 +2,9 @@ using AlAshmar.Domain.Entities.Forms;
 
 namespace AlAshmar.Application.DTOs.Domain;
 
-// ==================== FORMS DOMAIN ====================
 
-// ── Read DTOs ──────────────────────────────────────────────────────────────────
+
+
 
 public record FormDto(
     Guid Id,
@@ -67,7 +67,7 @@ public record FormAnswerDto(
     List<Guid> SelectedOptionIds
 );
 
-// ── Create / Update DTOs ───────────────────────────────────────────────────────
+
 
 public record CreateFormDto(
     string Title,
@@ -132,9 +132,9 @@ public record UpdateFormQuestionOptionDto(
     bool IsCorrect
 );
 
-/// <summary>
-/// Payload for submitting a full response to a form in one request.
-/// </summary>
+
+
+
 public record SubmitFormResponseDto(
     Guid FormId,
     Guid? RespondedByStudentId,

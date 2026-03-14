@@ -5,7 +5,7 @@ namespace AlAshmar.Domain.Entities.Teachers;
 
 public class TeacherContactInfo
 {
-    // Composite key: configure TeacherId + ContactInfoId in OnModelCreating
+
     public Guid TeacherId { get; set; }
     [ForeignKey(nameof(TeacherId))]
     public Teacher? Teacher { get; set; }

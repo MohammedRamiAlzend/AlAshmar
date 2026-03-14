@@ -1,14 +1,13 @@
-﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace AlAshmar.Infrastructure.Persistence.Migrations
 {
-    /// <inheritdoc />
+
     public partial class AddCourseAndHalaqaEntities : Migration
     {
-        /// <inheritdoc />
+
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
@@ -176,7 +175,7 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                 onDelete: ReferentialAction.SetNull);
         }
 
-        /// <inheritdoc />
+
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(

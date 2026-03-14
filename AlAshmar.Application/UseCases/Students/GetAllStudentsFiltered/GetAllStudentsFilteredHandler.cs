@@ -1,26 +1,22 @@
-using AlAshmar.Application.Common;
-using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Application.Repos;
 using AlAshmar.Application.Repos.Includes;
-using System.Linq.Expressions;
 using ExpressionBuilderLib.src.Core;
 using ExpressionBuilderLib.src.Core.Enums;
 using AlAshmar.Application.DTOs.Domain;
-using MediatR;
 
 namespace AlAshmar.Application.UseCases.Students.GetAllStudentsFiltered;
 
-/// <summary>
-/// Query for getting filtered students with support for OR operations on filter parameters.
-/// All filter parameters are nullable to support flexible filtering.
-/// </summary>
-/// <param name="PageNumber">Page number for pagination (1-based)</param>
-/// <param name="PageSize">Number of items per page</param>
-/// <param name="ClassId">Filter by class ID (nullable </param>
-/// <param name="SemesterId">Filter by semester ID (nullable </param>
-/// <param name="EventId">Filter by event ID (nullable </param>
-/// <param name="TeacherId">Filter by teacher ID (nullable </param>
+
+
+
+
+
+
+
+
+
+
 public record GetAllStudentsFilteredQuery(
     int? PageNumber = null,
     int? PageSize = null,
@@ -83,7 +79,7 @@ public class GetAllStudentsFilteredHandler(IRepositoryBase<Student, Guid> reposi
 
     private static string GetRoleType(Guid roleId)
     {
-        // Default student role ID (matches Constants.DefaultStudentRoleId)
+
         return roleId == Guid.Parse("00000000-0000-0000-0000-000000000001") ? "Student" : "Unknown";
     }
 

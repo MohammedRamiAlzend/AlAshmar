@@ -37,14 +37,12 @@ public class StudentReportService : IStudentReportService
             return ApplicationErrors.StudentNotFound;
 
         var student = studentResult.Value;
-
-        // Get memorization for the day
         var hadithsToday = await _hadithRepository.GetAllAsync(
-            filter: h => h.StudentId == studentId && h.MemorizedAt.HasValue && 
-                        h.MemorizedAt.Value.Date == date.Date);
+            filter: h => h.StudentId == studentId && h.MemorizedAt.HasValue &&
+                      h.MemorizedAt.Value.Date == date.Date);
 
         var quraanPagesToday = await _quraanPageRepository.GetAllAsync(
-            filter: q => q.StudentId == studentId && q.MemorizedAt.HasValue && 
+            filter: q => q.StudentId == studentId && q.MemorizedAt.HasValue &&
                       q.MemorizedAt.Value.Date == date.Date);
 
         var hadithList = hadithsToday.Value?.ToList() ?? new List<StudentHadith>();
@@ -81,11 +79,11 @@ public class StudentReportService : IStudentReportService
         var student = studentResult.Value;
 
         var hadithsWeek = await _hadithRepository.GetAllAsync(
-            filter: h => h.StudentId == studentId && h.MemorizedAt.HasValue && 
+            filter: h => h.StudentId == studentId && h.MemorizedAt.HasValue &&
                         h.MemorizedAt.Value.Date >= weekStart.Date && h.MemorizedAt.Value.Date <= weekEnd.Date);
 
         var quraanPagesWeek = await _quraanPageRepository.GetAllAsync(
-            filter: q => q.StudentId == studentId && q.MemorizedAt.HasValue && 
+            filter: q => q.StudentId == studentId && q.MemorizedAt.HasValue &&
                       q.MemorizedAt.Value.Date >= weekStart.Date && q.MemorizedAt.Value.Date <= weekEnd.Date);
 
         var hadithList = hadithsWeek.Value?.ToList() ?? new List<StudentHadith>();
@@ -119,11 +117,11 @@ public class StudentReportService : IStudentReportService
         var student = studentResult.Value;
 
         var hadithsMonth = await _hadithRepository.GetAllAsync(
-            filter: h => h.StudentId == studentId && h.MemorizedAt.HasValue && 
+            filter: h => h.StudentId == studentId && h.MemorizedAt.HasValue &&
                         h.MemorizedAt.Value.Date >= monthStart.Date && h.MemorizedAt.Value.Date <= monthEnd.Date);
 
         var quraanPagesMonth = await _quraanPageRepository.GetAllAsync(
-            filter: q => q.StudentId == studentId && q.MemorizedAt.HasValue && 
+            filter: q => q.StudentId == studentId && q.MemorizedAt.HasValue &&
                       q.MemorizedAt.Value.Date >= monthStart.Date && q.MemorizedAt.Value.Date <= monthEnd.Date);
 
         var hadithList = hadithsMonth.Value?.ToList() ?? new List<StudentHadith>();
@@ -161,11 +159,11 @@ public class StudentReportService : IStudentReportService
             return ApplicationErrors.SemesterNotFound;
 
         var hadithsSemester = await _hadithRepository.GetAllAsync(
-            filter: h => h.StudentId == studentId && h.MemorizedAt.HasValue && 
+            filter: h => h.StudentId == studentId && h.MemorizedAt.HasValue &&
                         h.MemorizedAt.Value.Date >= semester.StartDate.Date && h.MemorizedAt.Value.Date <= semester.EndDate.Date);
 
         var quraanPagesSemester = await _quraanPageRepository.GetAllAsync(
-            filter: q => q.StudentId == studentId && q.MemorizedAt.HasValue && 
+            filter: q => q.StudentId == studentId && q.MemorizedAt.HasValue &&
                       q.MemorizedAt.Value.Date >= semester.StartDate.Date && q.MemorizedAt.Value.Date <= semester.EndDate.Date);
 
         var hadithList = hadithsSemester.Value?.ToList() ?? new List<StudentHadith>();

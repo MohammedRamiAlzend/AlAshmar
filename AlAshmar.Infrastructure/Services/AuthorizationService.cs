@@ -4,8 +4,6 @@ using System.Security.Cryptography;
 using System.Text;
 using AlAshmar.Application.Interfaces;
 using AlAshmar.Domain.Entities.Users;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace AlAshmar.Infrastructure.Services;

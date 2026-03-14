@@ -5,11 +5,11 @@ using AlAshmar.Domain.Entities.Forms;
 
 namespace AlAshmar.Application.Services.Domain;
 
-// ==================== FORM DOMAIN SERVICES ====================
+
 
 public interface IFormService : IAdvancedCrudService<Form, FormDto, Guid>
 {
-    /// <summary>Returns the form identified by its magic-link access token.</summary>
+
     Task<Result<FormDto>> GetByAccessTokenAsync(Guid accessToken, CancellationToken cancellationToken = default);
 }
 
@@ -48,10 +48,10 @@ public class FormQuestionOptionService : CrudServiceBase<FormQuestionOption, For
 
 public interface IFormResponseService : IAdvancedCrudService<FormResponse, FormResponseDto, Guid>
 {
-    /// <summary>
-    /// Persists a full form submission (all answers) in a single operation and
-    /// auto-grades the response when the form is a quiz.
-    /// </summary>
+
+
+
+
     Task<Result<FormResponseDto>> SubmitAsync(SubmitFormResponseDto dto, CancellationToken cancellationToken = default);
 }
 
@@ -76,7 +76,7 @@ public class FormResponseService : CrudServiceBase<FormResponse, FormResponseDto
 
     public async Task<Result<FormResponseDto>> SubmitAsync(SubmitFormResponseDto dto, CancellationToken cancellationToken = default)
     {
-        // Validate form exists and is active
+
         var formResult = await _formRepository.GetByIdAsync(dto.FormId);
         if (formResult.IsError || formResult.Value is null)
             return ApplicationErrors.FormNotFound;
@@ -93,7 +93,7 @@ public class FormResponseService : CrudServiceBase<FormResponse, FormResponseDto
         if (form.EndsAt.HasValue && now > form.EndsAt.Value)
             return ApplicationErrors.FormAlreadyEnded;
 
-        // Build the response entity
+
         var response = new FormResponse
         {
             Id = Guid.NewGuid(),
@@ -119,15 +119,12 @@ public class FormResponseService : CrudServiceBase<FormResponse, FormResponseDto
                 QuestionId = answerDto.QuestionId,
                 TextAnswer = answerDto.TextAnswer
             };
-
-            // Auto-grade for quiz forms
             if (form.FormType == FormType.Quiz && question is not null && question.Points.HasValue)
             {
                 bool isCorrect = false;
 
                 if (question.QuestionType is QuestionType.ShortText or QuestionType.LongText)
                 {
-                    // Text answers are not auto-graded
                 }
                 else if (answerDto.SelectedOptionIds.Count > 0 && question.Options.Count > 0)
                 {
@@ -145,8 +142,6 @@ public class FormResponseService : CrudServiceBase<FormResponse, FormResponseDto
                 answer.PointsAwarded = isCorrect ? question.Points.Value : 0;
                 totalScore += answer.PointsAwarded.Value;
             }
-
-            // Link selected options
             foreach (var optionId in answerDto.SelectedOptionIds)
             {
                 answer.SelectedOptions.Add(new FormAnswerSelectedOption

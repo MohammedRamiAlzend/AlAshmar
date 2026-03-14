@@ -1,10 +1,9 @@
-using AlAshmar.Domain.Entities.Abstraction;
 
 namespace AlAshmar.Domain.Events;
 
-/// <summary>
-/// Base entity class with domain event support.
-/// </summary>
+
+
+
 public abstract class EntityWithEvents<TKey> : Entity<TKey>, IHasDomainEvents
 {
     private readonly List<DomainEvent> _domainEvents = [];

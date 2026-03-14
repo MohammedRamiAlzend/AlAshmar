@@ -10,7 +10,7 @@ using AlAshmar.Domain.Entities.Users;
 
 namespace AlAshmar.Application.Services.Domain;
 
-// ==================== COMMON DOMAIN SERVICES ====================
+
 
 public interface IAllowableExtentionService : IAdvancedCrudService<AllowableExtention, AllowableExtentionDto, Guid> { }
 public class AllowableExtentionService : CrudServiceBase<AllowableExtention, AllowableExtentionDto, Guid>, IAllowableExtentionService
@@ -33,7 +33,7 @@ public class ContactInfoService : CrudServiceBase<ContactInfo, ContactInfoDto, G
         : base(repository, mapper) { }
 }
 
-// ==================== USERS DOMAIN SERVICES ====================
+
 
 public interface IUserService : IAdvancedCrudService<User, UserDto, Guid> { }
 public class UserService : CrudServiceBase<User, UserDto, Guid>, IUserService
@@ -49,7 +49,7 @@ public class RoleService : CrudServiceBase<Role, RoleDto, Guid>, IRoleService
         : base(repository, mapper) { }
 }
 
-// ==================== MANAGERS DOMAIN SERVICES ====================
+
 
 public interface IManagerService : IAdvancedCrudService<Manager, ManagerDto, Guid> { }
 public class ManagerService : CrudServiceBase<Manager, ManagerDto, Guid>, IManagerService
@@ -58,7 +58,7 @@ public class ManagerService : CrudServiceBase<Manager, ManagerDto, Guid>, IManag
         : base(repository, mapper) { }
 }
 
-// ==================== TEACHERS DOMAIN SERVICES ====================
+
 
 public interface ITeacherService : IAdvancedCrudService<Teacher, TeacherDto, Guid> { }
 public class TeacherService : CrudServiceBase<Teacher, TeacherDto, Guid>, ITeacherService
@@ -81,12 +81,12 @@ public class ClassTeacherEnrollmentService : CrudServiceBase<ClassTeacherEnrollm
         : base(repository, mapper) { }
 }
 
-// ==================== STUDENTS DOMAIN SERVICES ====================
-// Note: For student operations, use the specialized student DTOs:
-// - StudentListItemDto for lists
-// - StudentDetailDto for full details
-// - StudentBasicInfoDto for creation responses
-// The legacy StudentDto has been deprecated and split into specialized DTOs.
+
+
+
+
+
+
 
 public interface IStudentAttendanceService : IAdvancedCrudService<StudentAttendance, StudentAttendanceDto, Guid> { }
 public class StudentAttendanceService : CrudServiceBase<StudentAttendance, StudentAttendanceDto, Guid>, IStudentAttendanceService
@@ -102,7 +102,7 @@ public class ClassStudentEnrollmentService : CrudServiceBase<ClassStudentEnrollm
         : base(repository, mapper) { }
 }
 
-// ==================== ACADEMIC DOMAIN SERVICES ====================
+
 
 public interface IBookService : IAdvancedCrudService<Book, BookDto, Guid> { }
 public class BookService : CrudServiceBase<Book, BookDto, Guid>, IBookService

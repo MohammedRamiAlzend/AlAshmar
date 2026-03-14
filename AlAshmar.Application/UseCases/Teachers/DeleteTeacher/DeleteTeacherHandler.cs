@@ -1,8 +1,5 @@
-using AlAshmar.Application.Common;
-using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Teachers;
 using AlAshmar.Application.Repos;
-using MediatR;
 
 namespace AlAshmar.Application.UseCases.Teachers.DeleteTeacher;
 
@@ -26,7 +23,7 @@ public class DeleteTeacherHandler : IRequestHandler<DeleteTeacherCommand, Result
         var result = await _repository.RemoveAsync(t => t.Id == command.Id);
         if (result.IsError)
             return result.Errors;
-        
+
         return Result.Success;
     }
 }

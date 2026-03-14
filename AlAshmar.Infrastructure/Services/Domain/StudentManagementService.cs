@@ -1,20 +1,16 @@
-using AlAshmar.Application.Common;
-using AlAshmar.Application.DTOs;
 using AlAshmar.Application.DTOs.Domain;
 using AlAshmar.Application.Repos;
 using AlAshmar.Application.Repos.Includes;
-using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Academic;
 using AlAshmar.Domain.Entities.Common;
 using AlAshmar.Domain.Entities.Students;
-using Microsoft.EntityFrameworkCore;
 using AlAshmar.Application.UseCases.Students.GetMemorizationProgress;
 
 namespace AlAshmar.Infrastructure.Services.Domain;
 
-/// <summary>
-/// Service interface for student management operations.
-/// </summary>
+
+
+
 public interface IStudentManagementService
 {
     Task<Result<List<StudentDto>>> GetAllFilteredAsync(
@@ -87,9 +83,9 @@ public interface IStudentManagementService
         CancellationToken cancellationToken = default);
 }
 
-/// <summary>
-/// Service implementation for student management operations.
-/// </summary>
+
+
+
 public class StudentManagementService : IStudentManagementService
 {
     private readonly IRepositoryBase<Student, Guid> _studentRepository;

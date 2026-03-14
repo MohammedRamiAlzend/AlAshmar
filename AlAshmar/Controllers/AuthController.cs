@@ -1,9 +1,4 @@
 using AlAshmar.Application.Interfaces;
-using AlAshmar.Application.UseCases.Managers.CreateManager;
-using AlAshmar.Application.UseCases.Students.CreateStudent;
-using AlAshmar.Application.UseCases.Teachers.CreateTeacher;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace AlAshmar.Controllers;
 

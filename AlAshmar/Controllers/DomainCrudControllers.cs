@@ -10,11 +10,11 @@ public class AllowableExtentionsController(IAllowableExtentionService service, I
     protected override Guid GetId(AllowableExtentionDto dto) => dto.Id;
 }
 
-//public class AttachmentsController(IAttacmentService service, IMapper mapper) :
-//    BaseController<Attacment, AttacmentDto, CreateAttacmentDto, UpdateAttacmentDto, Guid>(service, mapper)
-//{
-//    protected override Guid GetId(AttacmentDto dto) => dto.Id;
-//}
+
+
+
+
+
 
 public class ContactInfosController(IContactInfoService service, IMapper mapper) :
     BaseController<ContactInfo, ContactInfoDto, CreateContactInfoDto, UpdateContactInfoDto, Guid>(service, mapper)

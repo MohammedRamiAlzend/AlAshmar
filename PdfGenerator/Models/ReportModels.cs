@@ -1,8 +1,8 @@
 namespace PdfGenerator.Models;
 
-/// <summary>
-/// Base model for all report types.
-/// </summary>
+
+
+
 public class ReportBaseModel
 {
     public string ReportTitle { get; set; } = string.Empty;
@@ -11,9 +11,9 @@ public class ReportBaseModel
     public string? LogoPath { get; set; }
 }
 
-/// <summary>
-/// Model for student daily/weekly/monthly/semester reports.
-/// </summary>
+
+
+
 public class StudentDailyReportModel : ReportBaseModel
 {
     public Guid StudentId { get; set; }
@@ -27,9 +27,9 @@ public class StudentDailyReportModel : ReportBaseModel
     public List<string> TeacherNotes { get; set; } = new();
 }
 
-/// <summary>
-/// Model for teacher daily/weekly/monthly/semester reports.
-/// </summary>
+
+
+
 public class TeacherDailyReportModel : ReportBaseModel
 {
     public Guid TeacherId { get; set; }
@@ -41,9 +41,9 @@ public class TeacherDailyReportModel : ReportBaseModel
     public double AttendancePercentage { get; set; }
 }
 
-/// <summary>
-/// Model for class daily/weekly/monthly/semester reports.
-/// </summary>
+
+
+
 public class ClassDailyReportModel : ReportBaseModel
 {
     public Guid ClassId { get; set; }
@@ -57,9 +57,9 @@ public class ClassDailyReportModel : ReportBaseModel
     public double AverageAttendancePercentage { get; set; }
 }
 
-/// <summary>
-/// Model for attendance reports.
-/// </summary>
+
+
+
 public class AttendanceReportModel : ReportBaseModel
 {
     public DateTime FromDate { get; set; }
@@ -71,9 +71,9 @@ public class AttendanceReportModel : ReportBaseModel
     public int TotalTeacherAbsences { get; set; }
 }
 
-/// <summary>
-/// Model for points reports.
-/// </summary>
+
+
+
 public class PointsReportModel : ReportBaseModel
 {
     public Guid? SemesterId { get; set; }
@@ -88,9 +88,9 @@ public class PointsReportModel : ReportBaseModel
     public int TotalEvents { get; set; }
 }
 
-/// <summary>
-/// Model for semester overview reports.
-/// </summary>
+
+
+
 public class SemesterOverviewReportModel : ReportBaseModel
 {
     public Guid SemesterId { get; set; }

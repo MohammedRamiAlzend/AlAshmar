@@ -3,9 +3,7 @@ using AlAshmar.Application.Repos;
 using AlAshmar.Application.UseCases.Managers.CreateManager;
 using AlAshmar.Application.UseCases.Students.CreateStudent;
 using AlAshmar.Application.UseCases.Teachers.CreateTeacher;
-using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Users;
-using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace AlAshmar.Infrastructure.Services;
@@ -36,7 +34,7 @@ public class AuthenticationService(
 
     public async Task<Result<AuthResult>> RegisterManagerAsync(CreateManagerCommand command, CancellationToken cancellationToken = default)
     {
-        // Check if user already exists
+
         var existingUser = await userRepository.GetAsync(u => u.UserName == command.UserName);
         if (!existingUser.IsError && existingUser.Value != null)
             return ApplicationErrors.UserAlreadyExists;
@@ -60,7 +58,7 @@ public class AuthenticationService(
 
     public async Task<Result<AuthResult>> RegisterStudentAsync(CreateStudentCommand command, CancellationToken cancellationToken = default)
     {
-        // Check if user already exists
+
         var existingUser = await userRepository.GetAsync(u => u.UserName == command.UserName);
         if (!existingUser.IsError && existingUser.Value != null)
             return ApplicationErrors.UserAlreadyExists;
@@ -83,7 +81,7 @@ public class AuthenticationService(
 
     public async Task<Result<AuthResult>> RegisterTeacherAsync(CreateTeacherCommand command, CancellationToken cancellationToken = default)
     {
-        // Check if user already exists
+
         var existingUser = await userRepository.GetAsync(u => u.UserName == command.UserName);
         if (!existingUser.IsError && existingUser.Value != null)
             return ApplicationErrors.UserAlreadyExists;

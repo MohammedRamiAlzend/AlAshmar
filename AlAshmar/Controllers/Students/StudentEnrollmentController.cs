@@ -1,8 +1,8 @@
 namespace AlAshmar.Controllers.Students;
 
-/// <summary>
-/// Controller for student enrollment operations.
-/// </summary>
+
+
+
 [ApiController]
 [Route("api/students")]
 [Authorize]
@@ -15,9 +15,9 @@ public class StudentEnrollmentController : ControllerBase
         _sender = sender;
     }
 
-    /// <summary>
-    /// Enroll a student in a class.
-    /// </summary>
+
+
+
     [HttpPost("{id:guid}/enrollments")]
     public async Task<IActionResult> EnrollInClass(
         [FromRoute] Guid id,
@@ -29,9 +29,9 @@ public class StudentEnrollmentController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Get student's class enrollments.
-    /// </summary>
+
+
+
     [HttpGet("{id:guid}/enrollments")]
     public async Task<IActionResult> GetClassEnrollments(
         [FromRoute] Guid id,

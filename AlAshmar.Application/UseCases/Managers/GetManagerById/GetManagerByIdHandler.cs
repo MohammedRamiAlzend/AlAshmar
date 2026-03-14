@@ -1,10 +1,7 @@
-using AlAshmar.Application.Common;
 using AlAshmar.Application.DTOs;
-using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Managers;
 using AlAshmar.Application.Repos;
 using AlAshmar.Application.Repos.Includes;
-using MediatR;
 
 namespace AlAshmar.Application.UseCases.Managers.GetManagerById;
 

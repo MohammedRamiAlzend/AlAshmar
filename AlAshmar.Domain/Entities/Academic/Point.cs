@@ -18,7 +18,7 @@ public class Point : Entity<Guid>
     [ForeignKey(nameof(ClassId))]
     public Halaqa? Halaqa { get; set; }
 
-    public Guid SmesterId { get; set; } // keep spelled as in diagram
+    public Guid SmesterId { get; set; }
 
     public int PointValue { get; set; }
 

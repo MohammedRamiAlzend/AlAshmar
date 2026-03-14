@@ -13,7 +13,7 @@ public class EntityMappingProfile : Profile
 {
     public EntityMappingProfile()
     {
-        // Common Domain
+
         CreateMap<AllowableExtention, AllowableExtentionDto>().ReverseMap();
         CreateMap<CreateAllowableExtentionDto, AllowableExtention>();
         CreateMap<UpdateAllowableExtentionDto, AllowableExtention>();
@@ -26,7 +26,7 @@ public class EntityMappingProfile : Profile
         CreateMap<CreateContactInfoDto, ContactInfo>();
         CreateMap<UpdateContactInfoDto, ContactInfo>();
 
-        // Users Domain
+
         CreateMap<User, UserDto>().ReverseMap();
         CreateMap<CreateUserDto, User>();
         CreateMap<UpdateUserDto, User>();
@@ -34,7 +34,7 @@ public class EntityMappingProfile : Profile
         CreateMap<Role, RoleDto>().ReverseMap();
         CreateMap<Permission, PermissionDto>().ReverseMap();
 
-        // Managers Domain
+
         CreateMap<Manager, ManagerDto>().ReverseMap();
         CreateMap<CreateManagerDto, Manager>();
         CreateMap<UpdateManagerDto, Manager>();
@@ -42,7 +42,7 @@ public class EntityMappingProfile : Profile
         CreateMap<ManagerContactInfo, ManagerContactInfoDto>().ReverseMap();
         CreateMap<ManagerAttachment, ManagerAttachmentDto>().ReverseMap();
 
-        // Teachers Domain
+
         CreateMap<Teacher, TeacherDto>().ReverseMap();
         CreateMap<CreateTeacherDto, Teacher>();
         CreateMap<UpdateTeacherDto, Teacher>();
@@ -52,16 +52,16 @@ public class EntityMappingProfile : Profile
         CreateMap<TeacherAttencance, TeacherAttencanceDto>().ReverseMap();
         CreateMap<ClassTeacherEnrollment, ClassTeacherEnrollmentDto>().ReverseMap();
 
-        // Students Domain
-        // Note: Student entity uses specialized DTOs (StudentListItemDto, StudentDetailDto, etc.)
-        // Direct mapping is not used. Use manual mapping in handlers.
+
+
+
         CreateMap<CreateStudentDto, Student>();
         CreateMap<UpdateStudentDto, Student>();
 
-        // StudentAttendance uses the StudentAttendanceDto for CRUD operations
+
         CreateMap<StudentAttendance, StudentAttendanceDto>().ReverseMap();
-        
-        // Academic Domain
+
+
         CreateMap<Book, BookDto>().ReverseMap();
         CreateMap<CreateBookDto, Book>();
         CreateMap<UpdateBookDto, Book>();
@@ -90,7 +90,7 @@ public class EntityMappingProfile : Profile
         CreateMap<CreatePointDto, Point>();
         CreateMap<UpdatePointDto, Point>();
 
-        // Forms Domain
+
         CreateMap<Form, FormDto>().ReverseMap();
         CreateMap<CreateFormDto, FormDto>();
         CreateMap<UpdateFormDto, FormDto>();

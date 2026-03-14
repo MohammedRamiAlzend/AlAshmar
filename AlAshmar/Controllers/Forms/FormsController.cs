@@ -1,15 +1,12 @@
-using AlAshmar.Application.DTOs.Domain;
 using AlAshmar.Application.Services.Domain;
 using AlAshmar.Domain.Entities.Forms;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace AlAshmar.Controllers.Forms;
 
-/// <summary>
-/// CRUD endpoints for managing forms and quizzes.
-/// Requires authentication.
-/// </summary>
+
+
+
+
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
@@ -50,10 +47,10 @@ public class FormsController : ControllerBase
         return Ok(result.Value);
     }
 
-    /// <summary>
-    /// Returns a form by its magic-link access token. Does NOT require authentication,
-    /// allowing direct access via a shared link.
-    /// </summary>
+
+
+
+
     [AllowAnonymous]
     [HttpGet("access/{accessToken:guid}")]
     public async Task<ActionResult<FormDto>> GetByAccessToken(Guid accessToken, CancellationToken cancellationToken)
@@ -103,9 +100,9 @@ public class FormsController : ControllerBase
     }
 }
 
-/// <summary>
-/// Endpoints for managing questions inside a form.
-/// </summary>
+
+
+
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
@@ -171,9 +168,9 @@ public class FormQuestionsController : ControllerBase
     }
 }
 
-/// <summary>
-/// Endpoints for managing options of a form question.
-/// </summary>
+
+
+
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
@@ -232,9 +229,9 @@ public class FormQuestionOptionsController : ControllerBase
     }
 }
 
-/// <summary>
-/// Endpoints for form responses (submissions).
-/// </summary>
+
+
+
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
@@ -265,10 +262,10 @@ public class FormResponsesController : ControllerBase
         return result.IsError ? BadRequest(result.Errors) : Ok(result.Value);
     }
 
-    /// <summary>
-    /// Submits a response to a form. Accessible without authentication so that
-    /// students/teachers can respond via a magic link.
-    /// </summary>
+
+
+
+
     [AllowAnonymous]
     [HttpPost("submit")]
     public async Task<ActionResult<FormResponseDto>> Submit([FromBody] SubmitFormResponseDto dto, CancellationToken cancellationToken)

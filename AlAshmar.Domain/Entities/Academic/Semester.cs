@@ -1,4 +1,3 @@
-using AlAshmar.Domain.Entities.Abstraction;
 
 namespace AlAshmar.Domain.Entities.Academic;
 

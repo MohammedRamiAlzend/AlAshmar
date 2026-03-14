@@ -1,8 +1,8 @@
 namespace AlAshmar.Controllers.Managers;
 
-/// <summary>
-/// Controller for core manager CRUD operations.
-/// </summary>
+
+
+
 [ApiController]
 [Route("api/managers")]
 [Authorize]
@@ -15,9 +15,9 @@ public class ManagerController : ControllerBase
         _sender = sender;
     }
 
-    /// <summary>
-    /// Get all managers.
-    /// </summary>
+
+
+
     [HttpGet]
     public async Task<IActionResult> GetAllManagers(CancellationToken cancellationToken = default)
     {
@@ -26,9 +26,9 @@ public class ManagerController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Get a manager by ID.
-    /// </summary>
+
+
+
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetManagerById(
         [FromRoute] Guid id,
@@ -39,9 +39,9 @@ public class ManagerController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Create a new manager.
-    /// </summary>
+
+
+
     [HttpPost]
     public async Task<IActionResult> CreateManager(
         [FromBody] CreateManagerCommand command,
@@ -51,9 +51,9 @@ public class ManagerController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Update an existing manager's information.
-    /// </summary>
+
+
+
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateManager(
         [FromRoute] Guid id,
@@ -65,9 +65,9 @@ public class ManagerController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Delete a manager by ID.
-    /// </summary>
+
+
+
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteManager(
         [FromRoute] Guid id,
@@ -78,9 +78,9 @@ public class ManagerController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Update a manager's password.
-    /// </summary>
+
+
+
     [HttpPut("{id:guid}/password")]
     public async Task<IActionResult> UpdatePassword(
         [FromRoute] Guid id,

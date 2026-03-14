@@ -3,9 +3,9 @@ using FileManager.Models;
 
 namespace FileManager.Core;
 
-/// <summary>
-/// Enhanced file manager implementation with Windows Explorer-like functionality.
-/// </summary>
+
+
+
 public class EnhancedFileManager : IFileManager
 {
     private readonly string[] _defaultAllowedExtensions = {
@@ -139,7 +139,7 @@ public class EnhancedFileManager : IFileManager
         {
             if (!File.Exists(filePath))
             {
-                return new FileOperationResult(true, null, filePath); // Already deleted
+                return new FileOperationResult(true, null, filePath);
             }
 
             File.Delete(filePath);
@@ -361,7 +361,7 @@ public class EnhancedFileManager : IFileManager
         {
             if (!Directory.Exists(directoryPath))
             {
-                return new DirectoryOperationResult(true, null, directoryPath); // Already deleted
+                return new DirectoryOperationResult(true, null, directoryPath);
             }
 
             Directory.Delete(directoryPath, recursive);
@@ -438,7 +438,7 @@ public class EnhancedFileManager : IFileManager
 
             searchPattern = string.IsNullOrEmpty(searchPattern) ? "*" : searchPattern;
 
-            // Get files
+
             var files = Directory.GetFiles(directoryPath, searchPattern, searchOption);
             foreach (var file in files)
             {
@@ -458,7 +458,7 @@ public class EnhancedFileManager : IFileManager
                 });
             }
 
-            // Get directories
+
             var directories = Directory.GetDirectories(directoryPath, searchPattern, searchOption);
             foreach (var dir in directories)
             {
@@ -506,7 +506,7 @@ public class EnhancedFileManager : IFileManager
             {
                 var fileInfo = new FileInfo(file);
 
-                // Apply filters
+
                 if (!string.IsNullOrEmpty(searchCriteria.FileExtension) &&
                     !fileInfo.Extension.Equals(searchCriteria.FileExtension, searchCriteria.CaseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase))
                 {
@@ -662,7 +662,7 @@ public class EnhancedFileManager : IFileManager
             safeName = safeName.Substring(0, 100);
         }
 
-        var guid = Guid.NewGuid().ToString("N")[..8]; // First 8 characters of GUID
+        var guid = Guid.NewGuid().ToString("N")[..8];
         return $"{safeName}_{guid}{extension}";
     }
 

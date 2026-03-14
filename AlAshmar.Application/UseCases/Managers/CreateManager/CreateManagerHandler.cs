@@ -1,7 +1,6 @@
 using AlAshmar.Application.DTOs;
 using AlAshmar.Domain.Entities.Managers;
 using AlAshmar.Application.Repos;
-using MediatR;
 
 namespace AlAshmar.Application.UseCases.Managers.CreateManager;
 

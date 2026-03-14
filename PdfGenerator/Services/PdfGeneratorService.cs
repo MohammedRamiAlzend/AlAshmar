@@ -8,9 +8,9 @@ using QuestPDF.Infrastructure;
 
 namespace PdfGenerator.Services;
 
-/// <summary>
-/// Implementation of PDF generator service using QuestPDF.
-/// </summary>
+
+
+
 public class PdfGeneratorService : IPdfGeneratorService
 {
     private readonly IPdfOptions _options;
@@ -18,15 +18,15 @@ public class PdfGeneratorService : IPdfGeneratorService
     public PdfGeneratorService(IPdfOptions? options = null)
     {
         _options = options ?? new PdfOptions();
-        
-        // Configure QuestPDF
+
+
         QuestPDF.Settings.License = LicenseType.Community;
     }
 
     public Task<byte[]> GenerateFromHtmlAsync(string htmlContent, string fileName)
     {
-        // For HTML to PDF, we'd need a different approach as QuestPDF doesn't support HTML directly
-        // In production, consider using Playwright or similar
+
+
         throw new NotImplementedException("HTML to PDF conversion requires additional setup. Use GenerateFromModelAsync instead.");
     }
 
@@ -45,7 +45,7 @@ public class PdfGeneratorService : IPdfGeneratorService
             "semester-overview" => GenerateSemesterOverviewReport(model as SemesterOverviewReportModel ?? throw new InvalidCastException()),
             _ => GenerateGenericReport(model, reportType)
         };
-        
+
         return Task.FromResult(result);
     }
 

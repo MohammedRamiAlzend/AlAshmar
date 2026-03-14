@@ -1,16 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
-using AlAshmar.Domain.Commons;
 
 namespace AlAshmar.Infrastructure.Extensions;
 
-/// <summary>
-/// Extension methods for converting Result<T> to IActionResult.
-/// </summary>
+
+
+
 public static class ResultExtensions
 {
-    /// <summary>
-    /// Converts a Result to an IActionResult with appropriate HTTP status codes.
-    /// </summary>
+
+
+
     public static IActionResult ToActionResult<T>(this Result<T> result) where T : notnull
     {
         if (result.IsError)
@@ -37,9 +36,9 @@ public static class ResultExtensions
         };
     }
 
-    /// <summary>
-    /// Converts a Result to an IActionResult with a specific location header for Created responses
-    /// </summary>
+
+
+
     public static IActionResult ToActionResult<T>(this Result<T> result, string? locationUri = null) where T : notnull
     {
         if (result.IsError)
@@ -66,9 +65,9 @@ public static class ResultExtensions
         };
     }
 
-    /// <summary>
-    /// Converts a Result to an IActionResult with action name and route values for Created responses
-    /// </summary>
+
+
+
     public static IActionResult ToCreatedAtActionResult<T>(this Result<T> result, ControllerBase controller, string actionName, object? routeValues = null) where T : notnull
     {
         if (result.IsError)

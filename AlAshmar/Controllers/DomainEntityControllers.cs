@@ -1,6 +1,4 @@
-using AlAshmar.Application.DTOs.Domain;
 using AlAshmar.Application.Services.Domain;
-using Microsoft.AspNetCore.Mvc;
 using AlAshmar.Domain.Entities.Users;
 using AlAshmar.Domain.Entities.Teachers;
 using AlAshmar.Domain.Entities.Students;

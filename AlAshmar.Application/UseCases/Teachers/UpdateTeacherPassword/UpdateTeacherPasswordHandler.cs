@@ -1,10 +1,7 @@
-using AlAshmar.Application.Common;
-using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Teachers;
 using AlAshmar.Domain.Entities.Users;
 using AlAshmar.Application.Repos;
 using Microsoft.EntityFrameworkCore;
-using MediatR;
 
 namespace AlAshmar.Application.UseCases.Teachers.UpdateTeacherPassword;
 

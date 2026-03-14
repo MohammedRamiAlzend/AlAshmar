@@ -1,18 +1,17 @@
-﻿using System.Linq.Expressions;
 using ExpressionBuilderLib.src.Core.Enums;
 using ExpressionBuilderLib.src.Core.Interfaces;
 using ExpressionBuilderLib.src.Utilities;
 
 namespace ExpressionBuilderLib.src.Core;
 
-/// <summary>
-/// Combines multiple expressions using logical operators
-/// </summary>
+
+
+
 public static class ExpressionCombiner
 {
-    /// <summary>
-    /// Combines two expressions with the specified logical operator
-    /// </summary>
+
+
+
     public static Expression<Func<T, bool>> Combine<T>(
         Expression<Func<T, bool>> expr1,
         Expression<Func<T, bool>> expr2,
@@ -38,9 +37,9 @@ public static class ExpressionCombiner
         return Expression.Lambda<Func<T, bool>>(combined, parameter);
     }
 
-    /// <summary>
-    /// Combines multiple expressions with AND operator
-    /// </summary>
+
+
+
     public static Expression<Func<T, bool>> AndAll<T>(
         params Expression<Func<T, bool>>[] expressions)
     {
@@ -59,9 +58,9 @@ public static class ExpressionCombiner
         return result;
     }
 
-    /// <summary>
-    /// Combines multiple expressions with OR operator
-    /// </summary>
+
+
+
     public static Expression<Func<T, bool>> OrAll<T>(
         params Expression<Func<T, bool>>[] expressions)
     {
@@ -80,9 +79,9 @@ public static class ExpressionCombiner
         return result;
     }
 
-    /// <summary>
-    /// Negates an expression
-    /// </summary>
+
+
+
     public static Expression<Func<T, bool>> Negate<T>(Expression<Func<T, bool>> expression)
     {
         if (expression == null)
