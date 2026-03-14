@@ -24,6 +24,7 @@ public static class ApplicationErrors
     public static readonly Error PermissionNotFound = new("200", "The specified permission was not found.", ErrorKind.NotFound, "لم يتم العثور على الإذن المحدد.");
     public static readonly Error PermissionAlreadyExists = new("201", "A permission with this name already exists.", ErrorKind.Conflict, "يوجد بالفعل إذن بهذا الاسم.");
     public static readonly Error PermissionNotAssignedToRole = new("202", "The permission is not assigned to this role.", ErrorKind.NotFound, "لم يتم تعيين الإذن لهذا الدور.");
+    public static readonly Error SomePermissionsNotFound = new("203", "Some of the specified permissions were not found.", ErrorKind.Validation, "بعض الأذونات المحددة غير موجودة.");
 
     // Template Errors (300-399)
     public static readonly Error TemplateNotFound = new("300", "The specified template was not found.", ErrorKind.NotFound, "لم يتم العثور على القالب المحدد.");
@@ -81,4 +82,48 @@ public static class ApplicationErrors
 
     public static Error FileOperationFailed(string message)
         => Error.Failure("1001", $"File operation failed: {message}", "فشلت عملية الملف:");
+
+    // Generic Resource Errors (1099)
+    public static readonly Error ResourceNotFound = new("1099", "The specified resource was not found.", ErrorKind.NotFound, "لم يتم العثور على المورد المحدد.");
+
+    // Student Errors (1100-1199)
+    public static readonly Error StudentNotFound = new("1100", "The specified student was not found.", ErrorKind.NotFound, "لم يتم العثور على الطالب المحدد.");
+    public static readonly Error StudentAlreadyEnrolledInClass = new("1101", "The student is already enrolled in this class.", ErrorKind.Conflict, "الطالب مسجل بالفعل في هذا الصف.");
+    public static readonly Error StudentUserNotFound = new("1102", "The student or associated user was not found.", ErrorKind.NotFound, "لم يتم العثور على الطالب أو المستخدم المرتبط به.");
+    public static readonly Error NationalityNumberAlreadyExists = new("1103", "A record with this nationality number already exists.", ErrorKind.Conflict, "يوجد بالفعل سجل بهذا الرقم الوطني.");
+
+    // Teacher Errors (1200-1299)
+    public static readonly Error TeacherNotFound = new("1200", "The specified teacher was not found.", ErrorKind.NotFound, "لم يتم العثور على المعلم المحدد.");
+    public static readonly Error TeacherContactInfoNotFound = new("1201", "The teacher contact information was not found.", ErrorKind.NotFound, "لم يتم العثور على معلومات الاتصال بالمعلم.");
+    public static readonly Error TeacherAlreadyAssignedToClass = new("1202", "The teacher is already assigned to this class.", ErrorKind.Conflict, "المعلم مسند بالفعل لهذا الصف.");
+    public static readonly Error TeacherClassEnrollmentNotFound = new("1203", "The teacher class enrollment was not found.", ErrorKind.NotFound, "لم يتم العثور على تسجيل المعلم في الصف.");
+    public static readonly Error TeacherUserNotFound = new("1204", "The teacher or associated user was not found.", ErrorKind.NotFound, "لم يتم العثور على المعلم أو المستخدم المرتبط به.");
+
+    // Manager Errors (1300-1399)
+    public static readonly Error ManagerNotFound = new("1300", "The specified manager was not found.", ErrorKind.NotFound, "لم يتم العثور على المدير المحدد.");
+    public static readonly Error ManagerUserNotFound = new("1301", "The manager or associated user was not found.", ErrorKind.NotFound, "لم يتم العثور على المدير أو المستخدم المرتبط به.");
+
+    // Course Errors (1400-1499)
+    public static readonly Error CourseNotFound = new("1400", "The specified course was not found.", ErrorKind.NotFound, "لم يتم العثور على المادة الدراسية المحددة.");
+
+    // Semester Errors (1500-1599)
+    public static readonly Error SemesterNotFound = new("1500", "The specified semester was not found.", ErrorKind.NotFound, "لم يتم العثور على الفصل الدراسي المحدد.");
+
+    // Halaqa Errors (1600-1699)
+    public static readonly Error HalaqaNotFound = new("1600", "The specified halaqa was not found.", ErrorKind.NotFound, "لم يتم العثور على الحلقة المحددة.");
+
+    // Form Errors (1700-1799)
+    public static readonly Error FormNotFound = new("1700", "The specified form was not found.", ErrorKind.NotFound, "لم يتم العثور على النموذج المحدد.");
+    public static readonly Error FormNotActive = new("1701", "The form is not active.", ErrorKind.Validation, "النموذج غير نشط.");
+    public static readonly Error FormNotStarted = new("1702", "The form has not started yet.", ErrorKind.Validation, "لم يبدأ النموذج بعد.");
+    public static readonly Error FormAlreadyEnded = new("1703", "The form has already ended.", ErrorKind.Validation, "انتهى النموذج بالفعل.");
+
+    // Repository / Infrastructure Errors (1800-1899)
+    public static readonly Error EntityCannotBeNull = new("1800", "The entity cannot be null.", ErrorKind.Failure, "الكيان لا يمكن أن يكون فارغاً.");
+    public static readonly Error FilterCannotBeNull = new("1801", "The filter cannot be null.", ErrorKind.Failure, "المرشح لا يمكن أن يكون فارغاً.");
+    public static Error ForeignKeyConstraintViolated(string foreignKeyName)
+        => new("1802", $"A foreign key constraint was violated: {foreignKeyName}", ErrorKind.Failure, $"انتهاك قيد المفتاح الأجنبي: {foreignKeyName}");
+
+    // Class Errors (1900-1999)
+    public static readonly Error ClassNotFound = new("1900", "The specified class was not found.", ErrorKind.NotFound, "لم يتم العثور على الصف المحدد.");
 }

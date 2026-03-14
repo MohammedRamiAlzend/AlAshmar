@@ -13,7 +13,7 @@ public class DeleteHalaqaHandler(IRepositoryBase<Halaqa, Guid> repository)
     {
         var result = await repository.GetByIdAsync(command.Id);
         if (result.Value == null)
-            return new Error("404", "Halaqa not found", ErrorKind.NotFound);
+            return ApplicationErrors.HalaqaNotFound;
 
         var deleteResult = await repository.RemoveAsync(h => h.Id == command.Id);
         if (deleteResult.IsError)

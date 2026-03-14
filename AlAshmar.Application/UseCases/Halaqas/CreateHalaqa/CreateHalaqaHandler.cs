@@ -19,7 +19,7 @@ public class CreateHalaqaHandler(
     {
         var courseExists = await courseRepository.AnyAsync(d => d.Id == command.CourseId);
         if (!courseExists)
-            return new Error("404", "Course not found", ErrorKind.NotFound);
+            return ApplicationErrors.CourseNotFound;
 
         var halaqa = new Halaqa
         {

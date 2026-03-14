@@ -15,7 +15,7 @@ public class RepositoryBase<TEntity, TKey>(AppDbContext dbcontext, ILogger<Repos
     public async Task<Result<Success>> AddAsync(TEntity entity)
     {
         if (entity == null)
-            return new Error("00", "Entity cannot be null.", ErrorKind.Failure);
+            return ApplicationErrors.EntityCannotBeNull;
 
         try
         {
@@ -24,7 +24,7 @@ public class RepositoryBase<TEntity, TKey>(AppDbContext dbcontext, ILogger<Repos
 
             return saveResult > 0
                 ? Result.Success
-                : new Error("00", "Failed to save entity.", ErrorKind.Failure);
+                : ApplicationErrors.OperationFailed;
         }
         catch (DbUpdateException dbEx)
         {
@@ -33,16 +33,16 @@ public class RepositoryBase<TEntity, TKey>(AppDbContext dbcontext, ILogger<Repos
             if (fkName != null)
             {
                 logger.LogWarning("Foreign key constraint violation: {FKName}", fkName);
-                return new Error("FK_ERROR", $"Foreign key constraint violated: {fkName}", ErrorKind.Failure);
+                return ApplicationErrors.ForeignKeyConstraintViolated(fkName);
             }
 
             logger.LogError(dbEx, "Database update error adding {EntityType}", typeof(TEntity).Name);
-            return new Error("DB_ERROR", dbEx.Message, ErrorKind.Failure);
+            return ApplicationErrors.DatabaseError;
         }
         catch (Exception e)
         {
             logger.LogError(e, "Unexpected error adding entity of type {EntityType}.", typeof(TEntity).Name);
-            return new Error("UNEXPECTED", e.Message, ErrorKind.Failure);
+            return ApplicationErrors.InternalServerError;
         }
     }
 
@@ -73,10 +73,7 @@ public class RepositoryBase<TEntity, TKey>(AppDbContext dbcontext, ILogger<Repos
         catch (Exception e)
         {
             logger.LogError(e, "Error retrieving entities of type {EntityType}.", typeof(TEntity).Name);
-            return new Error(
-                "00",
-                $"Something went wrong while retrieving entities of type {typeof(TEntity).Name}. Exception: {e.Message}",
-                type: ErrorKind.Failure);
+            return ApplicationErrors.DatabaseError;
         }
     }
 
@@ -115,10 +112,7 @@ public class RepositoryBase<TEntity, TKey>(AppDbContext dbcontext, ILogger<Repos
         catch (Exception e)
         {
             logger.LogError(e, "Error retrieving paged entities of type {EntityType}.", typeof(TEntity).Name);
-            return new Error(
-                "00",
-                $"Something went wrong while retrieving paged entities of type {typeof(TEntity).Name}. Exception: {e.Message}",
-                ErrorKind.Failure);
+            return ApplicationErrors.DatabaseError;
         }
     }
 
@@ -136,7 +130,7 @@ public class RepositoryBase<TEntity, TKey>(AppDbContext dbcontext, ILogger<Repos
             var result = await query.FirstOrDefaultAsync();
 
             if (result == null)
-                return new Error("404", "not found", ErrorKind.NotFound);
+                return ApplicationErrors.ResourceNotFound;
             else
                 return result;
 
@@ -144,32 +138,29 @@ public class RepositoryBase<TEntity, TKey>(AppDbContext dbcontext, ILogger<Repos
         catch (Exception e)
         {
             logger.LogError(e, "Error retrieving entity of type {EntityType}.", typeof(TEntity).Name);
-            return new Error(
-                "00",
-                $"Something went wrong while retrieving an entity of type {typeof(TEntity).Name}. Exception: {e.Message}", ErrorKind.Failure);
+            return ApplicationErrors.DatabaseError;
         }
     }
 
     public async Task<Result<Deleted>> RemoveAsync(Expression<Func<TEntity, bool>> filter)
     {
-        if (filter == null) return new Error("00", "Filter cannot be null.", ErrorKind.Failure);
+        if (filter == null) return ApplicationErrors.FilterCannotBeNull;
 
         try
         {
             var getEntity = await GetAsync(filter);
             if (getEntity.IsError) return getEntity.Errors;
             var entity = getEntity.Value;
-            if (entity == null) return new Error("00", "Entity not found.", ErrorKind.Failure);
+            if (entity == null) return ApplicationErrors.ResourceNotFound;
 
             dbcontext.Set<TEntity>().Remove(entity);
             int saveResult = await dbcontext.SaveChangesAsync();
-            return saveResult > 0 ? Result.Deleted : new Error("00", "Failed to delete entity.", ErrorKind.Failure);
+            return saveResult > 0 ? Result.Deleted : ApplicationErrors.OperationFailed;
         }
         catch (Exception e)
         {
             logger.LogError(e, "Error removing entity of type {EntityType}.", typeof(TEntity).Name);
-            return new Error("00",
-                $"Something went wrong while removing entity of type {typeof(TEntity).Name}. Exception: {e.Message}", ErrorKind.Failure);
+            return ApplicationErrors.DatabaseError;
         }
     }
 
@@ -190,7 +181,7 @@ public class RepositoryBase<TEntity, TKey>(AppDbContext dbcontext, ILogger<Repos
 
     public async Task<Result<Updated>> UpdateAsync(TEntity entity)
     {
-        if (entity == null) return new Error("00", "Entity cannot be null.", ErrorKind.Failure);
+        if (entity == null) return ApplicationErrors.EntityCannotBeNull;
         //if (entity.Id == default) return new Error("00", "Entity key (Id) cannot be zero or null.", ErrorKind.Failure);
 
         try
@@ -198,13 +189,12 @@ public class RepositoryBase<TEntity, TKey>(AppDbContext dbcontext, ILogger<Repos
             dbcontext.Attach(entity);
             dbcontext.Set<TEntity>().Entry(entity).State = EntityState.Modified;
             var saveResult = await dbcontext.SaveChangesAsync();
-            return saveResult > 0 ? Result.Updated : new Error("00", "Failed to update entity.", ErrorKind.Failure);
+            return saveResult > 0 ? Result.Updated : ApplicationErrors.OperationFailed;
         }
         catch (Exception e)
         {
             logger.LogError(e, "Error updating entity of type {EntityType}.", typeof(TEntity).Name);
-            return new Error("00",
-                $"Something went wrong while updating entity of type {typeof(TEntity).Name}. Exception: {e.Message}", ErrorKind.Failure);
+            return ApplicationErrors.DatabaseError;
         }
     }
 
@@ -217,8 +207,7 @@ public class RepositoryBase<TEntity, TKey>(AppDbContext dbcontext, ILogger<Repos
         catch (Exception e)
         {
             logger.LogError(e, "Error retrieving entity of type {EntityType} with id {Id}.", typeof(TEntity).Name, id);
-            return new Error("00",
-                $"Something went wrong while retrieving entity of type {typeof(TEntity).Name} with id {id}. Exception: {e.Message}", ErrorKind.Failure);
+            return ApplicationErrors.DatabaseError;
         }
     }
 

@@ -32,7 +32,7 @@ public class CreateManagerHandlerTests
     public async Task Handle_RepositoryFailure_ReturnsError()
     {
         _repoMock.Setup(r => r.AddAsync(It.IsAny<Manager>()))
-            .ReturnsAsync(new Error("DB_ERROR", "Database failure"));
+            .ReturnsAsync(ApplicationErrors.DatabaseError);
 
         var handler = new CreateManagerHandler(_repoMock.Object);
         var command = new CreateManagerCommand("Manager Name", "manager_user", "Secure@789");
@@ -66,7 +66,7 @@ public class DeleteManagerHandlerTests
     [Fact]
     public async Task Handle_NonExistingManager_ReturnsNotFoundError()
     {
-        _repoMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(new Error("NOT_FOUND", "Manager not found", ErrorKind.NotFound));
+        _repoMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(ApplicationErrors.ManagerNotFound);
 
         var handler = new DeleteManagerHandler(_repoMock.Object);
         var result = await handler.Handle(new DeleteManagerCommand(Guid.NewGuid()), CancellationToken.None);
@@ -109,7 +109,7 @@ public class GetAllManagersHandlerTests
                 It.IsAny<Expression<Func<Manager, bool>>?>(),
                 It.IsAny<Func<IQueryable<Manager>, IQueryable<Manager>>?>(),
                 It.IsAny<Func<IQueryable<Manager>, IOrderedQueryable<Manager>>?>()))
-            .ReturnsAsync(new Error("DB_ERROR", "Database error"));
+            .ReturnsAsync(ApplicationErrors.DatabaseError);
 
         var handler = new GetAllManagersHandler(_repoMock.Object);
         var result = await handler.Handle(new GetAllManagersQuery(), CancellationToken.None);
@@ -142,7 +142,7 @@ public class GetManagerByIdHandlerTests
     [Fact]
     public async Task Handle_NonExistingManager_ReturnsNotFoundError()
     {
-        _repoMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(new Error("NOT_FOUND", "Manager not found", ErrorKind.NotFound));
+        _repoMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(ApplicationErrors.ManagerNotFound);
 
         var handler = new GetManagerByIdHandler(_repoMock.Object);
         var result = await handler.Handle(new GetManagerByIdQuery(Guid.NewGuid()), CancellationToken.None);
@@ -176,7 +176,7 @@ public class UpdateManagerHandlerTests
     [Fact]
     public async Task Handle_NonExistingManager_ReturnsNotFoundError()
     {
-        _repoMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(new Error("NOT_FOUND", "Manager not found", ErrorKind.NotFound));
+        _repoMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(ApplicationErrors.ManagerNotFound);
 
         var handler = new UpdateManagerHandler(_repoMock.Object);
         var command = new UpdateManagerCommand(Guid.NewGuid(), "New Name");

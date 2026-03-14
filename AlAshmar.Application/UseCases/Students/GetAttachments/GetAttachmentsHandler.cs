@@ -20,7 +20,7 @@ public class GetAttachmentsHandler(IRepositoryBase<Student, Guid> repository)
 
         if (student.IsError) return student.Errors;
         if (student.Value == null)
-            return new Error("404", "Student not found", ErrorKind.NotFound);
+            return ApplicationErrors.StudentNotFound;
 
         var attachmentDtos = student.Value.StudentAttachments
             .Select(sa => new StudentAttachmentDetailDto(

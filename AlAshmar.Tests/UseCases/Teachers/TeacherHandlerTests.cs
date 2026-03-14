@@ -39,7 +39,7 @@ public class CreateTeacherHandlerTests
         _repoMock.Setup(r => r.AnyAsync(It.IsAny<Expression<Func<Teacher, bool>>>(), It.IsAny<Func<IQueryable<Teacher>, IQueryable<Teacher>>?>()))
             .ReturnsAsync(false);
         _repoMock.Setup(r => r.AddAsync(It.IsAny<Teacher>()))
-            .ReturnsAsync(new Error("DB_ERROR", "Database failure"));
+            .ReturnsAsync(ApplicationErrors.DatabaseError);
 
         var handler = new CreateTeacherHandler(_repoMock.Object);
         var command = new CreateTeacherCommand("Khalid", "Ahmad", "Sara", "8888888881", null, "khalid_user", "Secure@456");
@@ -73,7 +73,7 @@ public class DeleteTeacherHandlerTests
     [Fact]
     public async Task Handle_NonExistingTeacher_ReturnsNotFoundError()
     {
-        _repoMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(new Error("NOT_FOUND", "Teacher not found", ErrorKind.NotFound));
+        _repoMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(ApplicationErrors.TeacherNotFound);
 
         var handler = new DeleteTeacherHandler(_repoMock.Object);
         var result = await handler.Handle(new DeleteTeacherCommand(Guid.NewGuid()), CancellationToken.None);
@@ -116,7 +116,7 @@ public class GetAllTeachersHandlerTests
                 It.IsAny<Expression<Func<Teacher, bool>>?>(),
                 It.IsAny<Func<IQueryable<Teacher>, IQueryable<Teacher>>?>(),
                 It.IsAny<Func<IQueryable<Teacher>, IOrderedQueryable<Teacher>>?>()))
-            .ReturnsAsync(new Error("DB_ERROR", "Database error"));
+            .ReturnsAsync(ApplicationErrors.DatabaseError);
 
         var handler = new GetAllTeachersHandler(_repoMock.Object);
         var result = await handler.Handle(new GetAllTeachersQuery(), CancellationToken.None);
@@ -263,7 +263,7 @@ public class UpdateTeacherHandlerTests
     [Fact]
     public async Task Handle_NonExistingTeacher_ReturnsNotFoundError()
     {
-        _repoMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(new Error("NOT_FOUND", "Teacher not found", ErrorKind.NotFound));
+        _repoMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(ApplicationErrors.TeacherNotFound);
 
         var handler = new UpdateTeacherHandler(_repoMock.Object);
         var command = new UpdateTeacherCommand(Guid.NewGuid(), "Name", "Father", "Mother", "8888888883", null);
@@ -309,7 +309,7 @@ public class AddTeacherAttachmentHandlerTests
     [Fact]
     public async Task Handle_NonExistingTeacher_ReturnsNotFoundError()
     {
-        _teacherRepoMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(new Error("NOT_FOUND", "Teacher not found", ErrorKind.NotFound));
+        _teacherRepoMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(ApplicationErrors.TeacherNotFound);
 
         var handler = new AddTeacherAttachmentHandler(_teacherRepoMock.Object, _attachmentRepoMock.Object);
         var command = new AddTeacherAttachmentCommand(Guid.NewGuid(), "/path/file.pdf", "application/pdf", "safe.pdf", "orig.pdf", null);

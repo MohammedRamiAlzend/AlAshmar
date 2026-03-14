@@ -193,7 +193,7 @@ public class StudentManagementService : IStudentManagementService
         var student = await _studentRepository.GetByIdAsync(id);
 
         if (student.Value == null)
-            return new Error("404", "Student not found", ErrorKind.NotFound);
+            return ApplicationErrors.StudentNotFound;
 
         return new StudentDto(
             student.Value.Id,
@@ -266,7 +266,7 @@ public class StudentManagementService : IStudentManagementService
     {
         var studentResult = await _studentRepository.GetByIdAsync(id);
         if (studentResult.Value == null)
-            return new Error("404", "Student not found", ErrorKind.NotFound);
+            return ApplicationErrors.StudentNotFound;
 
         var student = studentResult.Value;
         student.UpdateBasicInfo(
@@ -303,7 +303,7 @@ public class StudentManagementService : IStudentManagementService
     {
         var student = await _studentRepository.GetByIdAsync(id);
         if (student.Value == null)
-            return new Error("404", "Student not found", ErrorKind.NotFound);
+            return ApplicationErrors.StudentNotFound;
 
         var result = await _studentRepository.RemoveAsync(s => s.Id == id);
         if (result.IsError)
@@ -406,7 +406,7 @@ public class StudentManagementService : IStudentManagementService
 
         if (existingEnrollment.IsError) return existingEnrollment.Errors;
         if (existingEnrollment.Value.Any())
-            return new Error("409", "Student is already enrolled in this class", ErrorKind.Conflict);
+            return ApplicationErrors.StudentAlreadyEnrolledInClass;
 
         var enrollment = new ClassStudentEnrollment
         {
@@ -447,7 +447,7 @@ public class StudentManagementService : IStudentManagementService
     {
         var student = await _studentRepository.GetByIdAsync(studentId);
         if (student.Value == null)
-            return new Error("404", "Student not found", ErrorKind.NotFound);
+            return ApplicationErrors.StudentNotFound;
 
         var attachment = new Attacment
         {
@@ -487,7 +487,7 @@ public class StudentManagementService : IStudentManagementService
 
         if (student.IsError) return student.Errors;
         if (student.Value == null)
-            return new Error("404", "Student not found", ErrorKind.NotFound);
+            return ApplicationErrors.StudentNotFound;
 
         var attachmentDtos = student.Value.StudentAttachments
             .Select(sa => new StudentAttachmentDto(

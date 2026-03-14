@@ -39,7 +39,7 @@ public class AuthorizationService : Application.Interfaces.IAuthorizationService
     {
         var permission = await _context.Permissions.FindAsync([id], cancellationToken);
         if (permission == null)
-            return new Error("404", "Permission not found", ErrorKind.NotFound);
+            return ApplicationErrors.PermissionNotFound;
 
         return new PermissionDto(permission.Id, permission.Name, permission.Description, permission.Resource, permission.Action);
     }
@@ -54,7 +54,7 @@ public class AuthorizationService : Application.Interfaces.IAuthorizationService
     {
         var permission = await _context.Permissions.FindAsync([id], cancellationToken);
         if (permission == null)
-            return new Error("404", "Permission not found", ErrorKind.NotFound);
+            return ApplicationErrors.PermissionNotFound;
 
         _context.Permissions.Remove(permission);
         await _context.SaveChangesAsync(cancellationToken);
@@ -68,7 +68,7 @@ public class AuthorizationService : Application.Interfaces.IAuthorizationService
             .FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
 
         if (role == null)
-            return new Error("404", "Role not found", ErrorKind.NotFound);
+            return ApplicationErrors.RoleNotFound;
 
         return MapToRoleDto(role);
     }
@@ -89,7 +89,7 @@ public class AuthorizationService : Application.Interfaces.IAuthorizationService
             .FirstOrDefaultAsync(r => r.Type == type, cancellationToken);
 
         if (role == null)
-            return new Error("404", "Role not found", ErrorKind.NotFound);
+            return ApplicationErrors.RoleNotFound;
 
         return MapToRoleDto(role);
     }
@@ -101,14 +101,14 @@ public class AuthorizationService : Application.Interfaces.IAuthorizationService
             .FirstOrDefaultAsync(r => r.Id == dto.RoleId, cancellationToken);
 
         if (role == null)
-            return new Error("404", "Role not found", ErrorKind.NotFound);
+            return ApplicationErrors.RoleNotFound;
 
         var permissions = await _context.Permissions
             .Where(p => dto.PermissionIds.Contains(p.Id))
             .ToListAsync(cancellationToken);
 
         if (permissions.Count != dto.PermissionIds.Count)
-            return new Error("400", "Some permissions not found", ErrorKind.Validation);
+            return ApplicationErrors.SomePermissionsNotFound;
 
         role.Permissions.Clear();
         foreach (var permission in permissions)
@@ -128,11 +128,11 @@ public class AuthorizationService : Application.Interfaces.IAuthorizationService
             .FirstOrDefaultAsync(r => r.Id == roleId, cancellationToken);
 
         if (role == null)
-            return new Error("404", "Role not found", ErrorKind.NotFound);
+            return ApplicationErrors.RoleNotFound;
 
         var permission = role.Permissions.FirstOrDefault(p => p.Id == permissionId);
         if (permission == null)
-            return new Error("404", "Permission not assigned to role", ErrorKind.NotFound);
+            return ApplicationErrors.PermissionNotAssignedToRole;
 
         role.Permissions.Remove(permission);
         await _context.SaveChangesAsync(cancellationToken);
@@ -144,11 +144,11 @@ public class AuthorizationService : Application.Interfaces.IAuthorizationService
     {
         var user = await _context.Users.FindAsync([dto.UserId], cancellationToken);
         if (user == null)
-            return new Error("404", "User not found", ErrorKind.NotFound);
+            return ApplicationErrors.UserNotFound;
 
         var role = await _context.Roles.FindAsync([dto.RoleId], cancellationToken);
         if (role == null)
-            return new Error("404", "Role not found", ErrorKind.NotFound);
+            return ApplicationErrors.RoleNotFound;
 
         user.RoleId = dto.RoleId;
         await _context.SaveChangesAsync(cancellationToken);

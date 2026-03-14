@@ -22,7 +22,7 @@ public class GetHalaqaByIdHandler(IRepositoryBase<Halaqa, Guid> repository)
 
         var halaqa = result.Value.FirstOrDefault();
         if (halaqa == null)
-            return new Error("404", "Halaqa not found", ErrorKind.NotFound);
+            return ApplicationErrors.HalaqaNotFound;
 
         var courseDto = halaqa.Course is not null
             ? new CourseDto(halaqa.Course.Id, halaqa.Course.EventName, halaqa.Course.SemesterId, null, [])

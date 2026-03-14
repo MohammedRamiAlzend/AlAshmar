@@ -48,7 +48,7 @@ public class AddAttachmentHandlerTests
     public async Task Handle_NonExistingStudent_ReturnsNotFoundError()
     {
         _studentRepoMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>()))
-            .ReturnsAsync(new Error("NOT_FOUND", "Student not found", ErrorKind.NotFound));
+            .ReturnsAsync(ApplicationErrors.StudentNotFound);
 
         var handler = new AddAttachmentHandler(_studentRepoMock.Object, _attachmentRepoMock.Object);
         var command = new AddAttachmentCommand(Guid.NewGuid(), "/path/file.jpg", "image/jpeg", "safe.jpg", "orig.jpg", null);
@@ -67,7 +67,7 @@ public class AddAttachmentHandlerTests
 
         _studentRepoMock.Setup(r => r.GetByIdAsync(studentId)).ReturnsAsync(student);
         _attachmentRepoMock.Setup(r => r.AddAsync(It.IsAny<Attacment>()))
-            .ReturnsAsync(new Error("DB_ERROR", "Database failure"));
+            .ReturnsAsync(ApplicationErrors.DatabaseError);
 
         var handler = new AddAttachmentHandler(_studentRepoMock.Object, _attachmentRepoMock.Object);
         var command = new AddAttachmentCommand(studentId, "/path/file.jpg", "image/jpeg", "safe.jpg", "orig.jpg", null);
@@ -163,7 +163,7 @@ public class GetAttachmentsHandlerTests
         _repoMock.Setup(r => r.GetAsync(
                 It.IsAny<Expression<Func<Student, bool>>?>(),
                 It.IsAny<Func<IQueryable<Student>, IQueryable<Student>>?>()))
-            .ReturnsAsync(new Error("NOT_FOUND", "Student not found", ErrorKind.NotFound));
+            .ReturnsAsync(ApplicationErrors.StudentNotFound);
 
         var handler = new GetAttachmentsHandler(_repoMock.Object);
         var result = await handler.Handle(new GetAttachmentsQuery(Guid.NewGuid()), CancellationToken.None);
@@ -206,7 +206,7 @@ public class GetAttendanceRecordsHandlerTests
                 It.IsAny<Expression<Func<StudentAttendance, bool>>?>(),
                 It.IsAny<Func<IQueryable<StudentAttendance>, IQueryable<StudentAttendance>>?>(),
                 It.IsAny<Func<IQueryable<StudentAttendance>, IOrderedQueryable<StudentAttendance>>?>()))
-            .ReturnsAsync(new Error("DB_ERROR", "Database error"));
+            .ReturnsAsync(ApplicationErrors.DatabaseError);
 
         var handler = new GetAttendanceRecordsHandler(_repoMock.Object);
         var result = await handler.Handle(new GetAttendanceRecordsQuery(Guid.NewGuid(), null, null), CancellationToken.None);
@@ -287,7 +287,7 @@ public class GetMemorizationProgressHandlerTests
                 It.IsAny<Expression<Func<StudentHadith, bool>>?>(),
                 It.IsAny<Func<IQueryable<StudentHadith>, IQueryable<StudentHadith>>?>(),
                 It.IsAny<Func<IQueryable<StudentHadith>, IOrderedQueryable<StudentHadith>>?>()))
-            .ReturnsAsync(new Error("DB_ERROR", "Database error"));
+            .ReturnsAsync(ApplicationErrors.DatabaseError);
 
         var handler = new GetMemorizationProgressHandler(_hadithRepoMock.Object, _quranRepoMock.Object);
         var result = await handler.Handle(new GetMemorizationProgressQuery(Guid.NewGuid()), CancellationToken.None);

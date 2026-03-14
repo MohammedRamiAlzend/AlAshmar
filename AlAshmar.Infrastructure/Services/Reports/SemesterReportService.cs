@@ -18,7 +18,7 @@ public class SemesterReportService : ISemesterReportService
     {
         var semesterResult = await _semesterRepository.GetByIdAsync(semesterId);
         if (semesterResult.Value == null)
-            return Error.NotFound("Semester", semesterId.ToString());
+            return ApplicationErrors.SemesterNotFound;
 
         var semester = semesterResult.Value;
 

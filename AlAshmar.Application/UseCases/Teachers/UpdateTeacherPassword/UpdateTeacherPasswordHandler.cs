@@ -25,7 +25,7 @@ public class UpdateTeacherPasswordHandler(
             transform: q => q.Include(t => t.RelatedUser));
 
         if (teacherResult.IsError || teacherResult.Value?.RelatedUser == null)
-            return new Error("404", "Teacher or associated user not found", ErrorKind.NotFound);
+            return ApplicationErrors.TeacherUserNotFound;
 
         var user = teacherResult.Value.RelatedUser;
         user.UpdateUserPassword(PasswordHasher.Hash(command.NewPassword));

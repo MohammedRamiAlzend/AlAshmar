@@ -33,7 +33,7 @@ public class GetStudentByIdHandler : IRequestHandler<GetStudentByIdQuery, Result
         var student = studentResult.Value.FirstOrDefault();
 
         if (student == null)
-            return new Error("404", "Student not found", ErrorKind.NotFound);
+            return ApplicationErrors.StudentNotFound;
 
         return MapToDetailDto(student);
     }

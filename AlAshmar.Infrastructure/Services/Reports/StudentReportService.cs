@@ -34,7 +34,7 @@ public class StudentReportService : IStudentReportService
     {
         var studentResult = await _studentRepository.GetByIdAsync(studentId);
         if (studentResult.Value == null)
-            return Error.NotFound("Student", studentId.ToString());
+            return ApplicationErrors.StudentNotFound;
 
         var student = studentResult.Value;
 
@@ -76,7 +76,7 @@ public class StudentReportService : IStudentReportService
         var weekEnd = weekStart.AddDays(6);
         var studentResult = await _studentRepository.GetByIdAsync(studentId);
         if (studentResult.Value == null)
-            return Error.NotFound("Student", studentId.ToString());
+            return ApplicationErrors.StudentNotFound;
 
         var student = studentResult.Value;
 
@@ -114,7 +114,7 @@ public class StudentReportService : IStudentReportService
 
         var studentResult = await _studentRepository.GetByIdAsync(studentId);
         if (studentResult.Value == null)
-            return Error.NotFound("Student", studentId.ToString());
+            return ApplicationErrors.StudentNotFound;
 
         var student = studentResult.Value;
 
@@ -149,7 +149,7 @@ public class StudentReportService : IStudentReportService
     {
         var studentResult = await _studentRepository.GetByIdAsync(studentId);
         if (studentResult.Value == null)
-            return Error.NotFound("Student", studentId.ToString());
+            return ApplicationErrors.StudentNotFound;
 
         var student = studentResult.Value;
 
@@ -158,7 +158,7 @@ public class StudentReportService : IStudentReportService
 
         var semester = pointsResult.Value?.FirstOrDefault()?.Semester;
         if (semester == null)
-            return Error.NotFound("Semester", semesterId.ToString());
+            return ApplicationErrors.SemesterNotFound;
 
         var hadithsSemester = await _hadithRepository.GetAllAsync(
             filter: h => h.StudentId == studentId && h.MemorizedAt.HasValue &&
