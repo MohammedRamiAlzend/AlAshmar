@@ -1,15 +1,12 @@
-using AlAshmar.Application.Common;
-using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Common;
 using AlAshmar.Domain.Entities.Teachers;
 using AlAshmar.Application.Repos;
-using MediatR;
 
 namespace AlAshmar.Application.UseCases.Teachers.AddAttachment;
 
-/// <summary>
-/// Command to add an attachment to a teacher's profile.
-/// </summary>
+
+
+
 public record AddTeacherAttachmentCommand(
     Guid TeacherId,
     string Path,

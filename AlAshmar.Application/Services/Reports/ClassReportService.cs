@@ -22,7 +22,7 @@ public class ClassReportService : IClassReportService
     {
         var enrollments = await _enrollmentRepository.GetAllAsync(filter: e => e.ClassId == classId);
         var studentIds = enrollments.Value?.Select(e => e.StudentId).ToList() ?? new List<Guid>();
-        
+
         var students = new List<Student>();
         foreach (var studentId in studentIds)
         {
@@ -30,7 +30,7 @@ public class ClassReportService : IClassReportService
             if (studentResult.Value != null)
                 students.Add(studentResult.Value);
         }
-        
+
         var studentBriefs = students.Select(s => new StudentBriefDto(s.Id, s.Name)).ToList();
 
         return new ClassDailyReportDto(
@@ -48,7 +48,7 @@ public class ClassReportService : IClassReportService
     {
         var weekEnd = weekStart.AddDays(6);
         var result = await GetDailyReportAsync(classId, weekStart, cancellationToken);
-        
+
         if (result.IsError)
             return ApplicationErrors.ClassNotFound;
 

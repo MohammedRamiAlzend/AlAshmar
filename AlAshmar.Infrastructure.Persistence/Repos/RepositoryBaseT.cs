@@ -1,4 +1,3 @@
-﻿using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -58,7 +57,7 @@ public class RepositoryBase<TEntity, TKey>(AppDbContext dbcontext, ILogger<Repos
             if (filter != null) query = query.Where(filter);
             if (transform != null) query = transform(query);
 
-            // If no specific ordering is provided, order by Id descending (newest first, assuming auto-incrementing IDs)
+
             if (orderBy == null)
             {
                 query = query.OrderByDescending(e => e.Id);
@@ -175,14 +174,14 @@ public class RepositoryBase<TEntity, TKey>(AppDbContext dbcontext, ILogger<Repos
         catch (Exception e)
         {
             logger.LogError(e, "Error checking existence of entities of type {EntityType}.", typeof(TEntity).Name);
-            return false; // Return false on error, as AnyAsync should be safe
+            return false;
         }
     }
 
     public async Task<Result<Updated>> UpdateAsync(TEntity entity)
     {
         if (entity == null) return ApplicationErrors.EntityCannotBeNull;
-        //if (entity.Id == default) return new Error("00", "Entity key (Id) cannot be zero or null.", ErrorKind.Failure);
+
 
         try
         {
@@ -215,17 +214,17 @@ public class RepositoryBase<TEntity, TKey>(AppDbContext dbcontext, ILogger<Repos
     {
         var message = ex.InnerException?.Message ?? ex.Message;
 
-        // SQL Server format: "FOREIGN KEY constraint "FK_Table_RefTable"..."
+
         var match = Regex.Match(message, @"FOREIGN KEY constraint ""?(?<fk>FK_[\w\d_]+)""?", RegexOptions.IgnoreCase);
         if (match.Success)
             return match.Groups["fk"].Value;
 
-        // PostgreSQL format example: "insert or update on table ... violates foreign key constraint "FK_Table_RefTable""
+
         match = Regex.Match(message, @"violates foreign key constraint ""?(?<fk>FK_[\w\d_]+)""?", RegexOptions.IgnoreCase);
         if (match.Success)
             return match.Groups["fk"].Value;
 
-        // MySQL format example: "Cannot add or update a child row: a foreign key constraint fails (`db`.`table`, CONSTRAINT `FK_Table_RefTable` FOREIGN KEY (`Column`)..."
+
         match = Regex.Match(message, @"CONSTRAINT [`""]?(?<fk>FK_[\w\d_]+)[`""]? FOREIGN KEY", RegexOptions.IgnoreCase);
         if (match.Success)
             return match.Groups["fk"].Value;

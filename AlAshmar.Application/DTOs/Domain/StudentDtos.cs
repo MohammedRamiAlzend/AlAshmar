@@ -1,22 +1,22 @@
 namespace AlAshmar.Application.DTOs.Domain;
 
-// ==================== STUDENT RESPONSE DTOs ====================
-// Organized by usage scenario to avoid null values and improve API clarity
 
-// ------------------- Basic Info DTOs (Lightweight, for lists) -------------------
 
-/// <summary>
-/// Minimal student information for dropdowns, quick references, and basic lookups.
-/// </summary>
+
+
+
+
+
+
 public record StudentBasicInfoDto(
     Guid Id,
     string Name
 );
 
-/// <summary>
-/// Student information for list views with essential identifying information.
-/// Used in get-all scenarios without detailed navigation properties.
-/// </summary>
+
+
+
+
 public record StudentListItemDto(
     Guid Id,
     string Name,
@@ -28,9 +28,9 @@ public record StudentListItemDto(
     string? RoleType
 );
 
-/// <summary>
-/// Student information with user details for administrative list views.
-/// </summary>
+
+
+
 public record StudentWithUserListItemDto(
     Guid Id,
     string Name,
@@ -41,12 +41,12 @@ public record StudentWithUserListItemDto(
     UserBasicInfoDto User
 );
 
-// ------------------- Detail DTOs (Full student information) -------------------
 
-/// <summary>
-/// Complete student details including all navigation properties.
-/// Used for single student detail views where all related data is needed.
-/// </summary>
+
+
+
+
+
 public record StudentDetailDto(
     Guid Id,
     string Name,
@@ -64,10 +64,10 @@ public record StudentDetailDto(
     List<PointDetailDto> Points
 );
 
-/// <summary>
-/// Student summary with counts and aggregated information.
-/// Used for dashboard views and overview screens.
-/// </summary>
+
+
+
+
 public record StudentSummaryDto(
     Guid Id,
     string Name,
@@ -83,11 +83,11 @@ public record StudentSummaryDto(
     int ClassEnrollmentCount
 );
 
-// ------------------- Academic Progress DTOs -------------------
 
-/// <summary>
-/// Student memorization progress for Hadith and Quran.
-/// </summary>
+
+
+
+
 public record StudentMemorizationProgressDto(
     Guid StudentId,
     List<StudentHadithSummaryDto> Hadiths,
@@ -96,10 +96,10 @@ public record StudentMemorizationProgressDto(
     int TotalQuranPagesMemorized
 );
 
-/// <summary>
-/// Student attendance records with date ranges.
-/// Used for individual student attendance queries.
-/// </summary>
+
+
+
+
 public record StudentAttendanceDto(
     Guid Id,
     DateTime StartDate,
@@ -107,9 +107,9 @@ public record StudentAttendanceDto(
     Guid ClassStudentId
 );
 
-/// <summary>
-/// Student points and achievements with category information.
-/// </summary>
+
+
+
 public record StudentPointDto(
     Guid Id,
     Guid StudentId,
@@ -122,9 +122,9 @@ public record StudentPointDto(
     Guid? GivenByTeacherId
 );
 
-/// <summary>
-/// Aggregated student points summary.
-/// </summary>
+
+
+
 public record StudentPointsSummaryDto(
     Guid StudentId,
     int TotalPoints,
@@ -136,11 +136,11 @@ public record StudentPointsSummaryDto(
     List<StudentClassEventsPointSummaryDto> ClassEventsPoints
 );
 
-// ------------------- Enrollment DTOs -------------------
 
-/// <summary>
-/// Student class enrollment information.
-/// </summary>
+
+
+
+
 public record StudentEnrollmentDto(
     Guid Id,
     Guid StudentId,
@@ -150,9 +150,9 @@ public record StudentEnrollmentDto(
     DateTime EnrollmentDate
 );
 
-/// <summary>
-/// Class enrollment with student details.
-/// </summary>
+
+
+
 public record ClassEnrollmentWithStudentDto(
     Guid Id,
     Guid ClassId,
@@ -162,9 +162,9 @@ public record ClassEnrollmentWithStudentDto(
     bool IsActive
 );
 
-// ==================== STUDENT RELATED ENTITY DTOs ====================
 
-// ------------------- Contact Info -------------------
+
+
 
 public record StudentContactInfoDetailDto(
     Guid StudentId,
@@ -174,7 +174,7 @@ public record StudentContactInfoDetailDto(
     bool IsActive
 );
 
-// ------------------- Attachments -------------------
+
 
 public record StudentAttachmentDetailDto(
     Guid StudentId,
@@ -192,7 +192,7 @@ public record AttachmentDetailDto(
     AllowableExtentionDto? Extention
 );
 
-// ------------------- Hadith -------------------
+
 
 public record StudentHadithDetailDto(
     Guid Id,
@@ -224,7 +224,7 @@ public record StudentHadithSummaryDto(
     string? Status
 );
 
-// ------------------- Quran Pages -------------------
+
 
 public record StudentQuraanPageDetailDto(
     Guid Id,
@@ -245,7 +245,7 @@ public record StudentQuraanPageSummaryDto(
     string? Status
 );
 
-// ------------------- Class Events Points -------------------
+
 
 public record StudentClassEventsPointDetailDto(
     Guid Id,
@@ -269,7 +269,7 @@ public record StudentClassEventsPointSummaryDto(
     int TotalPoints
 );
 
-// ------------------- Points -------------------
+
 
 public record PointDetailDto(
     Guid Id,
@@ -288,7 +288,7 @@ public record PointCategorySummaryDto(
     string Type
 );
 
-// ==================== USER DTOs (Simplified versions) ====================
+
 
 public record UserBasicInfoDto(
     Guid Id,
@@ -307,14 +307,14 @@ public record RoleSummaryDto(
     string Type
 );
 
-// ==================== CREATE/UPDATE DTOs ====================
-// Separated by operation type for better validation and API clarity
 
-// ------------------- Student Creation -------------------
 
-/// <summary>
-/// DTO for creating a new student with basic information.
-/// </summary>
+
+
+
+
+
+
 public record CreateStudentDto(
     string Name,
     string FatherName,
@@ -323,10 +323,10 @@ public record CreateStudentDto(
     string? Email
 );
 
-/// <summary>
-/// DTO for creating a student with account credentials.
-/// Used when student needs a user account.
-/// </summary>
+
+
+
+
 public record CreateStudentWithAccountDto(
     string Name,
     string FatherName,
@@ -337,9 +337,9 @@ public record CreateStudentWithAccountDto(
     string Password
 );
 
-/// <summary>
-/// DTO for adding contact information to a student.
-/// </summary>
+
+
+
 public record CreateStudentContactInfoDto(
     Guid StudentId,
     string Number,
@@ -347,9 +347,9 @@ public record CreateStudentContactInfoDto(
     bool IsActive = true
 );
 
-/// <summary>
-/// DTO for adding an attachment to a student.
-/// </summary>
+
+
+
 public record CreateStudentAttachmentDto(
     Guid StudentId,
     string Path,
@@ -359,11 +359,11 @@ public record CreateStudentAttachmentDto(
     Guid? ExtentionId
 );
 
-// ------------------- Student Updates -------------------
 
-/// <summary>
-/// DTO for updating student basic information.
-/// </summary>
+
+
+
+
 public record UpdateStudentDto(
     string Name,
     string FatherName,
@@ -372,18 +372,18 @@ public record UpdateStudentDto(
     string? Email
 );
 
-/// <summary>
-/// DTO for updating student contact information.
-/// </summary>
+
+
+
 public record UpdateStudentContactInfoDto(
     string Number,
     string? Email,
     bool IsActive
 );
 
-/// <summary>
-/// DTO for updating student attachment information.
-/// </summary>
+
+
+
 public record UpdateStudentAttachmentDto(
     string Path,
     string Type,
@@ -392,11 +392,11 @@ public record UpdateStudentAttachmentDto(
     Guid? ExtentionId
 );
 
-// ------------------- Student Memorization -------------------
 
-/// <summary>
-/// DTO for recording student hadith memorization.
-/// </summary>
+
+
+
+
 public record RecordStudentHadithDto(
     Guid StudentId,
     Guid HadithId,
@@ -406,9 +406,9 @@ public record RecordStudentHadithDto(
     string? Notes
 );
 
-/// <summary>
-/// DTO for recording student Quran page memorization.
-/// </summary>
+
+
+
 public record RecordStudentQuranPageDto(
     Guid StudentId,
     int PageNumber,
@@ -418,19 +418,19 @@ public record RecordStudentQuranPageDto(
     string? Notes
 );
 
-/// <summary>
-/// DTO for updating student memorization status.
-/// </summary>
+
+
+
 public record UpdateMemorizationStatusDto(
     string Status,
     string? Notes
 );
 
-// ------------------- Student Points -------------------
 
-/// <summary>
-/// DTO for adding points to a student.
-/// </summary>
+
+
+
+
 public record AddStudentPointDto(
     Guid StudentId,
     Guid EventId,
@@ -441,9 +441,9 @@ public record AddStudentPointDto(
     Guid? GivenByTeacherId
 );
 
-/// <summary>
-/// DTO for updating student class events points.
-/// </summary>
+
+
+
 public record UpdateStudentClassEventsPointDto(
     int QuranPoints,
     int HadithPoints,
@@ -451,22 +451,22 @@ public record UpdateStudentClassEventsPointDto(
     int BehaviorPoints
 );
 
-// ------------------- Student Enrollment -------------------
 
-/// <summary>
-/// DTO for enrolling a student in a class.
-/// </summary>
+
+
+
+
 public record EnrollStudentInClassDto(
     Guid StudentId,
     Guid ClassId
 );
 
-// ==================== QUERY/FILTER DTOs ====================
 
-/// <summary>
-/// Filter criteria for querying students.
-/// All properties are nullable - null values are ignored in filtering.
-/// </summary>
+
+
+
+
+
 public record StudentFilterDto(
     Guid? ClassId = null,
     Guid? SemesterId = null,
@@ -477,27 +477,27 @@ public record StudentFilterDto(
     string? Email = null
 );
 
-/// <summary>
-/// Pagination parameters for list queries.
-/// </summary>
+
+
+
 public record PaginationDto(
     int PageNumber = 1,
     int PageSize = 10
 );
 
-/// <summary>
-/// Combined filter and pagination request for student queries.
-/// </summary>
+
+
+
 public record StudentQueryRequestDto(
     StudentFilterDto? Filters = null,
     PaginationDto? Pagination = null
 );
 
-// ==================== RESPONSE WRAPPERS ====================
 
-/// <summary>
-/// Paginated response for student list queries.
-/// </summary>
+
+
+
+
 public record PagedResponse<T>(
     List<T> Items,
     int PageNumber,
@@ -508,9 +508,9 @@ public record PagedResponse<T>(
     bool HasNextPage
 );
 
-/// <summary>
-/// Paginated response specifically for student list items.
-/// </summary>
+
+
+
 public record StudentPagedResponse(
     List<StudentListItemDto> Items,
     int PageNumber,

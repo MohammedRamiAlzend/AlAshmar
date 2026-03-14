@@ -2,7 +2,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using AlAshmar.Domain.Entities.Users;
 using AlAshmar.Domain.Entities.Academic;
 using AlAshmar.Domain.Entities.Teachers.Events;
-using AlAshmar.Domain.Events;
 
 namespace AlAshmar.Domain.Entities.Teachers;
 
@@ -22,7 +21,7 @@ public class Teacher : EntityWithEvents<Guid>
     public ICollection<ClassTeacherEnrollment> ClassTeacherEnrollments { get; set; } = new List<ClassTeacherEnrollment>();
     public ICollection<Point> GivenPoints { get; set; } = new List<Point>();
 
-    // Domain methods
+
     public void UpdateBasicInfo(string name, string fatherName, string motherName, string nationalityNumber, string? email)
     {
         Name = name;

@@ -1,8 +1,8 @@
 namespace AlAshmar.Controllers.Teachers;
 
-/// <summary>
-/// Controller for teacher academic operations (attendance, points given).
-/// </summary>
+
+
+
 [ApiController]
 [Route("api/teachers")]
 [Authorize]
@@ -15,9 +15,9 @@ public class TeacherAcademicController : ControllerBase
         _sender = sender;
     }
 
-    /// <summary>
-    /// Get a teacher's attendance records.
-    /// </summary>
+
+
+
     [HttpGet("{id:guid}/attendance")]
     public async Task<IActionResult> GetAttendanceRecords(
         [FromRoute] Guid id,
@@ -28,9 +28,9 @@ public class TeacherAcademicController : ControllerBase
         return Ok(new List<TeacherAttencanceDto>());
     }
 
-    /// <summary>
-    /// Get points given by a teacher.
-    /// </summary>
+
+
+
     [HttpGet("{id:guid}/points-given")]
     public async Task<IActionResult> GetPointsGiven(
         [FromRoute] Guid id,

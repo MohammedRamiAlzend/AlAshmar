@@ -1,10 +1,9 @@
-using System.Linq;
 
 namespace AlAshmar.Domain.ValueObjects;
 
-/// <summary>
-/// Base class for all value objects.
-/// </summary>
+
+
+
 public abstract class ValueObject
 {
     protected static bool EqualOperator(ValueObject left, ValueObject right)

@@ -1,9 +1,6 @@
-using AlAshmar.Application.Common;
-using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Teachers;
 using AlAshmar.Application.Repos;
 using AlAshmar.Application.DTOs.Domain;
-using MediatR;
 
 namespace AlAshmar.Application.UseCases.Teachers.CreateTeacher;
 

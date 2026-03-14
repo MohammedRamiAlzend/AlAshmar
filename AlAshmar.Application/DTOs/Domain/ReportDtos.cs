@@ -1,6 +1,6 @@
 namespace AlAshmar.Application.DTOs.Domain;
 
-// ==================== REPORT REQUEST DTOs ====================
+
 
 public record ReportPeriodFilter(
     DateTime? FromDate = null,
@@ -17,7 +17,7 @@ public enum ReportPeriodType
     Semester
 }
 
-// ==================== STUDENT REPORT DTOs ====================
+
 
 public record StudentDailyReportDto(
     Guid StudentId,
@@ -129,7 +129,7 @@ public record TeacherNoteDto(
     string? Notes
 );
 
-// ==================== TEACHER REPORT DTOs ====================
+
 
 public record TeacherDailyReportDto(
     Guid TeacherId,
@@ -205,7 +205,7 @@ public record StudentProgressUnderTeacherDto(
     DateTime? LastMemorizationDate
 );
 
-// ==================== CLASS REPORT DTOs ====================
+
 
 public record ClassDailyReportDto(
     Guid ClassId,
@@ -300,7 +300,7 @@ public record StudentBriefDto(
     string Name
 );
 
-// ==================== SEMESTER REPORT DTOs ====================
+
 
 public record SemesterOverviewReportDto(
     Guid SemesterId,
@@ -348,7 +348,7 @@ public record TopTeacherDto(
     double AttendancePercentage
 );
 
-// ==================== ATTENDANCE REPORT DTOs ====================
+
 
 public record AttendanceOverviewReportDto(
     DateTime FromDate,
@@ -384,7 +384,7 @@ public record TeacherAttendanceDetailDto(
     List<DateTime> AbsenceDates
 );
 
-// ==================== POINTS REPORT DTOs ====================
+
 
 public record PointsOverviewReportDto(
     Guid? SemesterId,

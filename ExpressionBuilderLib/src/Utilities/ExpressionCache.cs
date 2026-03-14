@@ -1,11 +1,10 @@
-﻿namespace ExpressionBuilderLib.src.Utilities;
+namespace ExpressionBuilderLib.src.Utilities;
 
 using System.Collections.Concurrent;
-using System.Linq.Expressions;
 
-/// <summary>
-/// Provides caching for compiled expressions
-/// </summary>
+
+
+
 public static class ExpressionCache
 {
     private static readonly ConcurrentDictionary<string, Expression> _cache = new();

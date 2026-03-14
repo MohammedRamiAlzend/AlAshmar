@@ -5,7 +5,7 @@ namespace AlAshmar.Domain.Entities.Managers;
 
 public class ManagerContactInfo
 {
-    // Composite key: configure ManagerId + ContactInfoId in OnModelCreating
+
     public Guid ManagerId { get; set; }
     [ForeignKey(nameof(ManagerId))]
     public Manager? Manager { get; set; }

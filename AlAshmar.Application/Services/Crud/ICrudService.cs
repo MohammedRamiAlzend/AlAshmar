@@ -1,10 +1,9 @@
-using AlAshmar.Domain.Commons;
 
 namespace AlAshmar.Application.Services.Crud;
 
-/// <summary>
-/// Generic CRUD service interface for entity operations.
-/// </summary>
+
+
+
 public interface ICrudService<TEntity, TDto, TKey>
     where TEntity : Entity<TKey>
     where TDto : class
@@ -17,9 +16,9 @@ public interface ICrudService<TEntity, TDto, TKey>
     Task<Result<Success>> DeleteAsync(TKey id, CancellationToken cancellationToken = default);
 }
 
-/// <summary>
-/// Extended CRUD service with filtering and sorting capabilities.
-/// </summary>
+
+
+
 public interface IAdvancedCrudService<TEntity, TDto, TKey> : ICrudService<TEntity, TDto, TKey>
     where TEntity : Entity<TKey>
     where TDto : class

@@ -1,19 +1,15 @@
-using AlAshmar.Application.Common;
 using AlAshmar.Application.DTOs.Domain;
-using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Teachers;
 using AlAshmar.Application.Repos;
 using AlAshmar.Application.Repos.Includes;
-using System.Linq.Expressions;
 using ExpressionBuilderLib.src.Core;
 using ExpressionBuilderLib.src.Core.Enums;
-using MediatR;
 
 namespace AlAshmar.Application.UseCases.Teachers.GetAllTeachersFiltered;
 
-/// <summary>
-/// Handler for getting filtered teachers with support for OR operations on filter parameters.
-/// </summary>
+
+
+
 public class GetAllTeachersFilteredHandler(IRepositoryBase<Teacher, Guid> repository) : IRequestHandler<GetAllTeachersFilteredQuery, Result<List<TeacherDto>>>
 {
     public async Task<Result<List<TeacherDto>>> Handle(GetAllTeachersFilteredQuery query, CancellationToken cancellationToken = default)

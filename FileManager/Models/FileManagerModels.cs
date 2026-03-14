@@ -2,9 +2,9 @@ using System.ComponentModel;
 
 namespace FileManager.Models;
 
-/// <summary>
-/// Represents the result of a file operation.
-/// </summary>
+
+
+
 public class FileOperationResult
 {
     public bool Success { get; set; }
@@ -21,9 +21,9 @@ public class FileOperationResult
     }
 }
 
-/// <summary>
-/// Represents the result of a directory operation.
-/// </summary>
+
+
+
 public class DirectoryOperationResult
 {
     public bool Success { get; set; }
@@ -41,9 +41,9 @@ public class DirectoryOperationResult
     }
 }
 
-/// <summary>
-/// Represents file content result.
-/// </summary>
+
+
+
 public class FileContentResult
 {
     public bool Success { get; set; }
@@ -63,9 +63,9 @@ public class FileContentResult
     }
 }
 
-/// <summary>
-/// Represents detailed file information.
-/// </summary>
+
+
+
 public class FileInfoResult
 {
     public bool Success { get; set; }
@@ -90,9 +90,9 @@ public class FileInfoResult
     }
 }
 
-/// <summary>
-/// Represents detailed directory information.
-/// </summary>
+
+
+
 public class DirectoryInfoResult
 {
     public bool Success { get; set; }
@@ -115,9 +115,9 @@ public class DirectoryInfoResult
     }
 }
 
-/// <summary>
-/// Represents the result of a directory listing operation.
-/// </summary>
+
+
+
 public class ListingResult
 {
     public bool Success { get; set; }
@@ -134,9 +134,9 @@ public class ListingResult
     }
 }
 
-/// <summary>
-/// Represents a file system item (file or directory).
-/// </summary>
+
+
+
 public class FileSystemItem
 {
     public string Name { get; set; } = string.Empty;
@@ -151,9 +151,9 @@ public class FileSystemItem
     public string? FileType { get; set; }
 }
 
-/// <summary>
-/// Represents the result of a file search operation
-/// </summary>
+
+
+
 public class SearchResult
 {
     public bool Success { get; set; }
@@ -170,9 +170,9 @@ public class SearchResult
     }
 }
 
-/// <summary>
-/// Represents search criteria for file search.
-/// </summary>
+
+
+
 public class FileSearchCriteria
 {
     public string? FileNamePattern { get; set; }
@@ -185,9 +185,9 @@ public class FileSearchCriteria
     public bool CaseSensitive { get; set; } = false;
 }
 
-/// <summary>
-/// Represents the result of a cleanup operation.
-/// </summary>
+
+
+
 public class CleanupResult
 {
     public int FilesDeleted { get; set; }

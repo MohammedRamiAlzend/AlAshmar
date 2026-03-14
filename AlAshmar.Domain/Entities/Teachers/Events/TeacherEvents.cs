@@ -1,4 +1,3 @@
-using AlAshmar.Domain.Events;
 
 namespace AlAshmar.Domain.Entities.Teachers.Events;
 

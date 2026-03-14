@@ -1,12 +1,10 @@
-using AlAshmar.Application.DTOs.Domain;
 using AlAshmar.Application.Interfaces.Reports;
-using Microsoft.AspNetCore.Mvc;
 
 namespace AlAshmar.Controllers.Reports;
 
-/// <summary>
-/// Controller for consolidated attendance reports across students and teachers.
-/// </summary>
+
+
+
 public class AttendanceReportsController : ReportsBaseController
 {
     private readonly IAttendanceReportService _attendanceReportService;
@@ -16,12 +14,12 @@ public class AttendanceReportsController : ReportsBaseController
         _attendanceReportService = attendanceReportService;
     }
 
-    /// <summary>
-    /// Get overall attendance overview report for both students and teachers.
-    /// </summary>
-    /// <param name="fromDate">From date (defaults to start of current month)</param>
-    /// <param name="toDate">To date (defaults to today)</param>
-    /// <param name="cancellationToken">Cancellation token</param>
+
+
+
+
+
+
     [HttpGet("attendance/overview")]
     public async Task<ActionResult<AttendanceOverviewReportDto>> GetOverviewReport(
         [FromQuery] DateTime? fromDate = null,
@@ -42,14 +40,14 @@ public class AttendanceReportsController : ReportsBaseController
         return Ok(result.Value);
     }
 
-    /// <summary>
-    /// Get student attendance report with pagination.
-    /// </summary>
-    /// <param name="fromDate">From date (defaults to start of current month)</param>
-    /// <param name="toDate">To date (defaults to today)</param>
-    /// <param name="page">Page number</param>
-    /// <param name="pageSize">Page size</param>
-    /// <param name="cancellationToken">Cancellation token</param>
+
+
+
+
+
+
+
+
     [HttpGet("attendance/students")]
     public async Task<ActionResult<PagedList<StudentAttendanceDetailDto>>> GetStudentAttendanceReport(
         [FromQuery] DateTime? fromDate = null,
@@ -73,14 +71,14 @@ public class AttendanceReportsController : ReportsBaseController
         return CreatePagedResponse(result.Value);
     }
 
-    /// <summary>
-    /// Get teacher attendance report with pagination.
-    /// </summary>
-    /// <param name="fromDate">From date (defaults to start of current month)</param>
-    /// <param name="toDate">To date (defaults to today)</param>
-    /// <param name="page">Page number</param>
-    /// <param name="pageSize">Page size</param>
-    /// <param name="cancellationToken">Cancellation token</param>
+
+
+
+
+
+
+
+
     [HttpGet("attendance/teachers")]
     public async Task<ActionResult<PagedList<TeacherAttendanceDetailDto>>> GetTeacherAttendanceReport(
         [FromQuery] DateTime? fromDate = null,
@@ -104,12 +102,12 @@ public class AttendanceReportsController : ReportsBaseController
         return CreatePagedResponse(result.Value);
     }
 
-    /// <summary>
-    /// Get attendance summary for a specific period.
-    /// </summary>
-    /// <param name="fromDate">From date</param>
-    /// <param name="toDate">To date</param>
-    /// <param name="cancellationToken">Cancellation token</param>
+
+
+
+
+
+
     [HttpGet("attendance/summary")]
     public async Task<ActionResult<AttendanceSummaryDto>> GetAttendanceSummary(
         [FromQuery] DateTime? fromDate = null,
@@ -130,11 +128,11 @@ public class AttendanceReportsController : ReportsBaseController
         return Ok(result.Value.OverallSummary);
     }
 
-    /// <summary>
-    /// Get daily attendance report for a specific date.
-    /// </summary>
-    /// <param name="date">The date (defaults to today)</param>
-    /// <param name="cancellationToken">Cancellation token</param>
+
+
+
+
+
     [HttpGet("attendance/daily")]
     public async Task<ActionResult<AttendanceOverviewReportDto>> GetDailyAttendance(
         [FromQuery] DateTime? date = null,
@@ -149,11 +147,11 @@ public class AttendanceReportsController : ReportsBaseController
         return Ok(result.Value);
     }
 
-    /// <summary>
-    /// Get weekly attendance report.
-    /// </summary>
-    /// <param name="weekStart">The start of the week (defaults to current week's Monday)</param>
-    /// <param name="cancellationToken">Cancellation token</param>
+
+
+
+
+
     [HttpGet("attendance/weekly")]
     public async Task<ActionResult<AttendanceOverviewReportDto>> GetWeeklyAttendance(
         [FromQuery] DateTime? weekStart = null,
@@ -170,12 +168,12 @@ public class AttendanceReportsController : ReportsBaseController
         return Ok(result.Value);
     }
 
-    /// <summary>
-    /// Get monthly attendance report.
-    /// </summary>
-    /// <param name="month">The month (defaults to current month)</param>
-    /// <param name="year">The year (defaults to current year)</param>
-    /// <param name="cancellationToken">Cancellation token</param>
+
+
+
+
+
+
     [HttpGet("attendance/monthly")]
     public async Task<ActionResult<AttendanceOverviewReportDto>> GetMonthlyAttendance(
         [FromQuery] int? month = null,

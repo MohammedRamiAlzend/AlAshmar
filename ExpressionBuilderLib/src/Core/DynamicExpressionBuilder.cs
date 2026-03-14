@@ -1,17 +1,16 @@
-﻿using System.Linq.Expressions;
 using System.Reflection;
 using ExpressionBuilderLib.src.Core.Enums;
 
 namespace ExpressionBuilderLib.src.Core;
 
-/// <summary>
-/// Builds expressions dynamically from property names and values.
-/// </summary>
+
+
+
 public static class DynamicExpressionBuilder
 {
-    /// <summary>
-    /// Creates an expression for a property comparison.
-    /// </summary>
+
+
+
     public static Expression<Func<T, bool>> CreatePropertyExpression<T>(
         string propertyName,
         object value,
@@ -20,20 +19,20 @@ public static class DynamicExpressionBuilder
     {
         var parameter = Expression.Parameter(typeof(T), "x");
 
-        // Handle nested properties (e.g., "Address.City")
+
         Expression property = parameter;
         foreach (var part in propertyName.Split('.'))
         {
             property = Expression.PropertyOrField(property, part);
         }
 
-        // Handle null values
+
         if (value == null)
         {
             return CreateNullComparisonExpression<T>(parameter, property, comparison);
         }
 
-        // Convert value to the property type if needed
+
         var propertyType = property.Type;
         var convertedValue = ConvertValue(value, propertyType);
         var constant = Expression.Constant(convertedValue, propertyType);
@@ -42,9 +41,9 @@ public static class DynamicExpressionBuilder
             parameter, property, constant, comparison, stringComparison);
     }
 
-    /// <summary>
-    /// Creates expressions from a dictionary of filters
-    /// </summary>
+
+
+
     public static Expression<Func<T, bool>> BuildFromFilters<T>(
         IDictionary<string, object> filters,
         LogicalOperator logicalOperator = LogicalOperator.And,
@@ -66,9 +65,9 @@ public static class DynamicExpressionBuilder
         return builder.Build();
     }
 
-    /// <summary>
-    /// Creates an expression for string contains operation
-    /// </summary>
+
+
+
     public static Expression<Func<T, bool>> CreateStringContainsExpression<T>(
         string propertyName,
         string value,
@@ -80,10 +79,10 @@ public static class DynamicExpressionBuilder
         var parameter = Expression.Parameter(typeof(T), "x");
         var property = Expression.PropertyOrField(parameter, propertyName);
 
-        // Null check
+
         var nullCheck = Expression.NotEqual(property, Expression.Constant(null, typeof(string)));
 
-        // Get the appropriate Contains method based on string comparison mode
+
         MethodInfo containsMethod = GetStringContainsMethod(stringComparison);
 
         var containsCall = Expression.Call(
@@ -156,7 +155,7 @@ public static class DynamicExpressionBuilder
     {
         if (property.Type == typeof(string))
         {
-            // For strings, we need to handle case sensitivity
+
             var method = typeof(string).GetMethod(
                 "Equals",
                 new[] { typeof(string), typeof(StringComparison) });

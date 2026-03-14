@@ -4,7 +4,6 @@ using AlAshmar.Application.Repos;
 using AlAshmar.Domain.Entities.Academic;
 using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Domain.Entities.Teachers;
-using Microsoft.EntityFrameworkCore;
 
 namespace AlAshmar.Infrastructure.Services.Reports;
 
@@ -38,7 +37,7 @@ public class StudentReportService : IStudentReportService
 
         var student = studentResult.Value;
 
-        // Get memorization for the day
+
         var hadithsToday = await _hadithRepository.GetAllAsync(
             filter: h => h.StudentId == studentId && h.MemorizedAt.HasValue &&
                         h.MemorizedAt.Value.Date == date.Date);

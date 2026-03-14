@@ -1,11 +1,8 @@
-using AlAshmar.Application.Common;
 using AlAshmar.Application.DTOs.Domain;
-using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Application.Repos;
 using Microsoft.EntityFrameworkCore;
 using Attacment = AlAshmar.Domain.Entities.Common.Attacment;
-using MediatR;
 
 namespace AlAshmar.Application.UseCases.Students.GetAttachments;
 

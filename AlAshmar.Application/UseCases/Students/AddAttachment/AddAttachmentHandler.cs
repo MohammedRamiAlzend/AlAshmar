@@ -1,9 +1,6 @@
-using AlAshmar.Application.Common;
-using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Domain.Entities.Common;
 using AlAshmar.Application.Repos;
-using MediatR;
 
 namespace AlAshmar.Application.UseCases.Students.AddAttachment;
 

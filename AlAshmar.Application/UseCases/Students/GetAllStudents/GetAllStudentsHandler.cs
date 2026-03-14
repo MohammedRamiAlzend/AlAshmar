@@ -1,11 +1,8 @@
-using AlAshmar.Application.Common;
 using AlAshmar.Application.DTOs;
-using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Application.Repos;
 using AlAshmar.Application.Repos.Includes;
 using AlAshmar.Application.DTOs.Domain;
-using MediatR;
 
 namespace AlAshmar.Application.UseCases.Students.GetAllStudents;
 
@@ -47,7 +44,7 @@ public class GetAllStudentsHandler : IRequestHandler<GetAllStudentsQuery, Result
 
     private static string GetRoleType(Guid roleId)
     {
-        // Default student role ID (matches Constants.DefaultStudentRoleId)
+
         return roleId == Guid.Parse("00000000-0000-0000-0000-000000000001") ? "Student" : "Unknown";
     }
 }

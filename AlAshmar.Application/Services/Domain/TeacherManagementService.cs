@@ -1,9 +1,7 @@
-using AlAshmar.Application.Common;
 using AlAshmar.Application.DTOs;
 using AlAshmar.Application.DTOs.Domain;
 using AlAshmar.Application.Repos;
 using AlAshmar.Application.Repos.Includes;
-using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Academic;
 using AlAshmar.Domain.Entities.Common;
 using AlAshmar.Domain.Entities.Students;
@@ -12,9 +10,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AlAshmar.Application.Services.Domain;
 
-/// <summary>
-/// Filter parameters for teacher queries.
-/// </summary>
+
+
+
 public record TeacherFilterParameters(
     int? PageNumber = null,
     int? PageSize = null,
@@ -23,50 +21,50 @@ public record TeacherFilterParameters(
     Guid? EventId = null
 );
 
-/// <summary>
-/// Filter parameters for attendance queries.
-/// </summary>
+
+
+
 public record AttendanceFilterParameters(
     DateTime? FromDate = null,
     DateTime? ToDate = null
 );
 
-/// <summary>
-/// Filter parameters for points queries.
-/// </summary>
+
+
+
 public record PointsFilterParameters(
     Guid? SemesterId = null
 );
 
-/// <summary>
-/// Parameters for assigning a teacher to a class.
-/// </summary>
+
+
+
 public record ClassAssignmentParameters(
     Guid ClassId,
     bool IsMainTeacher = false
 );
 
-/// <summary>
-/// Parameters for contact info operations.
-/// </summary>
+
+
+
 public record ContactInfoParameters(
     string Number,
     string? Email = null,
     bool IsActive = true
 );
 
-/// <summary>
-/// Parameters for search operations.
-/// </summary>
+
+
+
 public record SearchParameters(
     string Query,
     int? PageNumber = 1,
     int? PageSize = 10
 );
 
-/// <summary>
-/// Service interface for teacher management operations.
-/// </summary>
+
+
+
 public interface ITeacherManagementService
 {
     Task<Result<List<AlAshmar.Application.DTOs.Domain.TeacherDto>>> GetAllFilteredAsync(
@@ -167,9 +165,9 @@ public interface ITeacherManagementService
         CancellationToken cancellationToken = default);
 }
 
-/// <summary>
-/// Service implementation for teacher management operations.
-/// </summary>
+
+
+
 public class TeacherManagementService : ITeacherManagementService
 {
     private readonly IRepositoryBase<Teacher, Guid> _teacherRepository;

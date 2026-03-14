@@ -1,31 +1,29 @@
-using AlAshmar.Infrastructure.Authorization.Handlers;
-using Microsoft.AspNetCore.Authorization;
 
 namespace AlAshmar.Infrastructure.Authorization.Policies;
 
-/// <summary>
-/// Extension methods for registering authorization policies.
-/// </summary>
+
+
+
 public static class AuthorizationPolicies
 {
-    /// <summary>
-    /// Registers all authorization policies and handlers.
-    /// </summary>
+
+
+
     public static IServiceCollection AddAuthorizationPolicies(this IServiceCollection services)
     {
-        // Register authorization handlers
+
         services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
         services.AddSingleton<IAuthorizationHandler, ResourceOwnershipHandler>();
         services.AddScoped<IAuthorizationHandler, ClassEnrollmentHandler>();
         services.AddSingleton<IAuthorizationHandler, TimeBasedAuthorizationHandler>();
 
-        // Configure authorization policies
+
         services.AddAuthorization(options =>
         {
-            // Permission-based policies (dynamically created via PermissionRequirement)
-            // Example: "permission:students.create"
 
-            // Resource ownership policies
+
+
+
             options.AddPolicy("owns:students", policy =>
                 policy.RequireAuthenticatedUser()
                       .AddRequirements(new ResourceOwnershipRequirement("students")));
@@ -34,12 +32,12 @@ public static class AuthorizationPolicies
                 policy.RequireAuthenticatedUser()
                       .AddRequirements(new ResourceOwnershipRequirement("teachers")));
 
-            // Class enrollment policy
+
             options.AddPolicy("EnrolledInClass", policy =>
                 policy.RequireAuthenticatedUser()
                       .AddRequirements(new ClassEnrollmentRequirement()));
 
-            // Time-based policies
+
             options.AddPolicy("SchoolHours", policy =>
                 policy.RequireAuthenticatedUser()
                       .AddRequirements(new TimeBasedRequirement(8, 17, [DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday])));
@@ -48,7 +46,7 @@ public static class AuthorizationPolicies
                 policy.RequireAuthenticatedUser()
                       .AddRequirements(new TimeBasedRequirement(8, 16, [DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday])));
 
-            // Role-based policies
+
             options.AddPolicy("AdminOnly", policy =>
                 policy.RequireRole("Admin", "SuperAdmin"));
 
@@ -58,12 +56,12 @@ public static class AuthorizationPolicies
             options.AddPolicy("StudentOnly", policy =>
                 policy.RequireRole("Student"));
 
-            // Combined policies (Role + Permission)
+
             options.AddPolicy("CanManageStudents", policy =>
                 policy.RequireRole("Teacher", "Admin", "SuperAdmin")
                       .RequireAssertion(context =>
               {
-                  // Check if user has any students management permission
+
                   return context.User.Claims.Any(c => c.Type == "permission" && c.Value.StartsWith("students."));
               }));
 
@@ -74,7 +72,7 @@ public static class AuthorizationPolicies
                   return context.User.Claims.Any(c => c.Type == "permission" && (c.Value == "points.assign" || c.Value == "points.*"));
               }));
 
-            // SuperAdmin policy - bypasses all checks
+
             options.AddPolicy("SuperAdminOnly", policy =>
                 policy.RequireRole("SuperAdmin"));
         });

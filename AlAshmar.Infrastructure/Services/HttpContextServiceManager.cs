@@ -1,6 +1,5 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using AlAshmar.Application.Interfaces;
-using Microsoft.AspNetCore.Http;
 
 namespace AlAshmar.Infrastructure.Services;
 

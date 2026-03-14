@@ -1,12 +1,10 @@
-using AlAshmar.Infrastructure.Authorization.Handlers;
-using Microsoft.AspNetCore.Authorization;
 
 namespace AlAshmar.Infrastructure.Authorization.Attributes;
 
-/// <summary>
-/// Attribute to require a specific permission.
-/// Usage: [RequirePermission("students.create")]
-/// </summary>
+
+
+
+
 public class RequirePermissionAttribute : AuthorizeAttribute
 {
     public RequirePermissionAttribute(string permission)
@@ -15,10 +13,10 @@ public class RequirePermissionAttribute : AuthorizeAttribute
     }
 }
 
-/// <summary>
-/// Attribute to require resource ownership.
-/// Usage: [RequireOwnership("students")]
-/// </summary>
+
+
+
+
 public class RequireOwnershipAttribute : AuthorizeAttribute
 {
     public RequireOwnershipAttribute(string resourceType)
@@ -27,10 +25,10 @@ public class RequireOwnershipAttribute : AuthorizeAttribute
     }
 }
 
-/// <summary>
-/// Attribute to require class enrollment.
-/// Usage: [RequireClassEnrollment]
-/// </summary>
+
+
+
+
 public class RequireClassEnrollmentAttribute : AuthorizeAttribute
 {
     public RequireClassEnrollmentAttribute()
@@ -39,10 +37,10 @@ public class RequireClassEnrollmentAttribute : AuthorizeAttribute
     }
 }
 
-/// <summary>
-/// Attribute to require access during school hours.
-/// Usage: [RequireSchoolHours]
-/// </summary>
+
+
+
+
 public class RequireSchoolHoursAttribute : AuthorizeAttribute
 {
     public RequireSchoolHoursAttribute()
@@ -51,10 +49,10 @@ public class RequireSchoolHoursAttribute : AuthorizeAttribute
     }
 }
 
-/// <summary>
-/// Attribute to require access during exam hours (8 AM - 4 PM, excluding Friday).
-/// Usage: [RequireExamHours]
-/// </summary>
+
+
+
+
 public class RequireExamHoursAttribute : AuthorizeAttribute
 {
     public RequireExamHoursAttribute()
@@ -63,10 +61,10 @@ public class RequireExamHoursAttribute : AuthorizeAttribute
     }
 }
 
-/// <summary>
-/// Combined attribute for layered authorization.
-/// Usage: [AuthorizeWithLayer(Roles = "Teacher", Permission = "points.assign")]
-/// </summary>
+
+
+
+
 public class AuthorizeWithLayerAttribute : AuthorizeAttribute
 {
     public AuthorizeWithLayerAttribute(string? roles = null, string? permission = null)

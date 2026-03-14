@@ -1,6 +1,6 @@
 namespace AlAshmar.Application.DTOs.Domain;
 
-// ==================== COMMON DOMAIN ====================
+
 
 public record AllowableExtentionDto(
     Guid Id,
@@ -24,7 +24,7 @@ public record ContactInfoDto(
     bool IsActive
 );
 
-// ==================== USERS DOMAIN ====================
+
 
 public record UserDto(
     Guid Id,
@@ -47,7 +47,7 @@ public record PermissionDto(
     string Action
 );
 
-// ==================== MANAGERS DOMAIN ====================
+
 
 public record ManagerDto(
     Guid Id,
@@ -72,7 +72,7 @@ public record ManagerAttachmentDto(
     AttacmentDto? Attachment
 );
 
-// ==================== TEACHERS DOMAIN ====================
+
 
 public record TeacherDto(
     Guid Id,
@@ -117,7 +117,7 @@ public record ClassTeacherEnrollmentDto(
     Guid ClassId
 );
 
-// ==================== ACADEMIC DOMAIN ====================
+
 
 public record BookDto(
     Guid Id,
@@ -171,9 +171,9 @@ public record PointDto(
     Guid? GivenByTeacherId
 );
 
-// ==================== CREATE/UPDATE DTOs ====================
 
-// Common
+
+
 public record CreateAllowableExtentionDto(string ExtName);
 public record UpdateAllowableExtentionDto(string ExtName);
 
@@ -185,19 +185,19 @@ public record UpdateContactInfoDto(string Number, string? Email, bool IsActive);
 
 public record UpdatePasswordDto(string NewPassword);
 
-// Users
+
 public record CreateUserDto(string UserName, string Password, Guid? RoleId);
 public record UpdateUserDto(string UserName, Guid? RoleId);
 
-// Managers
+
 public record CreateManagerDto(string Name, Guid? UserId);
 public record UpdateManagerDto(string Name, Guid? UserId);
 
-// Teachers
+
 public record CreateTeacherDto(string Name, string FatherName, string MotherName, string NationalityNumber, string? Email, Guid? UserId);
 public record UpdateTeacherDto(string Name, string FatherName, string MotherName, string NationalityNumber, string? Email);
 
-// Academic
+
 public record CreateBookDto(string Name);
 public record UpdateBookDto(string Name);
 
@@ -219,11 +219,11 @@ public record UpdatePointCategoryDto(string Type);
 public record CreatePointDto(Guid StudentId, Guid EventId, Guid ClassId, Guid SmesterId, int PointValue, Guid? CategoryId, Guid? GivenByTeacherId);
 public record UpdatePointDto(int PointValue, Guid? CategoryId, Guid? GivenByTeacherId);
 
-// ==================== ADDITIONAL DTOs ====================
 
-/// <summary>
-/// General-purpose Student DTO for service operations.
-/// </summary>
+
+
+
+
 public record StudentDto(
     Guid Id,
     string Name,
@@ -241,9 +241,9 @@ public record StudentDto(
     List<PointDto> Points
 );
 
-/// <summary>
-/// Student contact info DTO.
-/// </summary>
+
+
+
 public record StudentContactInfoDto(
     Guid StudentId,
     Guid ContactInfoId,
@@ -251,9 +251,9 @@ public record StudentContactInfoDto(
     ContactInfoDto? ContactInfo
 );
 
-/// <summary>
-/// Student attachment DTO.
-/// </summary>
+
+
+
 public record StudentAttachmentDto(
     Guid StudentId,
     Guid AttachmentId,
@@ -261,9 +261,9 @@ public record StudentAttachmentDto(
     AttacmentDto? Attachment
 );
 
-/// <summary>
-/// Student hadith DTO.
-/// </summary>
+
+
+
 public record StudentHadithDto(
     Guid Id,
     Guid HadithId,
@@ -275,9 +275,9 @@ public record StudentHadithDto(
     string? Notes
 );
 
-/// <summary>
-/// Student Quran page DTO.
-/// </summary>
+
+
+
 public record StudentQuraanPageDto(
     Guid Id,
     int PageNumber,
@@ -289,9 +289,9 @@ public record StudentQuraanPageDto(
     string? Notes
 );
 
-/// <summary>
-/// Student class events point DTO.
-/// </summary>
+
+
+
 public record StudentClassEventsPointDto(
     Guid Id,
     Guid StudentId,
@@ -305,9 +305,9 @@ public record StudentClassEventsPointDto(
     int TotalPoints
 );
 
-/// <summary>
-/// Class student enrollment DTO.
-/// </summary>
+
+
+
 public record ClassStudentEnrollmentDto(
     Guid Id,
     Guid StudentId,
@@ -315,9 +315,9 @@ public record ClassStudentEnrollmentDto(
     Guid ClassId
 );
 
-/// <summary>
-/// Teacher statistics DTO.
-/// </summary>
+
+
+
 public record TeacherStatisticsDto(
     Guid TeacherId,
     int TotalClasses,

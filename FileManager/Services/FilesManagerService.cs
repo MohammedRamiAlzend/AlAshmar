@@ -1,4 +1,4 @@
-﻿using FileManager.Abstractions;
+using FileManager.Abstractions;
 using FileManager.Models;
 using FileManager.Services.Abstraction;
 using Microsoft.AspNetCore.Http;
@@ -6,10 +6,10 @@ using AlAshmar.Domain.Commons;
 
 namespace FileManager.Services;
 
-/// <summary>
-/// Backward compatible file manager service that wraps the enhanced file manager
-/// for use with web applications
-/// </summary>
+
+
+
+
 public class FilesManagerService : IFilesManagerService
 {
     private readonly IFileManager _fileManager;
@@ -56,7 +56,7 @@ public class FilesManagerService : IFilesManagerService
                 await file.CopyToAsync(stream);
                 var fileContent = stream.ToArray();
                 var result = await _fileManager.WriteFileAsync(fullFilePath, fileContent);
-                
+
                 if (!result.Success)
                 {
                     return ApplicationErrors.FileOperationFailed(result.ErrorMessage ?? "Unknown error");

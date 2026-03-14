@@ -1,11 +1,8 @@
-using AlAshmar.Application.Common;
 using AlAshmar.Application.DTOs.Domain;
-using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Domain.Entities.Academic;
 using AlAshmar.Application.Repos;
 using Microsoft.EntityFrameworkCore;
-using MediatR;
 
 namespace AlAshmar.Application.UseCases.Students.GetPoints;
 

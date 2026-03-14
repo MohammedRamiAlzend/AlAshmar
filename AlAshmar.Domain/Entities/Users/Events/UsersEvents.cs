@@ -1,5 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace AlAshmar.Domain.Entities.Users.Events;

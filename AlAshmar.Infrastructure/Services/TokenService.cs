@@ -3,8 +3,6 @@ using System.Security.Claims;
 using System.Text;
 using AlAshmar.Application.Interfaces;
 using AlAshmar.Domain.Entities.Users;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace AlAshmar.Infrastructure.Services;
@@ -37,7 +35,7 @@ public class TokenService : ITokenService
         {
             claims.Add(new Claim("RoleId", roleId.Value.ToString()));
 
-            // Get role type and permissions
+
             var role = await _context.Roles
                 .Include(r => r.Permissions)
                 .FirstOrDefaultAsync(r => r.Id == roleId.Value, cancellationToken);
@@ -46,7 +44,7 @@ public class TokenService : ITokenService
             {
                 claims.Add(new Claim(ClaimTypes.Role, role.Type));
 
-                // Add permissions as claims
+
                 foreach (var permission in role.Permissions)
                 {
                     claims.Add(new Claim("permission", permission.ToPermissionString()));

@@ -2,9 +2,9 @@ using PdfGenerator.Interfaces;
 
 namespace PdfGenerator.Options;
 
-/// <summary>
-/// Default implementation of PDF options.
-/// </summary>
+
+
+
 public class PdfOptions : IPdfOptions
 {
     public string PageSize { get; set; } = "A4";
@@ -17,10 +17,10 @@ public class PdfOptions : IPdfOptions
     public bool IncludeFooter { get; set; } = true;
     public string? LogoPath { get; set; }
     public string? CompanyName { get; set; }
-    
-    /// <summary>
-    /// Creates a copy of the current options.
-    /// </summary>
+
+
+
+
     public PdfOptions Clone()
     {
         return new PdfOptions

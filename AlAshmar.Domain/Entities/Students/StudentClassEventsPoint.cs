@@ -13,7 +13,7 @@ public class StudentClassEventsPoint : Entity<Guid>
     [ForeignKey(nameof(ClassId))]
     public Halaqa? Halaqa { get; set; }
 
-    public Guid SmesterId { get; set; } // spelled as in diagram
+    public Guid SmesterId { get; set; }
     [ForeignKey(nameof(SmesterId))]
     public Semester? Semester { get; set; }
 

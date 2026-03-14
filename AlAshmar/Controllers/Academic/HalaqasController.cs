@@ -4,16 +4,13 @@ using AlAshmar.Application.UseCases.Halaqas.GetAllHalaqas;
 using AlAshmar.Application.UseCases.Halaqas.GetHalaqaById;
 using AlAshmar.Application.UseCases.Halaqas.GetHalaqasByCourse;
 using AlAshmar.Application.UseCases.Halaqas.UpdateHalaqa;
-using AlAshmar.Application.DTOs.Domain;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace AlAshmar.Controllers.Academic;
 
-/// <summary>
-/// Controller for Halaqa (learning circle/class) CRUD operations.
-/// Each Course (course) has many Halaqas; each Halaqa has many students and teachers.
-/// </summary>
+
+
+
+
 [ApiController]
 [Route("api/halaqas")]
 [Authorize]
@@ -26,9 +23,9 @@ public class HalaqasController : ControllerBase
         _sender = sender;
     }
 
-    /// <summary>
-    /// Get all halaqas.
-    /// </summary>
+
+
+
     [HttpGet]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default)
     {
@@ -36,9 +33,9 @@ public class HalaqasController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Get all halaqas in a specific course (course).
-    /// </summary>
+
+
+
     [HttpGet("by-course/{courseId:guid}")]
     public async Task<IActionResult> GetByCourse(
         [FromRoute] Guid courseId,
@@ -48,9 +45,9 @@ public class HalaqasController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Get a halaqa by ID.
-    /// </summary>
+
+
+
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(
         [FromRoute] Guid id,
@@ -60,9 +57,9 @@ public class HalaqasController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Create a new halaqa.
-    /// </summary>
+
+
+
     [HttpPost]
     public async Task<IActionResult> Create(
         [FromBody] CreateHalaqaDto dto,
@@ -72,9 +69,9 @@ public class HalaqasController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Update an existing halaqa.
-    /// </summary>
+
+
+
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(
         [FromRoute] Guid id,
@@ -85,9 +82,9 @@ public class HalaqasController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Delete a halaqa by ID.
-    /// </summary>
+
+
+
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(
         [FromRoute] Guid id,

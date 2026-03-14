@@ -2,9 +2,9 @@ using AlAshmar.Application.UseCases.Students.UpdateStudentPassword;
 
 namespace AlAshmar.Controllers.Students;
 
-/// <summary>
-/// Controller for core student CRUD operations.
-/// </summary>
+
+
+
 [ApiController]
 [Route("api/students")]
 [Authorize]
@@ -19,10 +19,10 @@ public class StudentController : ControllerBase
         _filesManager = filesManager;
     }
 
-    /// <summary>
-    /// Get all students filtered by various criteria with support for OR operations.
-    /// All filter parameters are optional - null values are ignored in filtering.
-    /// </summary>
+
+
+
+
     [HttpGet("filtered")]
     public async Task<IActionResult> GetAllStudentFiltered(
         [FromQuery] int? pageNumber = null,
@@ -38,9 +38,9 @@ public class StudentController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Get a student by ID with full details including contact info, attachments, and academic records.
-    /// </summary>
+
+
+
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetStudentById(
         [FromRoute] Guid id,
@@ -51,9 +51,9 @@ public class StudentController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Create a new student. The default password is set to the student's NationalityNumber.
-    /// </summary>
+
+
+
     [HttpPost]
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> CreateStudent(
@@ -112,9 +112,9 @@ public class StudentController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Update an existing student's basic information.
-    /// </summary>
+
+
+
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateStudent(
         [FromRoute] Guid id,
@@ -129,9 +129,9 @@ public class StudentController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Delete a student by ID.
-    /// </summary>
+
+
+
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteStudent(
         [FromRoute] Guid id,
@@ -142,9 +142,9 @@ public class StudentController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Update a student's password.
-    /// </summary>
+
+
+
     [HttpPut("{id:guid}/password")]
     public async Task<IActionResult> UpdatePassword(
         [FromRoute] Guid id,

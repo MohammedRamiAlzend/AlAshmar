@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,9 +6,9 @@ using AlAshmar.Domain.Entities.Abstraction;
 
 namespace AlAshmar.Infrastructure.Persistence.UnitOfWork;
 
-/// <summary>
-/// Implementation of Unit of Work pattern.
-/// </summary>
+
+
+
 public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _context;

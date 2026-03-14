@@ -1,10 +1,7 @@
-using AlAshmar.Application.Common;
 using AlAshmar.Application.DTOs.Domain;
-using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Application.Repos;
 using Microsoft.EntityFrameworkCore;
-using MediatR;
 
 namespace AlAshmar.Application.UseCases.Students.GetClassEnrollments;
 
@@ -24,7 +21,7 @@ public class GetClassEnrollmentsHandler(IRepositoryBase<ClassStudentEnrollment, 
             .Select(e => new ClassEnrollmentWithStudentDto(
                 e.Id,
                 e.ClassId,
-                "Class", // Class entity not available - using placeholder
+                "Class",
                 e.StudentId,
                 e.Student?.Name ?? "Unknown",
                 true)).ToList();

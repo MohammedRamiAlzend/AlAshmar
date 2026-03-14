@@ -1,16 +1,13 @@
-using AlAshmar.Application.DTOs.Domain;
 using AlAshmar.Application.Services.Crud;
 using AlAshmar.Domain.Commons;
 using AlAshmar.Infrastructure.Authorization.Attributes;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace AlAshmar.Controllers;
 
-/// <summary>
-/// Base controller with common CRUD operations.
-/// Depends on the <see cref="IAdvancedCrudService{TEntity,TDto,TKey}"/> service abstraction.
-/// </summary>
+
+
+
+
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]

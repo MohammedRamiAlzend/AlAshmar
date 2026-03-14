@@ -1,8 +1,6 @@
 using FileManager.Extensions;
 using AlAshmar.Infrastructure.Services;
 using AlAshmar.Application.Interfaces;
-using AlAshmar.Application.Common;
-using AlAshmar.Infrastructure.Persistence;
 using AlAshmar.Infrastructure.Services.Domain;
 using AlAshmar.Infrastructure.Services.Reports;
 using AlAshmar.Application.Interfaces.Reports;
@@ -17,41 +15,41 @@ using AlAshmar.Application.DTOs.Domain;
 
 namespace AlAshmar.Infrastructure;
 
-/// <summary>
-/// Extension methods for registering infrastructure services.
-/// </summary>
+
+
+
 public static class InfrastructureServiceRegistration
 {
-    /// <summary>
-    /// Adds infrastructure services to the dependency injection container.
-    /// </summary>
+
+
+
     public static IServiceCollection AddInfrastructureServices(
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        // Register File Manager Services
+
         services.AddFileManager();
 
-        // Register HttpContext Service Manager
+
         services.AddScoped<IHttpContextServiceManager, HttpContextServiceManager>();
 
-        // Register Token Service (needs DbContext for permissions)
+
         services.AddScoped<ITokenService, TokenService>();
 
-        // Register Authentication Service
+
         services.AddScoped<IAuthenticationService, AuthenticationService>();
 
-        // Register Authorization Service
+
         services.AddScoped<Application.Interfaces.IAuthorizationService, AuthorizationService>();
 
-        // Register Authorization Seeder
+
         services.AddScoped<AuthorizationSeeder>();
 
-        // Register student and teacher management services
+
         services.AddScoped<IStudentManagementService, StudentManagementService>();
         services.AddScoped<ITeacherManagementService, TeacherManagementService>();
 
-        // Register Domain CRUD Services
+
         services.AddScoped<IAllowableExtentionService, AllowableExtentionService>();
         services.AddScoped<IAttacmentService, AttacmentService>();
         services.AddScoped<IContactInfoService, ContactInfoService>();
@@ -69,14 +67,14 @@ public static class InfrastructureServiceRegistration
         services.AddScoped<IPointCategoryService, PointCategoryService>();
         services.AddScoped<IPointService, PointService>();
 
-        // Register Form Services
+
         services.AddScoped<AlAshmar.Application.Services.Domain.IFormService, AlAshmar.Application.Services.Domain.FormService>();
         services.AddScoped<AlAshmar.Application.Services.Domain.IFormQuestionService, AlAshmar.Application.Services.Domain.FormQuestionService>();
         services.AddScoped<AlAshmar.Application.Services.Domain.IFormQuestionOptionService, AlAshmar.Application.Services.Domain.FormQuestionOptionService>();
         services.AddScoped<AlAshmar.Application.Services.Domain.IFormResponseService, AlAshmar.Application.Services.Domain.FormResponseService>();
         services.AddScoped<AlAshmar.Application.Services.Domain.IFormAnswerService, AlAshmar.Application.Services.Domain.FormAnswerService>();
 
-        // Register Report Services
+
         services.AddScoped<IStudentReportService, StudentReportService>();
         services.AddScoped<ITeacherReportService, TeacherReportService>();
         services.AddScoped<IClassReportService, ClassReportService>();
@@ -84,14 +82,14 @@ public static class InfrastructureServiceRegistration
         services.AddScoped<IAttendanceReportService, AttendanceReportService>();
         services.AddScoped<IPointsReportService, PointsReportService>();
 
-        // Note: MediatR handlers are registered via AddMediatR() in Program.cs
+
 
         return services;
     }
 
-    /// <summary>
-    /// Adds authorization policies for the application.
-    /// </summary>
+
+
+
     public static IServiceCollection AddAuthorizationPolicies(this IServiceCollection services)
     {
         services.AddAuthorization();

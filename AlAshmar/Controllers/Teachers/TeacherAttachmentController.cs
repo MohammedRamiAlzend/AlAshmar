@@ -1,8 +1,8 @@
 namespace AlAshmar.Controllers.Teachers;
 
-/// <summary>
-/// Controller for teacher attachment operations.
-/// </summary>
+
+
+
 [ApiController]
 [Route("api/teachers")]
 [Authorize]
@@ -17,9 +17,9 @@ public class TeacherAttachmentController : ControllerBase
         _filesManager = filesManager;
     }
 
-    /// <summary>
-    /// Add attachment to a teacher's profile.
-    /// </summary>
+
+
+
     [HttpPost("{id:guid}/attachments")]
     public async Task<IActionResult> AddAttachment(
         [FromRoute] Guid id,
@@ -46,9 +46,9 @@ public class TeacherAttachmentController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Get teacher's attachments.
-    /// </summary>
+
+
+
     [HttpGet("{id:guid}/attachments")]
     public async Task<IActionResult> GetAttachments(
         [FromRoute] Guid id,

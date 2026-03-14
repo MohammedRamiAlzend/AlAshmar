@@ -5,7 +5,7 @@ namespace AlAshmar.Domain.Entities.Teachers;
 
 public class TeacherAttachment
 {
-    // Composite key: TeacherId + AttachmentId in OnModelCreating
+
     public Guid TeacherId { get; set; }
     [ForeignKey(nameof(TeacherId))]
     public Teacher? Teacher { get; set; }

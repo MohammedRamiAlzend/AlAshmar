@@ -4,16 +4,13 @@ using AlAshmar.Application.UseCases.Courses.GetAllCourses;
 using AlAshmar.Application.UseCases.Courses.GetCourseById;
 using AlAshmar.Application.UseCases.Courses.GetCoursesBySemester;
 using AlAshmar.Application.UseCases.Courses.UpdateCourse;
-using AlAshmar.Application.DTOs.Domain;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace AlAshmar.Controllers.Academic;
 
-/// <summary>
-/// Controller for Course (course/program) CRUD operations.
-/// Each Semester has many Courses; each Course has many Halaqas.
-/// </summary>
+
+
+
+
 [ApiController]
 [Route("api/courses")]
 [Authorize]
@@ -26,9 +23,9 @@ public class CoursesController : ControllerBase
         _sender = sender;
     }
 
-    /// <summary>
-    /// Get all courses.
-    /// </summary>
+
+
+
     [HttpGet]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default)
     {
@@ -36,9 +33,9 @@ public class CoursesController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Get all courses in a specific semester.
-    /// </summary>
+
+
+
     [HttpGet("by-semester/{semesterId:guid}")]
     public async Task<IActionResult> GetBySemester(
         [FromRoute] Guid semesterId,
@@ -48,9 +45,9 @@ public class CoursesController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Get a course by ID.
-    /// </summary>
+
+
+
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(
         [FromRoute] Guid id,
@@ -60,9 +57,9 @@ public class CoursesController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Create a new course.
-    /// </summary>
+
+
+
     [HttpPost]
     public async Task<IActionResult> Create(
         [FromBody] CreateCourseDto dto,
@@ -72,9 +69,9 @@ public class CoursesController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Update an existing course.
-    /// </summary>
+
+
+
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(
         [FromRoute] Guid id,
@@ -85,9 +82,9 @@ public class CoursesController : ControllerBase
         return result.ToActionResult();
     }
 
-    /// <summary>
-    /// Delete a course by ID.
-    /// </summary>
+
+
+
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(
         [FromRoute] Guid id,
