@@ -53,6 +53,18 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
+    var validAudiences = new[]
+    {
+        builder.Configuration["Jwt:Audience"],
+        Constants.SuperAdminUserType,
+        "Admin",
+        Constants.ManagerUserType,
+        Constants.TeacherUserType,
+        Constants.StuedentUserType
+    }
+    .Where(audience => !string.IsNullOrWhiteSpace(audience))
+    .Distinct(StringComparer.OrdinalIgnoreCase);
+
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
@@ -61,7 +73,7 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuer = true,
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidateAudience = true,
-        ValidAudience = builder.Configuration["Jwt:Audience"],
+        ValidAudiences = validAudiences,
         ValidateLifetime = true,
         ClockSkew = TimeSpan.Zero
     };

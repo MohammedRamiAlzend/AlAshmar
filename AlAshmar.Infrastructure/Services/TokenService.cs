@@ -23,6 +23,7 @@ public class TokenService : ITokenService
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
             _configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not configured")));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var audience = _configuration["Jwt:Audience"] ?? throw new InvalidOperationException("JWT Audience not configured");
 
         var claims = new List<Claim>
         {
@@ -43,6 +44,7 @@ public class TokenService : ITokenService
             if (role != null)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role.Type));
+                audience = role.Type;
 
 
                 foreach (var permission in role.Permissions)
@@ -57,7 +59,7 @@ public class TokenService : ITokenService
 
         var token = new JwtSecurityToken(
             issuer: _configuration["Jwt:Issuer"],
-            audience: _configuration["Jwt:Audience"],
+            audience: audience,
             claims: claims,
             expires: expiresAt,
             signingCredentials: credentials
@@ -75,6 +77,7 @@ public class TokenService : ITokenService
             _configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not configured")));
 
         var tokenHandler = new JwtSecurityTokenHandler();
+        var validAudiences = await GetValidAudiencesAsync(cancellationToken);
         try
         {
             tokenHandler.ValidateToken(token, new TokenValidationParameters
@@ -84,7 +87,7 @@ public class TokenService : ITokenService
                 ValidateIssuer = true,
                 ValidIssuer = _configuration["Jwt:Issuer"],
                 ValidateAudience = true,
-                ValidAudience = _configuration["Jwt:Audience"],
+                ValidAudiences = validAudiences,
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero
             }, out _);
@@ -94,5 +97,33 @@ public class TokenService : ITokenService
         {
             return false;
         }
+    }
+
+    private async Task<IEnumerable<string>> GetValidAudiencesAsync(CancellationToken cancellationToken)
+    {
+        var audiences = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var defaultAudience = _configuration["Jwt:Audience"];
+
+        if (!string.IsNullOrWhiteSpace(defaultAudience))
+        {
+            audiences.Add(defaultAudience);
+        }
+
+        var roleAudiences = await _context.Roles
+            .AsNoTracking()
+            .Where(r => !string.IsNullOrWhiteSpace(r.Type))
+            .Select(r => r.Type)
+            .Distinct()
+            .ToListAsync(cancellationToken);
+
+        foreach (var roleAudience in roleAudiences)
+        {
+            audiences.Add(roleAudience);
+        }
+
+        if (audiences.Count == 0)
+            throw new InvalidOperationException("No JWT audiences are configured");
+
+        return audiences;
     }
 }
