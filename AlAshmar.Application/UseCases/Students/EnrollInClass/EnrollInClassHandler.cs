@@ -17,7 +17,7 @@ public class EnrollInClassHandler(IRepositoryBase<ClassStudentEnrollment, Guid> 
 
         if (existingEnrollment.IsError) return existingEnrollment.Errors;
         if (existingEnrollment.Value.Any())
-            return new Error("409", "Student is already enrolled in this class", ErrorKind.Conflict);
+            return ApplicationErrors.StudentAlreadyEnrolledInClass;
 
         var enrollment = new ClassStudentEnrollment
         {

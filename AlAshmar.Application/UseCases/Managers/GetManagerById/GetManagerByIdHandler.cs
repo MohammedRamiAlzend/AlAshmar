@@ -32,7 +32,7 @@ public class GetManagerByIdHandler : IRequestHandler<GetManagerByIdQuery, Result
         var manager = managerResult.Value.FirstOrDefault();
 
         if (manager == null)
-            return new Error("404", "Manager not found", ErrorKind.NotFound);
+            return ApplicationErrors.ManagerNotFound;
 
         return new ManagerDto(
             manager.Id,

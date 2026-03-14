@@ -26,7 +26,7 @@ public class FormService : CrudServiceBase<Form, FormDto, Guid>, IFormService
 
         var form = result.Value.FirstOrDefault();
         if (form is null)
-            return new Error("404", "Form not found", ErrorKind.NotFound);
+            return ApplicationErrors.FormNotFound;
 
         return _mapper.Map<FormDto>(form);
     }
@@ -79,19 +79,19 @@ public class FormResponseService : CrudServiceBase<FormResponse, FormResponseDto
         // Validate form exists and is active
         var formResult = await _formRepository.GetByIdAsync(dto.FormId);
         if (formResult.IsError || formResult.Value is null)
-            return new Error("404", "Form not found", ErrorKind.NotFound);
+            return ApplicationErrors.FormNotFound;
 
         var form = formResult.Value;
 
         if (!form.IsActive)
-            return new Error("400", "Form is not active", ErrorKind.Validation);
+            return ApplicationErrors.FormNotActive;
 
         var now = DateTime.UtcNow;
         if (form.StartsAt.HasValue && now < form.StartsAt.Value)
-            return new Error("400", "Form has not started yet", ErrorKind.Validation);
+            return ApplicationErrors.FormNotStarted;
 
         if (form.EndsAt.HasValue && now > form.EndsAt.Value)
-            return new Error("400", "Form has already ended", ErrorKind.Validation);
+            return ApplicationErrors.FormAlreadyEnded;
 
         // Build the response entity
         var response = new FormResponse

@@ -24,7 +24,7 @@ public class CreateTeacherHandler(IRepositoryBase<Teacher, Guid> repository) :
     {
         var duplicate = await repository.AnyAsync(t => t.NationalityNumber == command.NationalityNumber);
         if (duplicate)
-            return new Error("409", "Nationality number already exists", ErrorKind.Conflict);
+            return ApplicationErrors.NationalityNumberAlreadyExists;
 
         var teacher = Teacher.Create(
             command.Name,

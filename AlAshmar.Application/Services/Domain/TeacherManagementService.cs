@@ -267,7 +267,7 @@ public class TeacherManagementService : ITeacherManagementService
         var teacher = await _teacherRepository.GetByIdAsync(id);
 
         if (teacher.Value == null)
-            return new Error("404", "Teacher not found", ErrorKind.NotFound);
+            return ApplicationErrors.TeacherNotFound;
 
         return new AlAshmar.Application.DTOs.Domain.TeacherDto(
             teacher.Value.Id,
@@ -334,7 +334,7 @@ public class TeacherManagementService : ITeacherManagementService
     {
         var teacherResult = await _teacherRepository.GetByIdAsync(id);
         if (teacherResult.Value == null)
-            return new Error("404", "Teacher not found", ErrorKind.NotFound);
+            return ApplicationErrors.TeacherNotFound;
 
         var teacher = teacherResult.Value;
         teacher.UpdateBasicInfo(
@@ -368,7 +368,7 @@ public class TeacherManagementService : ITeacherManagementService
     {
         var teacher = await _teacherRepository.GetByIdAsync(id);
         if (teacher.Value == null)
-            return new Error("404", "Teacher not found", ErrorKind.NotFound);
+            return ApplicationErrors.TeacherNotFound;
 
         var result = await _teacherRepository.RemoveAsync(t => t.Id == id);
         if (result.IsError)
@@ -445,7 +445,7 @@ public class TeacherManagementService : ITeacherManagementService
     {
         var teacher = await _teacherRepository.GetByIdAsync(teacherId);
         if (teacher.Value == null)
-            return new Error("404", "Teacher not found", ErrorKind.NotFound);
+            return ApplicationErrors.TeacherNotFound;
 
         var attachment = new Attacment
         {
@@ -485,7 +485,7 @@ public class TeacherManagementService : ITeacherManagementService
 
         if (teacher.IsError) return teacher.Errors;
         if (teacher.Value == null)
-            return new Error("404", "Teacher not found", ErrorKind.NotFound);
+            return ApplicationErrors.TeacherNotFound;
 
         var attachmentDtos = teacher.Value.TeacherAttachments
             .Select(ta => new TeacherAttachmentDto(
@@ -551,7 +551,7 @@ public class TeacherManagementService : ITeacherManagementService
     {
         var teacher = await _teacherRepository.GetByIdAsync(teacherId);
         if (teacher.Value == null)
-            return new Error("404", "Teacher not found", ErrorKind.NotFound);
+            return ApplicationErrors.TeacherNotFound;
 
         var contactInfo = new ContactInfo
         {
@@ -589,7 +589,7 @@ public class TeacherManagementService : ITeacherManagementService
 
         if (teacher.IsError) return teacher.Errors;
         if (teacher.Value == null)
-            return new Error("404", "Teacher not found", ErrorKind.NotFound);
+            return ApplicationErrors.TeacherNotFound;
 
         var contactInfoDtos = teacher.Value.TeacherContactInfos
             .Select(tc => new TeacherContactInfoDto(
@@ -616,13 +616,13 @@ public class TeacherManagementService : ITeacherManagementService
 
         if (teacher.IsError) return teacher.Errors;
         if (teacher.Value == null)
-            return new Error("404", "Teacher not found", ErrorKind.NotFound);
+            return ApplicationErrors.TeacherNotFound;
 
         var teacherContactInfo = teacher.Value.TeacherContactInfos
             .FirstOrDefault(tc => tc.ContactInfoId == contactInfoId);
 
         if (teacherContactInfo == null)
-            return new Error("404", "Teacher contact info not found", ErrorKind.NotFound);
+            return ApplicationErrors.TeacherContactInfoNotFound;
 
         teacher.Value.TeacherContactInfos.Remove(teacherContactInfo);
 
@@ -643,7 +643,7 @@ public class TeacherManagementService : ITeacherManagementService
 
         if (existingEnrollment.IsError) return existingEnrollment.Errors;
         if (existingEnrollment.Value.Any())
-            return new Error("409", "Teacher is already assigned to this class", ErrorKind.Conflict);
+            return ApplicationErrors.TeacherAlreadyAssignedToClass;
 
         var enrollment = new ClassTeacherEnrollment
         {
@@ -669,7 +669,7 @@ public class TeacherManagementService : ITeacherManagementService
 
         if (enrollment.IsError) return enrollment.Errors;
         if (enrollment.Value == null)
-            return new Error("404", "Teacher class enrollment not found", ErrorKind.NotFound);
+            return ApplicationErrors.TeacherClassEnrollmentNotFound;
 
         var deleteResult = await _enrollmentRepository.RemoveAsync(
             e => e.TeacherId == teacherId && e.ClassId == classId);
@@ -690,7 +690,7 @@ public class TeacherManagementService : ITeacherManagementService
 
         if (enrollment.IsError) return enrollment.Errors;
         if (enrollment.Value == null)
-            return new Error("404", "Teacher class enrollment not found", ErrorKind.NotFound);
+            return ApplicationErrors.TeacherClassEnrollmentNotFound;
 
         enrollment.Value.IsMainTeacher = true;
 
@@ -714,7 +714,7 @@ public class TeacherManagementService : ITeacherManagementService
 
         if (teacher.IsError) return teacher.Errors;
         if (teacher.Value == null)
-            return new Error("404", "Teacher not found", ErrorKind.NotFound);
+            return ApplicationErrors.TeacherNotFound;
 
         var totalClasses = teacher.Value.ClassTeacherEnrollments.Count;
         var isMainTeacherCount = teacher.Value.ClassTeacherEnrollments.Count(c => c.IsMainTeacher);

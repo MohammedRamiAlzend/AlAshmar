@@ -13,7 +13,7 @@ public class DeleteCourseHandler(IRepositoryBase<Course, Guid> repository)
     {
         var result = await repository.GetByIdAsync(command.Id);
         if (result.Value == null)
-            return new Error("404", "Course not found", ErrorKind.NotFound);
+            return ApplicationErrors.CourseNotFound;
 
         var deleteResult = await repository.RemoveAsync(d => d.Id == command.Id);
         if (deleteResult.IsError)

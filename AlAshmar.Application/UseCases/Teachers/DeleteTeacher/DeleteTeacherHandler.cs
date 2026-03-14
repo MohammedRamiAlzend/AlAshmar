@@ -21,7 +21,7 @@ public class DeleteTeacherHandler : IRequestHandler<DeleteTeacherCommand, Result
     {
         var teacher = await _repository.GetByIdAsync(command.Id);
         if (teacher.Value == null)
-            return new Error("404", "Teacher not found", ErrorKind.NotFound);
+            return ApplicationErrors.TeacherNotFound;
 
         var result = await _repository.RemoveAsync(t => t.Id == command.Id);
         if (result.IsError)

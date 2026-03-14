@@ -16,7 +16,7 @@ public class AddAttachmentHandler(
     {
         var student = await repository.GetByIdAsync(command.StudentId);
         if (student.Value == null)
-            return new Error("404", "Student not found", ErrorKind.NotFound);
+            return ApplicationErrors.StudentNotFound;
 
         var attachment = new Attacment
         {

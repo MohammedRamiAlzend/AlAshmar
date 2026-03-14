@@ -29,13 +29,13 @@ public class UpdateTeacherHandler : IRequestHandler<UpdateTeacherCommand, Result
     {
         var teacherResult = await _repository.GetByIdAsync(command.Id);
         if (teacherResult.Value == null)
-            return new Error("404", "Teacher not found", ErrorKind.NotFound);
+            return ApplicationErrors.TeacherNotFound;
 
         var teacher = teacherResult.Value;
 
         var duplicate = await _repository.AnyAsync(t => t.NationalityNumber == command.NationalityNumber && t.Id != command.Id);
         if (duplicate)
-            return new Error("409", "Nationality number already exists", ErrorKind.Conflict);
+            return ApplicationErrors.NationalityNumberAlreadyExists;
 
         teacher.UpdateBasicInfo(
             command.Name,

@@ -50,7 +50,7 @@ public class ClassReportService : IClassReportService
         var result = await GetDailyReportAsync(classId, weekStart, cancellationToken);
         
         if (result.IsError)
-            return Error.NotFound("Class", classId.ToString());
+            return ApplicationErrors.ClassNotFound;
 
         return new ClassWeeklyReportDto(
             result.Value.ClassId,
@@ -70,7 +70,7 @@ public class ClassReportService : IClassReportService
         var result = await GetDailyReportAsync(classId, monthStart, cancellationToken);
 
         if (result.IsError)
-            return Error.NotFound("Class", classId.ToString());
+            return ApplicationErrors.ClassNotFound;
 
         return new ClassMonthlyReportDto(
             result.Value.ClassId,
@@ -89,7 +89,7 @@ public class ClassReportService : IClassReportService
         var result = await GetDailyReportAsync(classId, DateTime.Today, cancellationToken);
 
         if (result.IsError)
-            return Error.NotFound("Class", classId.ToString());
+            return ApplicationErrors.ClassNotFound;
 
         return new ClassSemesterReportDto(
             result.Value.ClassId,

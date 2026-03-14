@@ -23,7 +23,7 @@ public abstract class CrudServiceBase<TEntity, TDto, TKey> : IAdvancedCrudServic
     {
         var entity = await _repository.GetByIdAsync(id);
         if (entity.Value == null)
-            return new Error("404", $"{typeof(TEntity).Name} not found", ErrorKind.NotFound);
+            return ApplicationErrors.ResourceNotFound;
 
         return _mapper.Map<TDto>(entity.Value);
     }
@@ -61,7 +61,7 @@ public abstract class CrudServiceBase<TEntity, TDto, TKey> : IAdvancedCrudServic
     {
         var existing = await _repository.GetByIdAsync(id);
         if (existing.Value == null)
-            return new Error("404", $"{typeof(TEntity).Name} not found", ErrorKind.NotFound);
+            return ApplicationErrors.ResourceNotFound;
 
         _mapper.Map(dto, existing.Value);
         var result = await _repository.UpdateAsync(existing.Value);
@@ -75,7 +75,7 @@ public abstract class CrudServiceBase<TEntity, TDto, TKey> : IAdvancedCrudServic
     {
         var existing = await _repository.GetByIdAsync(id);
         if (existing.Value == null)
-            return new Error("404", $"{typeof(TEntity).Name} not found", ErrorKind.NotFound);
+            return ApplicationErrors.ResourceNotFound;
 
         var result = await _repository.RemoveAsync(e => e.Id!.Equals(id));
         if (result.IsError)

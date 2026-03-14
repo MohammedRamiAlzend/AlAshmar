@@ -1,3 +1,4 @@
+using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.ValueObjects;
 
 namespace AlAshmar.Domain.ValueObjects;
@@ -17,11 +18,11 @@ public class Email : ValueObject
     public static Result<Email> Create(string? email)
     {
         if (string.IsNullOrWhiteSpace(email))
-            return new Error("INVALID_EMAIL", "Email cannot be empty", ErrorKind.Validation);
+            return ApplicationErrors.MissingRequiredField;
 
         // Simple email validation
         if (!email.Contains("@") || !email.Contains("."))
-            return new Error("INVALID_EMAIL", "Invalid email format", ErrorKind.Validation);
+            return ApplicationErrors.InvalidEmailFormat;
 
         return new Email(email);
     }
@@ -51,10 +52,10 @@ public class Name : ValueObject
     public static Result<Name> Create(string? name)
     {
         if (string.IsNullOrWhiteSpace(name))
-            return new Error("INVALID_NAME", "Name cannot be empty", ErrorKind.Validation);
+            return ApplicationErrors.MissingRequiredField;
 
         if (name.Length > 100)
-            return new Error("INVALID_NAME", "Name must not exceed 100 characters", ErrorKind.Validation);
+            return ApplicationErrors.InvalidInput;
 
         return new Name(name);
     }

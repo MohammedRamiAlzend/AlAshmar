@@ -23,7 +23,7 @@ public class TeacherReportService : ITeacherReportService
     {
         var teacherResult = await _teacherRepository.GetByIdAsync(teacherId);
         if (teacherResult.Value == null)
-            return Error.NotFound("Teacher", teacherId.ToString());
+            return ApplicationErrors.TeacherNotFound;
 
         var teacher = teacherResult.Value;
 
@@ -41,7 +41,7 @@ public class TeacherReportService : ITeacherReportService
     {
         var teacherResult = await _teacherRepository.GetByIdAsync(teacherId);
         if (teacherResult.Value == null)
-            return Error.NotFound("Teacher", teacherId.ToString());
+            return ApplicationErrors.TeacherNotFound;
 
         var teacher = teacherResult.Value;
         var weekEnd = weekStart.AddDays(6);
@@ -61,7 +61,7 @@ public class TeacherReportService : ITeacherReportService
     {
         var teacherResult = await _teacherRepository.GetByIdAsync(teacherId);
         if (teacherResult.Value == null)
-            return Error.NotFound("Teacher", teacherId.ToString());
+            return ApplicationErrors.TeacherNotFound;
 
         var teacher = teacherResult.Value;
 
@@ -80,7 +80,7 @@ public class TeacherReportService : ITeacherReportService
     {
         var teacherResult = await _teacherRepository.GetByIdAsync(teacherId);
         if (teacherResult.Value == null)
-            return Error.NotFound("Teacher", teacherId.ToString());
+            return ApplicationErrors.TeacherNotFound;
 
         var teacher = teacherResult.Value;
 

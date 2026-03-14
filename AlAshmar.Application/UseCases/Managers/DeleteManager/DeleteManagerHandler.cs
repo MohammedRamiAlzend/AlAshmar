@@ -21,7 +21,7 @@ public class DeleteManagerHandler : IRequestHandler<DeleteManagerCommand, Result
     {
         var manager = await _repository.GetByIdAsync(command.Id);
         if (manager.Value == null)
-            return new Error("404", "Manager not found", ErrorKind.NotFound);
+            return ApplicationErrors.ManagerNotFound;
 
         var result = await _repository.RemoveAsync(m => m.Id == command.Id);
         if (result.IsError)

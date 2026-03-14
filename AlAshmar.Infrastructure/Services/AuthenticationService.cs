@@ -23,10 +23,10 @@ public class AuthenticationService(
         string hashedPs = PasswordHasher.Hash(password);
 
         if (user.IsError || user.Value == null)
-            return new Error("401", "Invalid username or password", ErrorKind.Unauthorized);
+            return ApplicationErrors.InvalidCredentials;
 
         if (!PasswordHasher.Verify(password, user.Value.HashedPassword))
-            return new Error("401", "Invalid username or password", ErrorKind.Unauthorized);
+            return ApplicationErrors.InvalidCredentials;
 
         var token = await tokenService.GenerateTokenAsync(user.Value.UserName, user.Value.Id, user.Value.RoleId, cancellationToken);
         var expiresAt = DateTime.UtcNow.AddHours(24);
@@ -39,7 +39,7 @@ public class AuthenticationService(
         // Check if user already exists
         var existingUser = await userRepository.GetAsync(u => u.UserName == command.UserName);
         if (!existingUser.IsError && existingUser.Value != null)
-            return new Error("400", "Username already exists", ErrorKind.Validation);
+            return ApplicationErrors.UserAlreadyExists;
 
         var user = new User
         {
@@ -63,7 +63,7 @@ public class AuthenticationService(
         // Check if user already exists
         var existingUser = await userRepository.GetAsync(u => u.UserName == command.UserName);
         if (!existingUser.IsError && existingUser.Value != null)
-            return new Error("400", "Username already exists", ErrorKind.Validation);
+            return ApplicationErrors.UserAlreadyExists;
 
         var user = User.Create(
          command.UserName,
@@ -86,7 +86,7 @@ public class AuthenticationService(
         // Check if user already exists
         var existingUser = await userRepository.GetAsync(u => u.UserName == command.UserName);
         if (!existingUser.IsError && existingUser.Value != null)
-            return new Error("400", "Username already exists", ErrorKind.Validation);
+            return ApplicationErrors.UserAlreadyExists;
 
         var user = new User
         {

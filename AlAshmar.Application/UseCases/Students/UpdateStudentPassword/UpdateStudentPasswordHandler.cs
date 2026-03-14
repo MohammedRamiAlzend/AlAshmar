@@ -25,7 +25,7 @@ public class UpdateStudentPasswordHandler(
             transform: q => q.Include(s => s.User));
 
         if (studentResult.IsError || studentResult.Value?.User == null)
-            return new Error("404", "Student or associated user not found", ErrorKind.NotFound);
+            return ApplicationErrors.StudentUserNotFound;
 
         var user = studentResult.Value.User;
         user.UpdateUserPassword(PasswordHasher.Hash(command.NewPassword));

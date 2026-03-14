@@ -30,13 +30,13 @@ public class UpdateStudentHandler : IRequestHandler<UpdateStudentCommand, Result
     {
         var studentResult = await _repository.GetByIdAsync(command.Id);
         if (studentResult.Value == null)
-            return new Error("404", "Student not found", ErrorKind.NotFound);
+            return ApplicationErrors.StudentNotFound;
 
         var student = studentResult.Value;
 
         var duplicate = await _repository.AnyAsync(s => s.NationalityNumber == command.NationalityNumber && s.Id != command.Id);
         if (duplicate)
-            return new Error("409", "Nationality number already exists", ErrorKind.Conflict);
+            return ApplicationErrors.NationalityNumberAlreadyExists;
 
         student.UpdateBasicInfo(
             command.Name,

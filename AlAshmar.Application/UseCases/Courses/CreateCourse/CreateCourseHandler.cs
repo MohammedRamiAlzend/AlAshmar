@@ -19,7 +19,7 @@ public class CreateCourseHandler(
     {
         var semesterExists = await semesterRepository.AnyAsync(s => s.Id == command.SemesterId);
         if (!semesterExists)
-            return new Error("404", "Semester not found", ErrorKind.NotFound);
+            return ApplicationErrors.SemesterNotFound;
 
         var course = new Course
         {

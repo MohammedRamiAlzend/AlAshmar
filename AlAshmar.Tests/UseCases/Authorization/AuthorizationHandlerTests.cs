@@ -36,7 +36,7 @@ public class AssignPermissionsToRoleHandlerTests
         var dto = new AssignPermissionsToRoleDto(Guid.NewGuid(), new List<Guid>());
 
         _authServiceMock.Setup(s => s.AssignPermissionsToRoleAsync(dto, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Error("NOT_FOUND", "Role not found", ErrorKind.NotFound));
+            .ReturnsAsync(ApplicationErrors.RoleNotFound);
 
         var handler = new AssignPermissionsToRoleHandler(_authServiceMock.Object);
         var result = await handler.Handle(new AssignPermissionsToRoleCommand(dto), CancellationToken.None);
@@ -70,7 +70,7 @@ public class AssignRoleToUserHandlerTests
         var dto = new AssignRoleToUserDto(Guid.NewGuid(), Guid.NewGuid());
 
         _authServiceMock.Setup(s => s.AssignRoleToUserAsync(dto, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Error("USER_NOT_FOUND", "User not found", ErrorKind.NotFound));
+            .ReturnsAsync(ApplicationErrors.UserNotFound);
 
         var handler = new AssignRoleToUserHandler(_authServiceMock.Object);
         var result = await handler.Handle(new AssignRoleToUserCommand(dto), CancellationToken.None);
@@ -107,7 +107,7 @@ public class GetAllPermissionsHandlerTests
     public async Task Handle_ServiceFailure_ReturnsError()
     {
         _authServiceMock.Setup(s => s.GetAllPermissionsAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Error("DB_ERROR", "Database error"));
+            .ReturnsAsync(ApplicationErrors.DatabaseError);
 
         var handler = new GetAllPermissionsHandler(_authServiceMock.Object);
         var result = await handler.Handle(new GetAllPermissionsQuery(), CancellationToken.None);
@@ -144,7 +144,7 @@ public class GetAllRolesHandlerTests
     public async Task Handle_ServiceFailure_ReturnsError()
     {
         _authServiceMock.Setup(s => s.GetAllRolesAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Error("DB_ERROR", "Database error"));
+            .ReturnsAsync(ApplicationErrors.DatabaseError);
 
         var handler = new GetAllRolesHandler(_authServiceMock.Object);
         var result = await handler.Handle(new GetAllRolesQuery(), CancellationToken.None);
@@ -179,7 +179,7 @@ public class GetRoleByIdHandlerTests
     public async Task Handle_NonExistingRole_ReturnsNotFoundError()
     {
         _authServiceMock.Setup(s => s.GetRoleByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Error("NOT_FOUND", "Role not found", ErrorKind.NotFound));
+            .ReturnsAsync(ApplicationErrors.RoleNotFound);
 
         var handler = new GetRoleByIdHandler(_authServiceMock.Object);
         var result = await handler.Handle(new GetRoleByIdQuery(Guid.NewGuid()), CancellationToken.None);

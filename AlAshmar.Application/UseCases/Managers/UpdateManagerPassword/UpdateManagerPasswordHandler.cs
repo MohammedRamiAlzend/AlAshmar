@@ -25,7 +25,7 @@ public class UpdateManagerPasswordHandler(
             transform: q => q.Include(m => m.User));
 
         if (managerResult.IsError || managerResult.Value?.User == null)
-            return new Error("404", "Manager or associated user not found", ErrorKind.NotFound);
+            return ApplicationErrors.ManagerUserNotFound;
 
         var user = managerResult.Value.User;
         user.UpdateUserPassword(PasswordHasher.Hash(command.NewPassword));

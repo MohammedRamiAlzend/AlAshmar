@@ -32,7 +32,7 @@ public class GetTeacherByIdHandler : IRequestHandler<GetTeacherByIdQuery, Result
         var teacher = teacherResult.Value.FirstOrDefault();
 
         if (teacher == null)
-            return new Error("404", "Teacher not found", ErrorKind.NotFound);
+            return ApplicationErrors.TeacherNotFound;
 
         return new TeacherDto(
             teacher.Id,

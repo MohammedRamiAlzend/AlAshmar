@@ -25,7 +25,7 @@ public class CreateStudentHandler(IRepositoryBase<Student, Guid> repository)
     {
         var duplicate = await repository.AnyAsync(s => s.NationalityNumber == command.NationalityNumber);
         if (duplicate)
-            return new Error("409", "Nationality number already exists", ErrorKind.Conflict);
+            return ApplicationErrors.NationalityNumberAlreadyExists;
 
         var student = Student.Create(
             command.Name,

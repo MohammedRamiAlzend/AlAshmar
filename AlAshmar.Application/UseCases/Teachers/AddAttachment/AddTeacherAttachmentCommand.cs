@@ -28,7 +28,7 @@ public class AddTeacherAttachmentHandler(
     {
         var teacher = await repository.GetByIdAsync(command.TeacherId);
         if (teacher.Value == null)
-            return new Error("404", "Teacher not found", ErrorKind.NotFound);
+            return ApplicationErrors.TeacherNotFound;
 
         var attachment = new Attacment
         {

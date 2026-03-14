@@ -34,7 +34,7 @@ public class CreateStudentHandlerTests
     [Fact]
     public async Task Handle_RepositoryFailure_ReturnsError()
     {
-        var error = new Error("DB_ERROR", "Database failure", ErrorKind.Failure);
+        var error = ApplicationErrors.DatabaseError;
         _repoMock.Setup(r => r.AnyAsync(It.IsAny<Expression<Func<Student, bool>>>(), It.IsAny<Func<IQueryable<Student>, IQueryable<Student>>?>()))
             .ReturnsAsync(false);
         _repoMock.Setup(r => r.AddAsync(It.IsAny<Student>()))
@@ -76,7 +76,7 @@ public class DeleteStudentHandlerTests
         var studentId = Guid.NewGuid();
 
         _repoMock.Setup(r => r.GetByIdAsync(studentId))
-            .ReturnsAsync(new Error("NOT_FOUND", "Student not found", ErrorKind.NotFound));
+            .ReturnsAsync(ApplicationErrors.StudentNotFound);
 
         var handler = new DeleteStudentHandler(_repoMock.Object);
         var result = await handler.Handle(new DeleteStudentCommand(studentId), CancellationToken.None);
@@ -119,7 +119,7 @@ public class GetAllStudentsHandlerTests
                 It.IsAny<Expression<Func<Student, bool>>?>(),
                 It.IsAny<Func<IQueryable<Student>, IQueryable<Student>>?>(),
                 It.IsAny<Func<IQueryable<Student>, IOrderedQueryable<Student>>?>()))
-            .ReturnsAsync(new Error("DB_ERROR", "Database error"));
+            .ReturnsAsync(ApplicationErrors.DatabaseError);
 
         var handler = new GetAllStudentsHandler(_repoMock.Object);
         var result = await handler.Handle(new GetAllStudentsQuery(), CancellationToken.None);
@@ -263,7 +263,7 @@ public class UpdateStudentHandlerTests
     public async Task Handle_NonExistingStudent_ReturnsNotFoundError()
     {
         _repoMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>()))
-            .ReturnsAsync(new Error("NOT_FOUND", "Student not found", ErrorKind.NotFound));
+            .ReturnsAsync(ApplicationErrors.StudentNotFound);
 
         var handler = new UpdateStudentHandler(_repoMock.Object);
         var command = new UpdateStudentCommand(Guid.NewGuid(), "Name", "Father", "Mother", "9999999992", null);

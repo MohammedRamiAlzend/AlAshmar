@@ -22,7 +22,7 @@ public class GetCourseByIdHandler(IRepositoryBase<Course, Guid> repository)
 
         var course = result.Value.FirstOrDefault();
         if (course == null)
-            return new Error("404", "Course not found", ErrorKind.NotFound);
+            return ApplicationErrors.CourseNotFound;
 
         var semesterDto = course.Semester is not null
             ? new SemesterDto(course.Semester.Id, course.Semester.StartDate, course.Semester.EndDate, course.Semester.Name)
