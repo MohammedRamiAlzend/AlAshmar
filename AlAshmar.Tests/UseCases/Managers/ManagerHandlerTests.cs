@@ -1,9 +1,12 @@
 using AlAshmar.Application.DTOs;
 using AlAshmar.Application.UseCases.Managers.CreateManager;
 using AlAshmar.Application.UseCases.Managers.DeleteManager;
+using AlAshmar.Application.UseCases.Managers.AddAttachment;
 using AlAshmar.Application.UseCases.Managers.GetAllManagers;
+using AlAshmar.Application.UseCases.Managers.GetAttachments;
 using AlAshmar.Application.UseCases.Managers.GetManagerById;
 using AlAshmar.Application.UseCases.Managers.UpdateManager;
+using AlAshmar.Domain.Entities.Common;
 using AlAshmar.Domain.Entities.Managers;
 
 namespace AlAshmar.Tests.UseCases.Managers;
@@ -181,6 +184,98 @@ public class UpdateManagerHandlerTests
         var handler = new UpdateManagerHandler(_repoMock.Object);
         var command = new UpdateManagerCommand(Guid.NewGuid(), "New Name");
         var result = await handler.Handle(command, CancellationToken.None);
+
+        Assert.True(result.IsError);
+        Assert.Equal(ErrorKind.NotFound, result.TopError.Type);
+    }
+}
+
+public class AddManagerAttachmentHandlerTests
+{
+    private readonly Mock<IRepositoryBase<Manager, Guid>> _managerRepoMock = new();
+    private readonly Mock<IRepositoryBase<Attacment, Guid>> _attachmentRepoMock = new();
+
+    [Fact]
+    public async Task Handle_ExistingManager_AddsAttachmentAndReturnsSuccess()
+    {
+        var managerId = Guid.NewGuid();
+        var manager = new Manager
+        {
+            Id = managerId,
+            Name = "Manager",
+            ManagerAttachments = new List<ManagerAttachment>()
+        };
+
+        _managerRepoMock.Setup(r => r.GetByIdAsync(managerId)).ReturnsAsync(manager);
+        _attachmentRepoMock.Setup(r => r.AddAsync(It.IsAny<Attacment>())).ReturnsAsync(new Success());
+        _managerRepoMock.Setup(r => r.UpdateAsync(It.IsAny<Manager>())).ReturnsAsync(new Updated());
+
+        var handler = new AddManagerAttachmentHandler(_managerRepoMock.Object, _attachmentRepoMock.Object);
+        var command = new AddManagerAttachmentCommand(managerId, "/path/to/file.pdf", "application/pdf", "safe.pdf", "original.pdf", null);
+
+        var result = await handler.Handle(command, CancellationToken.None);
+
+        Assert.False(result.IsError);
+        _attachmentRepoMock.Verify(r => r.AddAsync(It.IsAny<Attacment>()), Times.Once);
+        _managerRepoMock.Verify(r => r.UpdateAsync(It.IsAny<Manager>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task Handle_NonExistingManager_ReturnsNotFoundError()
+    {
+        _managerRepoMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(ApplicationErrors.ManagerNotFound);
+
+        var handler = new AddManagerAttachmentHandler(_managerRepoMock.Object, _attachmentRepoMock.Object);
+        var command = new AddManagerAttachmentCommand(Guid.NewGuid(), "/path/file.pdf", "application/pdf", "safe.pdf", "orig.pdf", null);
+
+        var result = await handler.Handle(command, CancellationToken.None);
+
+        Assert.True(result.IsError);
+        Assert.Equal(ErrorKind.NotFound, result.TopError.Type);
+    }
+}
+
+public class GetManagerAttachmentsHandlerTests
+{
+    private readonly Mock<IRepositoryBase<Manager, Guid>> _repoMock = new();
+
+    [Fact]
+    public async Task Handle_ExistingManager_ReturnsAttachments()
+    {
+        var managerId = Guid.NewGuid();
+        var manager = new Manager
+        {
+            Id = managerId,
+            Name = "Manager",
+            ManagerAttachments = new List<ManagerAttachment>
+            {
+                new() { ManagerId = managerId, AttachmentId = Guid.NewGuid(),
+                    Attachment = new Attacment { Id = Guid.NewGuid(), Path = "/file.pdf", Type = "application/pdf", SafeName = "safe.pdf", OriginalName = "orig.pdf" } }
+            }
+        };
+
+        _repoMock.Setup(r => r.GetAsync(
+                It.IsAny<Expression<Func<Manager, bool>>?>(),
+                It.IsAny<Func<IQueryable<Manager>, IQueryable<Manager>>?>()))
+            .ReturnsAsync(manager);
+
+        var handler = new GetManagerAttachmentsHandler(_repoMock.Object);
+        var result = await handler.Handle(new GetManagerAttachmentsQuery(managerId), CancellationToken.None);
+
+        Assert.False(result.IsError);
+        Assert.Single(result.Value!);
+    }
+
+    [Fact]
+    public async Task Handle_NonExistingManager_ReturnsNotFoundError()
+    {
+        _repoMock.Setup(r => r.GetAsync(
+                It.IsAny<Expression<Func<Manager, bool>>?>(),
+                It.IsAny<Func<IQueryable<Manager>, IQueryable<Manager>>?>()))
+            .ReturnsAsync(ApplicationErrors.ManagerNotFound);
+
+        var handler = new GetManagerAttachmentsHandler(_repoMock.Object);
+        var result = await handler.Handle(new GetManagerAttachmentsQuery(Guid.NewGuid()), CancellationToken.None);
 
         Assert.True(result.IsError);
         Assert.Equal(ErrorKind.NotFound, result.TopError.Type);

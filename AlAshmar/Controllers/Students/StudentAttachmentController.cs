@@ -1,5 +1,7 @@
 namespace AlAshmar.Controllers.Students;
 
+using System.IO.Compression;
+
 
 
 
@@ -30,10 +32,10 @@ public class StudentAttachmentController : ControllerBase
             return BadRequest("No file provided");
 
         var saveResult = await _filesManager.SaveFileAsync(formFile, $"students/{id}");
-        if (saveResult.IsError)
+        if (saveResult.IsError || saveResult.Value == null)
             return BadRequest(new { errors = saveResult.Errors });
 
-        var metadata = saveResult.Value;
+        var metadata = saveResult.Value!;
         var command = new AddAttachmentCommand(
             id,
             metadata.FilePath,
@@ -57,5 +59,46 @@ public class StudentAttachmentController : ControllerBase
         var query = new GetAttachmentsQuery(id);
         var result = await _sender.Send(query, cancellationToken);
         return result.ToActionResult();
+    }
+
+    [HttpGet("{id:guid}/attachments/zip")]
+    public async Task<IActionResult> DownloadAttachmentsZip(
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken = default)
+    {
+        var query = new GetAttachmentsQuery(id);
+        var result = await _sender.Send(query, cancellationToken);
+        if (result.IsError)
+            return result.ToActionResult();
+
+        var attachments = (result.Value ?? [])
+            .Where(a => a.Attachment != null && !string.IsNullOrWhiteSpace(a.Attachment.Path) && _filesManager.FileExists(a.Attachment.Path))
+            .Select(a => a.Attachment!)
+            .ToList();
+
+        if (attachments.Count == 0)
+            return NotFound("No attachments found");
+
+        using var zipStream = new MemoryStream();
+        using (var archive = new ZipArchive(zipStream, ZipArchiveMode.Create, true))
+        {
+            foreach (var attachment in attachments)
+            {
+                var fileBytesResult = await _filesManager.GetFileBytesAsync(attachment.Path);
+                if (fileBytesResult.IsError)
+                    continue;
+
+                var entryName = Path.GetFileName(attachment.OriginalName);
+                if (string.IsNullOrWhiteSpace(entryName))
+                    entryName = attachment.SafeName;
+
+                var entry = archive.CreateEntry(entryName);
+                await using var entryStream = entry.Open();
+                await entryStream.WriteAsync(fileBytesResult.Value, cancellationToken);
+            }
+        }
+
+        zipStream.Position = 0;
+        return File(zipStream.ToArray(), "application/zip", $"student-{id}-attachments.zip");
     }
 }

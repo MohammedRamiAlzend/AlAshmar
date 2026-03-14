@@ -1,26 +1,20 @@
-namespace AlAshmar.Controllers.Teachers;
+namespace AlAshmar.Controllers.Managers;
 
 using System.IO.Compression;
 
-
-
-
 [ApiController]
-[Route("api/teachers")]
+[Route("api/managers")]
 [Authorize]
-public class TeacherAttachmentController : ControllerBase
+public class ManagerAttachmentController : ControllerBase
 {
     private readonly ISender _sender;
     private readonly IFilesManagerService _filesManager;
 
-    public TeacherAttachmentController(ISender sender, IFilesManagerService filesManager)
+    public ManagerAttachmentController(ISender sender, IFilesManagerService filesManager)
     {
         _sender = sender;
         _filesManager = filesManager;
     }
-
-
-
 
     [HttpPost("{id:guid}/attachments")]
     public async Task<IActionResult> AddAttachment(
@@ -31,12 +25,12 @@ public class TeacherAttachmentController : ControllerBase
         if (formFile == null || formFile.Length == 0)
             return BadRequest("No file provided");
 
-        var saveResult = await _filesManager.SaveFileAsync(formFile, $"teachers/{id}");
+        var saveResult = await _filesManager.SaveFileAsync(formFile, $"managers/{id}");
         if (saveResult.IsError || saveResult.Value == null)
             return BadRequest(new { errors = saveResult.Errors });
 
         var metadata = saveResult.Value!;
-        var command = new AddTeacherAttachmentCommand(
+        var command = new AddManagerAttachmentCommand(
             id,
             metadata.FilePath,
             metadata.ContentType,
@@ -48,15 +42,12 @@ public class TeacherAttachmentController : ControllerBase
         return result.ToActionResult();
     }
 
-
-
-
     [HttpGet("{id:guid}/attachments")]
     public async Task<IActionResult> GetAttachments(
         [FromRoute] Guid id,
         CancellationToken cancellationToken = default)
     {
-        var query = new GetTeacherAttachmentsQuery(id);
+        var query = new GetManagerAttachmentsQuery(id);
         var result = await _sender.Send(query, cancellationToken);
         return result.ToActionResult();
     }
@@ -66,7 +57,7 @@ public class TeacherAttachmentController : ControllerBase
         [FromRoute] Guid id,
         CancellationToken cancellationToken = default)
     {
-        var query = new GetTeacherAttachmentsQuery(id);
+        var query = new GetManagerAttachmentsQuery(id);
         var result = await _sender.Send(query, cancellationToken);
         if (result.IsError)
             return result.ToActionResult();
@@ -99,6 +90,6 @@ public class TeacherAttachmentController : ControllerBase
         }
 
         zipStream.Position = 0;
-        return File(zipStream.ToArray(), "application/zip", $"teacher-{id}-attachments.zip");
+        return File(zipStream.ToArray(), "application/zip", $"manager-{id}-attachments.zip");
     }
 }
