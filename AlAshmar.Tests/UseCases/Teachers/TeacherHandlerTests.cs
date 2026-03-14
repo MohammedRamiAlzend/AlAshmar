@@ -4,6 +4,7 @@ using AlAshmar.Application.UseCases.Teachers.CreateTeacher;
 using AlAshmar.Application.UseCases.Teachers.DeleteTeacher;
 using AlAshmar.Application.UseCases.Teachers.GetAllTeachers;
 using AlAshmar.Application.UseCases.Teachers.GetAllTeachersFiltered;
+using AlAshmar.Application.UseCases.Teachers.GetAttachments;
 using AlAshmar.Application.UseCases.Teachers.GetTeacherById;
 using AlAshmar.Application.UseCases.Teachers.UpdateTeacher;
 using AlAshmar.Domain.Entities.Common;
@@ -315,6 +316,55 @@ public class AddTeacherAttachmentHandlerTests
         var command = new AddTeacherAttachmentCommand(Guid.NewGuid(), "/path/file.pdf", "application/pdf", "safe.pdf", "orig.pdf", null);
 
         var result = await handler.Handle(command, CancellationToken.None);
+
+        Assert.True(result.IsError);
+        Assert.Equal(ErrorKind.NotFound, result.TopError.Type);
+    }
+}
+
+public class GetTeacherAttachmentsHandlerTests
+{
+    private readonly Mock<IRepositoryBase<Teacher, Guid>> _repoMock = new();
+
+    [Fact]
+    public async Task Handle_ExistingTeacher_ReturnsAttachments()
+    {
+        var teacherId = Guid.NewGuid();
+        var teacher = new Teacher
+        {
+            Id = teacherId,
+            Name = "Khalid",
+            FatherName = "Ahmad",
+            MotherName = "Sara",
+            TeacherAttachments = new List<TeacherAttachment>
+            {
+                new() { TeacherId = teacherId, AttachmentId = Guid.NewGuid(),
+                    Attachment = new Attacment { Id = Guid.NewGuid(), Path = "/file.pdf", Type = "application/pdf", SafeName = "safe.pdf", OriginalName = "orig.pdf" } }
+            }
+        };
+
+        _repoMock.Setup(r => r.GetAsync(
+                It.IsAny<Expression<Func<Teacher, bool>>?>(),
+                It.IsAny<Func<IQueryable<Teacher>, IQueryable<Teacher>>?>()))
+            .ReturnsAsync(teacher);
+
+        var handler = new GetTeacherAttachmentsHandler(_repoMock.Object);
+        var result = await handler.Handle(new GetTeacherAttachmentsQuery(teacherId), CancellationToken.None);
+
+        Assert.False(result.IsError);
+        Assert.Single(result.Value!);
+    }
+
+    [Fact]
+    public async Task Handle_NonExistingTeacher_ReturnsNotFoundError()
+    {
+        _repoMock.Setup(r => r.GetAsync(
+                It.IsAny<Expression<Func<Teacher, bool>>?>(),
+                It.IsAny<Func<IQueryable<Teacher>, IQueryable<Teacher>>?>()))
+            .ReturnsAsync(ApplicationErrors.TeacherNotFound);
+
+        var handler = new GetTeacherAttachmentsHandler(_repoMock.Object);
+        var result = await handler.Handle(new GetTeacherAttachmentsQuery(Guid.NewGuid()), CancellationToken.None);
 
         Assert.True(result.IsError);
         Assert.Equal(ErrorKind.NotFound, result.TopError.Type);
