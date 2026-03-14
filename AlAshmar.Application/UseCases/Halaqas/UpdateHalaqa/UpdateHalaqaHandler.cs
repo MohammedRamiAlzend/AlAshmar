@@ -7,7 +7,7 @@ namespace AlAshmar.Application.UseCases.Halaqas.UpdateHalaqa;
 public record UpdateHalaqaCommand(
     Guid Id,
     string ClassName
-) : ICommand<Result<HalaqaDto>>;
+) : IRequest<Result<HalaqaDto>>;
 
 public class UpdateHalaqaHandler(IRepositoryBase<Halaqa, Guid> repository)
     : IRequestHandler<UpdateHalaqaCommand, Result<HalaqaDto>>

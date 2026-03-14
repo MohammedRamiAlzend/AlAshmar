@@ -8,7 +8,7 @@ namespace AlAshmar.Application.UseCases.Managers.UpdateManagerPassword;
 public record UpdateManagerPasswordCommand(
     Guid ManagerId,
     string NewPassword
-) : ICommand<Result<Success>>;
+) : IRequest<Result<Success>>;
 
 public class UpdateManagerPasswordHandler(
     IRepositoryBase<Manager, Guid> managerRepository,

@@ -12,7 +12,7 @@ public record CreateTeacherCommand(
     string? Email,
     string UserName,
     string Password
-) : ICommand<Result<TeacherDto>>;
+) : IRequest<Result<TeacherDto>>;
 
 public class CreateTeacherHandler(IRepositoryBase<Teacher, Guid> repository) :
     IRequestHandler<CreateTeacherCommand, Result<TeacherDto>>

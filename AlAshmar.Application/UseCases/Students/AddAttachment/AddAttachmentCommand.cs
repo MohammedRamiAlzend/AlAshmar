@@ -11,4 +11,4 @@ public record AddAttachmentCommand(
     string SafeName,
     string OriginalName,
     Guid? ExtensionId
-) : ICommand<Result<Success>>;
+) : IRequest<Result<Success>>;

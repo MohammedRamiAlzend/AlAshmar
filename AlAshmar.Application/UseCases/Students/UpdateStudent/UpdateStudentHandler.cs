@@ -12,7 +12,7 @@ public record UpdateStudentCommand(
     string MotherName,
     string NationalityNumber,
     string? Email
-) : ICommand<Result<Success>>;
+) : IRequest<Result<Success>>;
 
 public class UpdateStudentHandler : IRequestHandler<UpdateStudentCommand, Result<Success>>
 {

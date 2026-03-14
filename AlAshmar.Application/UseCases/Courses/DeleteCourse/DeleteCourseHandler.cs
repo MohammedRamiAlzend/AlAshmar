@@ -3,7 +3,7 @@ using AlAshmar.Domain.Entities.Academic;
 
 namespace AlAshmar.Application.UseCases.Courses.DeleteCourse;
 
-public record DeleteCourseCommand(Guid Id) : ICommand<Result<Success>>;
+public record DeleteCourseCommand(Guid Id) : IRequest<Result<Success>>;
 
 public class DeleteCourseHandler(IRepositoryBase<Course, Guid> repository)
     : IRequestHandler<DeleteCourseCommand, Result<Success>>

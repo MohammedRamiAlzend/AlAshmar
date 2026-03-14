@@ -3,7 +3,7 @@ using AlAshmar.Domain.Entities.Academic;
 
 namespace AlAshmar.Application.UseCases.Halaqas.DeleteHalaqa;
 
-public record DeleteHalaqaCommand(Guid Id) : ICommand<Result<Success>>;
+public record DeleteHalaqaCommand(Guid Id) : IRequest<Result<Success>>;
 
 public class DeleteHalaqaHandler(IRepositoryBase<Halaqa, Guid> repository)
     : IRequestHandler<DeleteHalaqaCommand, Result<Success>>

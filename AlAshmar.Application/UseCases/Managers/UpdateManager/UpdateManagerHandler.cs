@@ -7,7 +7,7 @@ namespace AlAshmar.Application.UseCases.Managers.UpdateManager;
 public record UpdateManagerCommand(
     Guid Id,
     string Name
-) : ICommand<Result<ManagerDto>>;
+) : IRequest<Result<ManagerDto>>;
 
 public class UpdateManagerHandler : IRequestHandler<UpdateManagerCommand, Result<ManagerDto>>
 {
