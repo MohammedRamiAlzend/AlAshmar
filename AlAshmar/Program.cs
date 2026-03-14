@@ -23,7 +23,7 @@ builder.Services.AddAutoMapper(typeof(EntityMappingProfile).Assembly);
 
 
 builder.Services.AddMediatR(cfg => {
-    cfg.RegisterServicesFromAssembly(typeof(ICommand<>).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(IQuery<>).Assembly);
 });
 
 builder.Services.AddCors(options =>

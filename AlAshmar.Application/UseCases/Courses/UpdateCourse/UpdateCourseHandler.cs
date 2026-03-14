@@ -7,7 +7,7 @@ namespace AlAshmar.Application.UseCases.Courses.UpdateCourse;
 public record UpdateCourseCommand(
     Guid Id,
     string EventName
-) : ICommand<Result<CourseDto>>;
+) : IRequest<Result<CourseDto>>;
 
 public class UpdateCourseHandler(IRepositoryBase<Course, Guid> repository)
     : IRequestHandler<UpdateCourseCommand, Result<CourseDto>>

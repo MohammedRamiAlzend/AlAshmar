@@ -8,7 +8,7 @@ public record CreateManagerCommand(
     string Name,
     string UserName,
     string Password
-) : ICommand<Result<ManagerDto>>;
+) : IRequest<Result<ManagerDto>>;
 
 public class CreateManagerHandler(IRepositoryBase<Manager, Guid> repository)
     : IRequestHandler<CreateManagerCommand, Result<ManagerDto>>

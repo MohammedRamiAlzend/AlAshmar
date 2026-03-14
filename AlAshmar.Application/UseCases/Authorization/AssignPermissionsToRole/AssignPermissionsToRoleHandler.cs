@@ -3,7 +3,7 @@ using AlAshmar.Application.Interfaces;
 
 namespace AlAshmar.Application.UseCases.Authorization.AssignPermissionsToRole;
 
-public record AssignPermissionsToRoleCommand(AssignPermissionsToRoleDto Dto) : ICommand<Result<RoleDto>>;
+public record AssignPermissionsToRoleCommand(AssignPermissionsToRoleDto Dto) : IRequest<Result<RoleDto>>;
 
 public class AssignPermissionsToRoleHandler : IRequestHandler<AssignPermissionsToRoleCommand, Result<RoleDto>>
 {

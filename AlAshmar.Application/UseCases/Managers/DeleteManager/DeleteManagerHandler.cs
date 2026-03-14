@@ -3,7 +3,7 @@ using AlAshmar.Application.Repos;
 
 namespace AlAshmar.Application.UseCases.Managers.DeleteManager;
 
-public record DeleteManagerCommand(Guid Id) : ICommand<Result<Success>>;
+public record DeleteManagerCommand(Guid Id) : IRequest<Result<Success>>;
 
 public class DeleteManagerHandler : IRequestHandler<DeleteManagerCommand, Result<Success>>
 {

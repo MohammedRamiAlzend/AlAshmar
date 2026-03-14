@@ -8,7 +8,7 @@ namespace AlAshmar.Application.UseCases.Teachers.UpdateTeacherPassword;
 public record UpdateTeacherPasswordCommand(
     Guid TeacherId,
     string NewPassword
-) : ICommand<Result<Success>>;
+) : IRequest<Result<Success>>;
 
 public class UpdateTeacherPasswordHandler(
     IRepositoryBase<Teacher, Guid> teacherRepository,

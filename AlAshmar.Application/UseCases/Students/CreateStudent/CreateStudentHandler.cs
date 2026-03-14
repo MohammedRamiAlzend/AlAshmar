@@ -13,7 +13,7 @@ public record CreateStudentCommand(
     string? Email,
     string UserName,
     string Password
-) : ICommand<Result<StudentBasicInfoDto>>;
+) : IRequest<Result<StudentBasicInfoDto>>;
 
 public class CreateStudentHandler(IRepositoryBase<Student, Guid> repository)
     : IRequestHandler<CreateStudentCommand, Result<StudentBasicInfoDto>>

@@ -7,7 +7,7 @@ namespace AlAshmar.Application.UseCases.Courses.CreateCourse;
 public record CreateCourseCommand(
     string EventName,
     Guid SemesterId
-) : ICommand<Result<CourseDto>>;
+) : IRequest<Result<CourseDto>>;
 
 public class CreateCourseHandler(
     IRepositoryBase<Course, Guid> courseRepository,

@@ -11,7 +11,7 @@ public record UpdateTeacherCommand(
     string MotherName,
     string NationalityNumber,
     string? Email
-) : ICommand<Result<TeacherDto>>;
+) : IRequest<Result<TeacherDto>>;
 
 public class UpdateTeacherHandler : IRequestHandler<UpdateTeacherCommand, Result<TeacherDto>>
 {

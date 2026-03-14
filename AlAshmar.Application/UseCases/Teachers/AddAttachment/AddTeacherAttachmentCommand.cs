@@ -14,7 +14,7 @@ public record AddTeacherAttachmentCommand(
     string SafeName,
     string OriginalName,
     Guid? ExtensionId
-) : ICommand<Result<Success>>;
+) : IRequest<Result<Success>>;
 
 public class AddTeacherAttachmentHandler(
     IRepositoryBase<Teacher, Guid> repository,

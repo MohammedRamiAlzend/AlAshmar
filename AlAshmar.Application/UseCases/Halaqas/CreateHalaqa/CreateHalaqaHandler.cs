@@ -7,7 +7,7 @@ namespace AlAshmar.Application.UseCases.Halaqas.CreateHalaqa;
 public record CreateHalaqaCommand(
     string ClassName,
     Guid CourseId
-) : ICommand<Result<HalaqaDto>>;
+) : IRequest<Result<HalaqaDto>>;
 
 public class CreateHalaqaHandler(
     IRepositoryBase<Halaqa, Guid> halaqaRepository,

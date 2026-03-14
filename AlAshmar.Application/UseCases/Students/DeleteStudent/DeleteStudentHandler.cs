@@ -3,7 +3,7 @@ using AlAshmar.Application.Repos;
 
 namespace AlAshmar.Application.UseCases.Students.DeleteStudent;
 
-public record DeleteStudentCommand(Guid Id) : ICommand<Result<Success>>;
+public record DeleteStudentCommand(Guid Id) : IRequest<Result<Success>>;
 
 public class DeleteStudentHandler : IRequestHandler<DeleteStudentCommand, Result<Success>>
 {
