@@ -2,7 +2,6 @@ using AlAshmar.Application.DTOs.Domain;
 using AlAshmar.Application.Services.Domain;
 using Microsoft.AspNetCore.Mvc;
 using AlAshmar.Domain.Entities.Users;
-using AlAshmar.Domain.Entities.Managers;
 using AlAshmar.Domain.Entities.Teachers;
 using AlAshmar.Domain.Entities.Students;
 
@@ -16,16 +15,6 @@ public class UsersController(IUserService service, IMapper mapper) : BaseControl
 public class RolesController(IRoleService service, IMapper mapper) : BaseController<Role, RoleDto, RoleDto, RoleDto, Guid>(service, mapper)
 {
     protected override Guid GetId(RoleDto dto) => dto.Id;
-}
-
-public class ManagersController(IManagerService service, IMapper mapper) : BaseController<Manager, ManagerDto, CreateManagerDto, UpdateManagerDto, Guid>(service, mapper)
-{
-    protected override Guid GetId(ManagerDto dto) => dto.Id;
-}
-
-public class TeachersController(ITeacherService service, IMapper mapper) : BaseController<Teacher, TeacherDto, CreateTeacherDto, UpdateTeacherDto, Guid>(service, mapper)
-{
-    protected override Guid GetId(TeacherDto dto) => dto.Id;
 }
 
 public class TeacherAttencancesController(ITeacherAttencanceService service, IMapper mapper) : BaseController<TeacherAttencance, TeacherAttencanceDto, TeacherAttencanceDto, TeacherAttencanceDto, Guid>(service, mapper)
