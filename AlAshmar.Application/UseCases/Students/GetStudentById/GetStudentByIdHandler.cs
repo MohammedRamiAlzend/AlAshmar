@@ -1,8 +1,7 @@
-using AlAshmar.Application.DTOs;
-using AlAshmar.Domain.Entities.Students;
+using AlAshmar.Application.DTOs.Domain;
 using AlAshmar.Application.Repos;
 using AlAshmar.Application.Repos.Includes;
-using AlAshmar.Application.DTOs.Domain;
+using AlAshmar.Domain.Entities.Students;
 
 namespace AlAshmar.Application.UseCases.Students.GetStudentById;
 

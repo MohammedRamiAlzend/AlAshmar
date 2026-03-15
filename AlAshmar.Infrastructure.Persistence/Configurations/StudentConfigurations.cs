@@ -1,6 +1,6 @@
+using AlAshmar.Domain.Entities.Students;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using AlAshmar.Domain.Entities.Students;
 
 namespace AlAshmar.Infrastructure.Persistence.Configurations;
 

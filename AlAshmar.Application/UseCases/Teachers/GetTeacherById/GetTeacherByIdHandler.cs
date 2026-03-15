@@ -1,7 +1,7 @@
-using AlAshmar.Domain.Entities.Teachers;
+using AlAshmar.Application.DTOs.Domain;
 using AlAshmar.Application.Repos;
 using AlAshmar.Application.Repos.Includes;
-using AlAshmar.Application.DTOs.Domain;
+using AlAshmar.Domain.Entities.Teachers;
 
 namespace AlAshmar.Application.UseCases.Teachers.GetTeacherById;
 

@@ -20,7 +20,7 @@ public class GetHalaqasByCourseHandler(IRepositoryBase<Halaqa, Guid> repository)
             return result.Errors;
 
         var halaqas = result.Value
-            .Select(h => new HalaqaDto(h.Id, h.ClassName, h.CourseId, null))
+            .Select(h => new HalaqaDto(h.Id, h.HalaqaName, h.CourseId, null))
             .ToList();
 
         return halaqas;

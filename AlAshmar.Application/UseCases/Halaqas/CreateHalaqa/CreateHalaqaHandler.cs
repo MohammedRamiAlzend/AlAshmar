@@ -22,7 +22,7 @@ public class CreateHalaqaHandler(
 
         var halaqa = new Halaqa
         {
-            ClassName = command.ClassName,
+            HalaqaName = command.ClassName,
             CourseId = command.CourseId
         };
 
@@ -30,6 +30,6 @@ public class CreateHalaqaHandler(
         if (addResult.IsError)
             return addResult.Errors;
 
-        return new HalaqaDto(halaqa.Id, halaqa.ClassName, halaqa.CourseId, null);
+        return new HalaqaDto(halaqa.Id, halaqa.HalaqaName, halaqa.CourseId, null);
     }
 }

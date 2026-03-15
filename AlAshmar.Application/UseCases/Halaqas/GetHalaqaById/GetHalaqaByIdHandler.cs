@@ -24,9 +24,9 @@ public class GetHalaqaByIdHandler(IRepositoryBase<Halaqa, Guid> repository)
             return ApplicationErrors.HalaqaNotFound;
 
         var courseDto = halaqa.Course is not null
-            ? new CourseDto(halaqa.Course.Id, halaqa.Course.EventName, halaqa.Course.SemesterId, null, [])
+            ? new CourseDto(halaqa.Course.Id, halaqa.Course.CourseName, halaqa.Course.SemesterId, null, [])
             : null;
 
-        return new HalaqaDto(halaqa.Id, halaqa.ClassName, halaqa.CourseId, courseDto);
+        return new HalaqaDto(halaqa.Id, halaqa.HalaqaName, halaqa.CourseId, courseDto);
     }
 }

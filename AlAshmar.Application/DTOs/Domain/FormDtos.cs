@@ -2,10 +2,6 @@ using AlAshmar.Domain.Entities.Forms;
 
 namespace AlAshmar.Application.DTOs.Domain;
 
-
-
-
-
 public record FormDto(
     Guid Id,
     string Title,
@@ -66,8 +62,6 @@ public record FormAnswerDto(
     int? PointsAwarded,
     List<Guid> SelectedOptionIds
 );
-
-
 
 public record CreateFormDto(
     string Title,
@@ -131,9 +125,6 @@ public record UpdateFormQuestionOptionDto(
     int Order,
     bool IsCorrect
 );
-
-
-
 
 public record SubmitFormResponseDto(
     Guid FormId,

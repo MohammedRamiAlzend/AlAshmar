@@ -17,7 +17,7 @@ public class GetAllCoursesHandler(IRepositoryBase<Course, Guid> repository)
             return result.Errors;
 
         var courses = result.Value
-            .Select(d => new CourseDto(d.Id, d.EventName, d.SemesterId, null, []))
+            .Select(d => new CourseDto(d.Id, d.CourseName, d.SemesterId, null, []))
             .ToList();
 
         return courses;

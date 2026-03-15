@@ -1,17 +1,7 @@
-using BCrypt.Net;
-
 namespace AlAshmar.Domain.Commons;
-
-
-
-
 
 public static class PasswordHasher
 {
-
-
-
-
 
     public static string Hash(string password)
     {
@@ -22,12 +12,6 @@ public static class PasswordHasher
 
         return BCrypt.Net.BCrypt.HashPassword(password);
     }
-
-
-
-
-
-
 
     public static bool Verify(string password, string hash)
     {

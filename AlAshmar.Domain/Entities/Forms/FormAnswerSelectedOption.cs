@@ -1,9 +1,5 @@
 namespace AlAshmar.Domain.Entities.Forms;
 
-
-
-
-
 public class FormAnswerSelectedOption
 {
     public Guid FormAnswerId { get; set; }

@@ -1,4 +1,3 @@
-
 namespace AlAshmar.Domain.Entities.Students.Events;
 
 public class StudentCreatedEvent : DomainEvent

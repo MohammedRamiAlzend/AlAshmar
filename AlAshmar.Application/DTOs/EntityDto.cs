@@ -1,8 +1,5 @@
 namespace AlAshmar.Application.DTOs;
 
-
-
-
 public record TeacherDto(
     Guid Id,
     string Name,

@@ -2,15 +2,6 @@ using AlAshmar.Application.DTOs.Domain;
 
 namespace AlAshmar.Application.UseCases.Teachers.GetAllTeachersFiltered;
 
-
-
-
-
-
-
-
-
-
 public record GetAllTeachersFilteredQuery(
     int? PageNumber = null,
     int? PageSize = null,

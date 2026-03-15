@@ -2,9 +2,6 @@ namespace AlAshmar.Controllers.Teachers;
 
 using System.IO.Compression;
 
-
-
-
 [ApiController]
 [Route("api/teachers")]
 [Authorize]
@@ -18,9 +15,6 @@ public class TeacherAttachmentController : ControllerBase
         _sender = sender;
         _filesManager = filesManager;
     }
-
-
-
 
     [HttpPost("{id:guid}/attachments")]
     public async Task<IActionResult> AddAttachment(
@@ -47,9 +41,6 @@ public class TeacherAttachmentController : ControllerBase
         var result = await _sender.Send(command, cancellationToken);
         return result.ToActionResult();
     }
-
-
-
 
     [HttpGet("{id:guid}/attachments")]
     public async Task<IActionResult> GetAttachments(

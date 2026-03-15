@@ -1,10 +1,10 @@
-using System.Text.RegularExpressions;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using AlAshmar.Application.Repos;
 using AlAshmar.Domain.Commons;
 using AlAshmar.Domain.Entities.Abstraction;
 using AlAshmar.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Text.RegularExpressions;
 
 namespace AlAshmar.Infrastructure.Persistence.Repos;
 
@@ -56,7 +56,6 @@ public class RepositoryBase<TEntity, TKey>(AppDbContext dbcontext, ILogger<Repos
         {
             if (filter != null) query = query.Where(filter);
             if (transform != null) query = transform(query);
-
 
             if (orderBy == null)
             {
@@ -182,7 +181,6 @@ public class RepositoryBase<TEntity, TKey>(AppDbContext dbcontext, ILogger<Repos
     {
         if (entity == null) return ApplicationErrors.EntityCannotBeNull;
 
-
         try
         {
             dbcontext.Attach(entity);
@@ -214,16 +212,13 @@ public class RepositoryBase<TEntity, TKey>(AppDbContext dbcontext, ILogger<Repos
     {
         var message = ex.InnerException?.Message ?? ex.Message;
 
-
         var match = Regex.Match(message, @"FOREIGN KEY constraint ""?(?<fk>FK_[\w\d_]+)""?", RegexOptions.IgnoreCase);
         if (match.Success)
             return match.Groups["fk"].Value;
 
-
         match = Regex.Match(message, @"violates foreign key constraint ""?(?<fk>FK_[\w\d_]+)""?", RegexOptions.IgnoreCase);
         if (match.Success)
             return match.Groups["fk"].Value;
-
 
         match = Regex.Match(message, @"CONSTRAINT [`""]?(?<fk>FK_[\w\d_]+)[`""]? FOREIGN KEY", RegexOptions.IgnoreCase);
         if (match.Success)

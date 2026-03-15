@@ -1,4 +1,3 @@
-using AlAshmar.Application.DTOs;
 using AlAshmar.Application.DTOs.Domain;
 using AlAshmar.Application.Repos;
 using AlAshmar.Application.Repos.Includes;
@@ -6,12 +5,8 @@ using AlAshmar.Domain.Entities.Academic;
 using AlAshmar.Domain.Entities.Common;
 using AlAshmar.Domain.Entities.Students;
 using Microsoft.EntityFrameworkCore;
-using AlAshmar.Application.UseCases.Students.GetMemorizationProgress;
 
 namespace AlAshmar.Application.Services.Domain;
-
-
-
 
 public interface IStudentManagementService
 {
@@ -84,9 +79,6 @@ public interface IStudentManagementService
         Guid studentId,
         CancellationToken cancellationToken = default);
 }
-
-
-
 
 public class StudentManagementService : IStudentManagementService
 {

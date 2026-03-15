@@ -15,7 +15,7 @@ public static class Constants
     public static string ManagerUserType => "Manager";
 
     public static User DefaultSuperAdminUser => new() { Id = DefaultUserId, UserName = "1", HashedPassword = "$2a$11$ugm3BJebpiSW.gjw5fVcYedC2J1OsKlNdykJ6wtVJIemVYnT2rJQO", RoleId = DefaultRoleId };
-    public static Role DefaultSuperAdminRole => new() { Id = DefaultRoleId , Type = SuperAdminUserType };
+    public static Role DefaultSuperAdminRole => new() { Id = DefaultRoleId, Type = SuperAdminUserType };
     public static Role DefaultTeacherRole => new() { Id = DefaultTeacherRoleId, Type = TeacherUserType };
     public static Role DefaultStudentRole => new() { Id = DefaultStudentRoleId, Type = StuedentUserType };
 

@@ -1,6 +1,6 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Domain.Entities.Teachers;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AlAshmar.Domain.Entities.Academic;
 

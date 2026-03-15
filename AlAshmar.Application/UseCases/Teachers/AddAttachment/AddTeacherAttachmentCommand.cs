@@ -1,11 +1,8 @@
+using AlAshmar.Application.Repos;
 using AlAshmar.Domain.Entities.Common;
 using AlAshmar.Domain.Entities.Teachers;
-using AlAshmar.Application.Repos;
 
 namespace AlAshmar.Application.UseCases.Teachers.AddAttachment;
-
-
-
 
 public record AddTeacherAttachmentCommand(
     Guid TeacherId,

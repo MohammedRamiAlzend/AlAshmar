@@ -1,8 +1,5 @@
 namespace AlAshmar.Controllers.Students;
 
-
-
-
 [ApiController]
 [Route("api/students")]
 [Authorize]
@@ -15,9 +12,6 @@ public class StudentAcademicController : ControllerBase
         _sender = sender;
     }
 
-
-
-
     [HttpGet("{id:guid}/memorization")]
     public async Task<IActionResult> GetMemorizationProgress(
         [FromRoute] Guid id,
@@ -27,9 +21,6 @@ public class StudentAcademicController : ControllerBase
         var result = await _sender.Send(query, cancellationToken);
         return result.ToActionResult();
     }
-
-
-
 
     [HttpGet("{id:guid}/attendance")]
     public async Task<IActionResult> GetAttendanceRecords(
@@ -42,9 +33,6 @@ public class StudentAcademicController : ControllerBase
         var result = await _sender.Send(query, cancellationToken);
         return result.ToActionResult();
     }
-
-
-
 
     [HttpGet("{id:guid}/points")]
     public async Task<IActionResult> GetPoints(

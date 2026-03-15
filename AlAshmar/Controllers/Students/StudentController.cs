@@ -2,9 +2,6 @@ using AlAshmar.Application.UseCases.Students.UpdateStudentPassword;
 
 namespace AlAshmar.Controllers.Students;
 
-
-
-
 [ApiController]
 [Route("api/students")]
 [Authorize]
@@ -18,10 +15,6 @@ public class StudentController : ControllerBase
         _sender = sender;
         _filesManager = filesManager;
     }
-
-
-
-
 
     [HttpGet("filtered")]
     public async Task<IActionResult> GetAllStudentFiltered(
@@ -38,9 +31,6 @@ public class StudentController : ControllerBase
         return result.ToActionResult();
     }
 
-
-
-
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetStudentById(
         [FromRoute] Guid id,
@@ -50,9 +40,6 @@ public class StudentController : ControllerBase
         var result = await _sender.Send(query, cancellationToken);
         return result.ToActionResult();
     }
-
-
-
 
     [HttpPost]
     [Consumes("multipart/form-data")]
@@ -112,9 +99,6 @@ public class StudentController : ControllerBase
         return result.ToActionResult();
     }
 
-
-
-
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateStudent(
         [FromRoute] Guid id,
@@ -129,9 +113,6 @@ public class StudentController : ControllerBase
         return result.ToActionResult();
     }
 
-
-
-
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteStudent(
         [FromRoute] Guid id,
@@ -141,9 +122,6 @@ public class StudentController : ControllerBase
         var result = await _sender.Send(command, cancellationToken);
         return result.ToActionResult();
     }
-
-
-
 
     [HttpPut("{id:guid}/password")]
     public async Task<IActionResult> UpdatePassword(

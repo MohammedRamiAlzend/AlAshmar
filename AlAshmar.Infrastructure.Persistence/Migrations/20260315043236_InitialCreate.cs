@@ -1,16 +1,21 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-#nullable disable
-
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
-namespace AlAshmar.Infrastructure.Persistence.Migrations
+﻿namespace AlAshmar.Infrastructure.Persistence.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+    using System;
+
     /// <inheritdoc />
+
+    /// <summary>
+    /// Defines the <see cref="InitialCreate" />
+    /// </summary>
     public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
+
+        /// <summary>
+        /// The Up
+        /// </summary>
+        /// <param name="migrationBuilder">The migrationBuilder<see cref="MigrationBuilder"/></param>
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -1210,6 +1215,11 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
         }
 
         /// <inheritdoc />
+
+        /// <summary>
+        /// The Down
+        /// </summary>
+        /// <param name="migrationBuilder">The migrationBuilder<see cref="MigrationBuilder"/></param>
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

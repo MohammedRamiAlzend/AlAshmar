@@ -1,5 +1,5 @@
-using AlAshmar.Domain.Entities.Teachers;
 using AlAshmar.Application.Repos;
+using AlAshmar.Domain.Entities.Teachers;
 
 namespace AlAshmar.Application.UseCases.Teachers.DeleteTeacher;
 

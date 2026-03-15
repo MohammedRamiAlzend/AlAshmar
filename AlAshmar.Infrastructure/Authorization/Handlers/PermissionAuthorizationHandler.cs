@@ -1,10 +1,4 @@
-using System.Security.Claims;
-
 namespace AlAshmar.Infrastructure.Authorization.Handlers;
-
-
-
-
 
 public class PermissionRequirement : IAuthorizationRequirement
 {
@@ -15,10 +9,6 @@ public class PermissionRequirement : IAuthorizationRequirement
         Permission = permission;
     }
 }
-
-
-
-
 
 public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionRequirement>
 {
@@ -36,7 +26,6 @@ public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionReq
                 return Task.CompletedTask;
             }
         }
-
 
         var wildcardPermission = $"{requirement.Permission.Split('.')[0]}.*";
         foreach (var claim in permissionClaims)

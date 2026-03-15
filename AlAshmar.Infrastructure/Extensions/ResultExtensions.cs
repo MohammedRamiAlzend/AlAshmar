@@ -2,13 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AlAshmar.Infrastructure.Extensions;
 
-
-
-
 public static class ResultExtensions
 {
-
-
 
     public static IActionResult ToActionResult<T>(this Result<T> result) where T : notnull
     {
@@ -36,9 +31,6 @@ public static class ResultExtensions
         };
     }
 
-
-
-
     public static IActionResult ToActionResult<T>(this Result<T> result, string? locationUri = null) where T : notnull
     {
         if (result.IsError)
@@ -64,9 +56,6 @@ public static class ResultExtensions
             _ => new OkObjectResult(new { data = result.Value })
         };
     }
-
-
-
 
     public static IActionResult ToCreatedAtActionResult<T>(this Result<T> result, ControllerBase controller, string actionName, object? routeValues = null) where T : notnull
     {

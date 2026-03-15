@@ -2,9 +2,6 @@ using AlAshmar.Application.Interfaces.Reports;
 
 namespace AlAshmar.Controllers.Reports;
 
-
-
-
 public class StudentReportsController : ReportsBaseController
 {
     private readonly IStudentReportService _studentReportService;
@@ -13,12 +10,6 @@ public class StudentReportsController : ReportsBaseController
     {
         _studentReportService = studentReportService;
     }
-
-
-
-
-
-
 
     [HttpGet("students/{studentId:guid}/daily")]
     public async Task<ActionResult<StudentDailyReportDto>> GetDailyReport(
@@ -35,12 +26,6 @@ public class StudentReportsController : ReportsBaseController
         return Ok(result.Value);
     }
 
-
-
-
-
-
-
     [HttpGet("students/{studentId:guid}/weekly")]
     public async Task<ActionResult<StudentWeeklyReportDto>> GetWeeklyReport(
         [FromRoute] Guid studentId,
@@ -55,13 +40,6 @@ public class StudentReportsController : ReportsBaseController
 
         return Ok(result.Value);
     }
-
-
-
-
-
-
-
 
     [HttpGet("students/{studentId:guid}/monthly")]
     public async Task<ActionResult<StudentMonthlyReportDto>> GetMonthlyReport(
@@ -81,12 +59,6 @@ public class StudentReportsController : ReportsBaseController
         return Ok(result.Value);
     }
 
-
-
-
-
-
-
     [HttpGet("students/{studentId:guid}/semesters/{semesterId:guid}")]
     public async Task<ActionResult<StudentSemesterReportDto>> GetSemesterReport(
         [FromRoute] Guid studentId,
@@ -100,15 +72,6 @@ public class StudentReportsController : ReportsBaseController
 
         return Ok(result.Value);
     }
-
-
-
-
-
-
-
-
-
 
     [HttpGet("students/{studentId:guid}/all")]
     public async Task<ActionResult<object>> GetAllReports(
@@ -140,13 +103,6 @@ public class StudentReportsController : ReportsBaseController
 
         return Ok(reports);
     }
-
-
-
-
-
-
-
 
     [HttpGet("students/{studentId:guid}/daily/export")]
     public async Task<IActionResult> ExportDailyReport(

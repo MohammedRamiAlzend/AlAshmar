@@ -1,8 +1,4 @@
-
 namespace AlAshmar.Domain.Events;
-
-
-
 
 public abstract class EntityWithEvents<TKey> : Entity<TKey>, IHasDomainEvents
 {

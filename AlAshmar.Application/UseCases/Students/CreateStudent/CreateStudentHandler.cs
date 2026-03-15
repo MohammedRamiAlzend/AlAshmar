@@ -1,7 +1,7 @@
 using AlAshmar.Application.DTOs;
-using AlAshmar.Domain.Entities.Students;
-using AlAshmar.Application.Repos;
 using AlAshmar.Application.DTOs.Domain;
+using AlAshmar.Application.Repos;
+using AlAshmar.Domain.Entities.Students;
 
 namespace AlAshmar.Application.UseCases.Students.CreateStudent;
 

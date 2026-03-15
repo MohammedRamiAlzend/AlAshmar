@@ -1,6 +1,6 @@
+using AlAshmar.Application.Repos;
 using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Domain.Entities.Users;
-using AlAshmar.Application.Repos;
 using Microsoft.EntityFrameworkCore;
 
 namespace AlAshmar.Application.UseCases.Students.UpdateStudentPassword;

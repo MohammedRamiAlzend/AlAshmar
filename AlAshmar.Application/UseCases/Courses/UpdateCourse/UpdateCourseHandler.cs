@@ -19,12 +19,12 @@ public class UpdateCourseHandler(IRepositoryBase<Course, Guid> repository)
             return ApplicationErrors.CourseNotFound;
 
         var course = result.Value;
-        course.EventName = command.EventName;
+        course.CourseName = command.EventName;
 
         var updateResult = await repository.UpdateAsync(course);
         if (updateResult.IsError)
             return updateResult.Errors;
 
-        return new CourseDto(course.Id, course.EventName, course.SemesterId, null, []);
+        return new CourseDto(course.Id, course.CourseName, course.SemesterId, null, []);
     }
 }

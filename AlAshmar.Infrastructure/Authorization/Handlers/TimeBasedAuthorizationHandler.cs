@@ -1,9 +1,4 @@
-
 namespace AlAshmar.Infrastructure.Authorization.Handlers;
-
-
-
-
 
 public class TimeBasedRequirement : IAuthorizationRequirement
 {
@@ -19,10 +14,6 @@ public class TimeBasedRequirement : IAuthorizationRequirement
     }
 }
 
-
-
-
-
 public class TimeBasedAuthorizationHandler : AuthorizationHandler<TimeBasedRequirement>
 {
     protected override Task HandleRequirementAsync(
@@ -31,12 +22,10 @@ public class TimeBasedAuthorizationHandler : AuthorizationHandler<TimeBasedRequi
     {
         var now = DateTime.Now;
 
-
         if (now.Hour < requirement.StartHour || now.Hour >= requirement.EndHour)
         {
             return Task.CompletedTask;
         }
-
 
         if (requirement.AllowedDays != null && !requirement.AllowedDays.Contains(now.DayOfWeek))
         {

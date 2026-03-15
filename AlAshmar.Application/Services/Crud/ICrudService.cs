@@ -1,8 +1,4 @@
-
 namespace AlAshmar.Application.Services.Crud;
-
-
-
 
 public interface ICrudService<TEntity, TDto, TKey>
     where TEntity : Entity<TKey>
@@ -15,9 +11,6 @@ public interface ICrudService<TEntity, TDto, TKey>
     Task<Result<TDto>> UpdateAsync(TKey id, TDto dto, CancellationToken cancellationToken = default);
     Task<Result<Success>> DeleteAsync(TKey id, CancellationToken cancellationToken = default);
 }
-
-
-
 
 public interface IAdvancedCrudService<TEntity, TDto, TKey> : ICrudService<TEntity, TDto, TKey>
     where TEntity : Entity<TKey>

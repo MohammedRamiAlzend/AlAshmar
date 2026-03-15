@@ -1,9 +1,4 @@
-using AlAshmar.Domain.ValueObjects;
-
 namespace AlAshmar.Domain.ValueObjects;
-
-
-
 
 public class Email : ValueObject
 {
@@ -18,7 +13,6 @@ public class Email : ValueObject
     {
         if (string.IsNullOrWhiteSpace(email))
             return ApplicationErrors.MissingRequiredField;
-
 
         if (!email.Contains("@") || !email.Contains("."))
             return ApplicationErrors.InvalidEmailFormat;
@@ -35,9 +29,6 @@ public class Email : ValueObject
 
     public override string ToString() => Value;
 }
-
-
-
 
 public class Name : ValueObject
 {

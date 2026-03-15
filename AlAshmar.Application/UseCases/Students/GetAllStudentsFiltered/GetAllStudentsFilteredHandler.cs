@@ -1,21 +1,10 @@
-using AlAshmar.Domain.Entities.Students;
+using AlAshmar.Application.DTOs.Domain;
 using AlAshmar.Application.Repos;
 using AlAshmar.Application.Repos.Includes;
+using AlAshmar.Domain.Entities.Students;
 using ExpressionBuilderLib.src.Core;
-using ExpressionBuilderLib.src.Core.Enums;
-using AlAshmar.Application.DTOs.Domain;
 
 namespace AlAshmar.Application.UseCases.Students.GetAllStudentsFiltered;
-
-
-
-
-
-
-
-
-
-
 
 public record GetAllStudentsFilteredQuery(
     int? PageNumber = null,

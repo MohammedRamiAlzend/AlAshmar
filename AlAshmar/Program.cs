@@ -1,13 +1,12 @@
-global using Scalar.AspNetCore;
-global using AlAshmar.Infrastructure.Persistence;
-global using AlAshmar.Infrastructure;
-global using AlAshmar.Application.Interfaces;
 global using AlAshmar.Application.Common;
+global using AlAshmar.Application.Interfaces;
 global using AlAshmar.Domain.Commons;
+global using AlAshmar.Infrastructure;
 global using AlAshmar.Infrastructure.Authorization.Policies;
-global using MediatR;
-using Microsoft.IdentityModel.Tokens;
+global using AlAshmar.Infrastructure.Persistence;
+global using Scalar.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,12 +18,13 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 
 AuthorizationPolicies.AddAuthorizationPolicies(builder.Services);
 
-builder.Services.AddAutoMapper(cfg => {
+builder.Services.AddAutoMapper(cfg =>
+{
     cfg.AddProfile<EntityMappingProfile>();
 });
 
-
-builder.Services.AddMediatR(cfg => {
+builder.Services.AddMediatR(cfg =>
+{
     cfg.RegisterServicesFromAssembly(typeof(IQuery<>).Assembly);
 });
 

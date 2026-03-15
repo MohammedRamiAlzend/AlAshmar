@@ -8,9 +8,6 @@ using AlAshmar.Domain.Entities.Teachers;
 
 namespace AlAshmar.Infrastructure.Services.Domain;
 
-
-
-
 public record TeacherFilterParameters(
     int? PageNumber = null,
     int? PageSize = null,
@@ -19,31 +16,19 @@ public record TeacherFilterParameters(
     Guid? EventId = null
 );
 
-
-
-
 public record AttendanceFilterParameters(
     DateTime? FromDate = null,
     DateTime? ToDate = null
 );
 
-
-
-
 public record PointsFilterParameters(
     Guid? SemesterId = null
 );
-
-
-
 
 public record ClassAssignmentParameters(
     Guid ClassId,
     bool IsMainTeacher = false
 );
-
-
-
 
 public record ContactInfoParameters(
     string Number,
@@ -51,17 +36,11 @@ public record ContactInfoParameters(
     bool IsActive = true
 );
 
-
-
-
 public record SearchParameters(
     string Query,
     int? PageNumber = 1,
     int? PageSize = 10
 );
-
-
-
 
 public interface ITeacherManagementService
 {
@@ -162,9 +141,6 @@ public interface ITeacherManagementService
         Guid? classId = null,
         CancellationToken cancellationToken = default);
 }
-
-
-
 
 public class TeacherManagementService : ITeacherManagementService
 {

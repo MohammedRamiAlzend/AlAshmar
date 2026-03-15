@@ -1,4 +1,3 @@
-
 namespace AlAshmar.Domain.Entities.Academic;
 
 public class Semester : Entity<Guid>

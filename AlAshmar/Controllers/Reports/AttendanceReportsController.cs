@@ -2,9 +2,6 @@ using AlAshmar.Application.Interfaces.Reports;
 
 namespace AlAshmar.Controllers.Reports;
 
-
-
-
 public class AttendanceReportsController : ReportsBaseController
 {
     private readonly IAttendanceReportService _attendanceReportService;
@@ -13,12 +10,6 @@ public class AttendanceReportsController : ReportsBaseController
     {
         _attendanceReportService = attendanceReportService;
     }
-
-
-
-
-
-
 
     [HttpGet("attendance/overview")]
     public async Task<ActionResult<AttendanceOverviewReportDto>> GetOverviewReport(
@@ -39,14 +30,6 @@ public class AttendanceReportsController : ReportsBaseController
 
         return Ok(result.Value);
     }
-
-
-
-
-
-
-
-
 
     [HttpGet("attendance/students")]
     public async Task<ActionResult<PagedList<StudentAttendanceDetailDto>>> GetStudentAttendanceReport(
@@ -71,14 +54,6 @@ public class AttendanceReportsController : ReportsBaseController
         return CreatePagedResponse(result.Value);
     }
 
-
-
-
-
-
-
-
-
     [HttpGet("attendance/teachers")]
     public async Task<ActionResult<PagedList<TeacherAttendanceDetailDto>>> GetTeacherAttendanceReport(
         [FromQuery] DateTime? fromDate = null,
@@ -102,12 +77,6 @@ public class AttendanceReportsController : ReportsBaseController
         return CreatePagedResponse(result.Value);
     }
 
-
-
-
-
-
-
     [HttpGet("attendance/summary")]
     public async Task<ActionResult<AttendanceSummaryDto>> GetAttendanceSummary(
         [FromQuery] DateTime? fromDate = null,
@@ -128,11 +97,6 @@ public class AttendanceReportsController : ReportsBaseController
         return Ok(result.Value.OverallSummary);
     }
 
-
-
-
-
-
     [HttpGet("attendance/daily")]
     public async Task<ActionResult<AttendanceOverviewReportDto>> GetDailyAttendance(
         [FromQuery] DateTime? date = null,
@@ -146,11 +110,6 @@ public class AttendanceReportsController : ReportsBaseController
 
         return Ok(result.Value);
     }
-
-
-
-
-
 
     [HttpGet("attendance/weekly")]
     public async Task<ActionResult<AttendanceOverviewReportDto>> GetWeeklyAttendance(
@@ -167,12 +126,6 @@ public class AttendanceReportsController : ReportsBaseController
 
         return Ok(result.Value);
     }
-
-
-
-
-
-
 
     [HttpGet("attendance/monthly")]
     public async Task<ActionResult<AttendanceOverviewReportDto>> GetMonthlyAttendance(

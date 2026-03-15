@@ -1,14 +1,10 @@
 using AlAshmar.Application.DTOs.Domain;
-using AlAshmar.Domain.Entities.Teachers;
 using AlAshmar.Application.Repos;
 using AlAshmar.Application.Repos.Includes;
+using AlAshmar.Domain.Entities.Teachers;
 using ExpressionBuilderLib.src.Core;
-using ExpressionBuilderLib.src.Core.Enums;
 
 namespace AlAshmar.Application.UseCases.Teachers.GetAllTeachersFiltered;
-
-
-
 
 public class GetAllTeachersFilteredHandler(IRepositoryBase<Teacher, Guid> repository) : IRequestHandler<GetAllTeachersFilteredQuery, Result<List<TeacherDto>>>
 {

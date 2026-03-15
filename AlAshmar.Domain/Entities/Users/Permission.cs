@@ -2,9 +2,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AlAshmar.Domain.Entities.Users;
 
-
-
-
 public class Permission : Entity<Guid>
 {
     [Required]
@@ -23,11 +20,7 @@ public class Permission : Entity<Guid>
     [MaxLength(50)]
     public string Action { get; set; } = null!;
 
-
     public ICollection<Role> Roles { get; set; } = new List<Role>();
-
-
-
 
     public static Permission FromString(string permissionString, string description)
     {
@@ -44,9 +37,6 @@ public class Permission : Entity<Guid>
             Description = description
         };
     }
-
-
-
 
     public string ToPermissionString() => $"{Resource}.{Action}";
 }

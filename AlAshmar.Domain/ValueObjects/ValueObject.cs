@@ -1,8 +1,4 @@
-
 namespace AlAshmar.Domain.ValueObjects;
-
-
-
 
 public abstract class ValueObject
 {

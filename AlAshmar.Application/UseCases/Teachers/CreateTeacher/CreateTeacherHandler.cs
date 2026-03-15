@@ -1,6 +1,6 @@
-using AlAshmar.Domain.Entities.Teachers;
-using AlAshmar.Application.Repos;
 using AlAshmar.Application.DTOs.Domain;
+using AlAshmar.Application.Repos;
+using AlAshmar.Domain.Entities.Teachers;
 
 namespace AlAshmar.Application.UseCases.Teachers.CreateTeacher;
 

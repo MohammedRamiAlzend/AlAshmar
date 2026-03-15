@@ -1,8 +1,5 @@
 namespace AlAshmar.Domain.Events;
 
-
-
-
 public abstract class DomainEvent
 {
     protected DomainEvent()
@@ -12,9 +9,6 @@ public abstract class DomainEvent
 
     public DateTimeOffset DateOccurred { get; protected set; }
 }
-
-
-
 
 public interface IHasDomainEvents
 {

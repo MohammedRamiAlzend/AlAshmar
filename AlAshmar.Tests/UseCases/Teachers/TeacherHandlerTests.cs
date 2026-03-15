@@ -1,4 +1,3 @@
-using AlAshmar.Application.DTOs.Domain;
 using AlAshmar.Application.UseCases.Teachers.AddAttachment;
 using AlAshmar.Application.UseCases.Teachers.CreateTeacher;
 using AlAshmar.Application.UseCases.Teachers.DeleteTeacher;

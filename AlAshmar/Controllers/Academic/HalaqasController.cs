@@ -7,10 +7,6 @@ using AlAshmar.Application.UseCases.Halaqas.UpdateHalaqa;
 
 namespace AlAshmar.Controllers.Academic;
 
-
-
-
-
 [ApiController]
 [Route("api/halaqas")]
 [Authorize]
@@ -23,18 +19,12 @@ public class HalaqasController : ControllerBase
         _sender = sender;
     }
 
-
-
-
     [HttpGet]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default)
     {
         var result = await _sender.Send(new GetAllHalaqasQuery(), cancellationToken);
         return result.ToActionResult();
     }
-
-
-
 
     [HttpGet("by-course/{courseId:guid}")]
     public async Task<IActionResult> GetByCourse(
@@ -45,9 +35,6 @@ public class HalaqasController : ControllerBase
         return result.ToActionResult();
     }
 
-
-
-
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(
         [FromRoute] Guid id,
@@ -56,9 +43,6 @@ public class HalaqasController : ControllerBase
         var result = await _sender.Send(new GetHalaqaByIdQuery(id), cancellationToken);
         return result.ToActionResult();
     }
-
-
-
 
     [HttpPost]
     public async Task<IActionResult> Create(
@@ -69,9 +53,6 @@ public class HalaqasController : ControllerBase
         return result.ToActionResult();
     }
 
-
-
-
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(
         [FromRoute] Guid id,
@@ -81,9 +62,6 @@ public class HalaqasController : ControllerBase
         var result = await _sender.Send(new UpdateHalaqaCommand(id, dto.ClassName), cancellationToken);
         return result.ToActionResult();
     }
-
-
-
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(

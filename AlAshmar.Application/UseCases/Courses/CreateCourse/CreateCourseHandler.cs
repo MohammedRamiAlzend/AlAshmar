@@ -22,7 +22,7 @@ public class CreateCourseHandler(
 
         var course = new Course
         {
-            EventName = command.EventName,
+            CourseName = command.EventName,
             SemesterId = command.SemesterId
         };
 
@@ -30,6 +30,6 @@ public class CreateCourseHandler(
         if (addResult.IsError)
             return addResult.Errors;
 
-        return new CourseDto(course.Id, course.EventName, course.SemesterId, null, []);
+        return new CourseDto(course.Id, course.CourseName, course.SemesterId, null, []);
     }
 }

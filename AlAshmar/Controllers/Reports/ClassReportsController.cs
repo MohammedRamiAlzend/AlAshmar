@@ -2,9 +2,6 @@ using AlAshmar.Application.Interfaces.Reports;
 
 namespace AlAshmar.Controllers.Reports;
 
-
-
-
 public class ClassReportsController : ReportsBaseController
 {
     private readonly IClassReportService _classReportService;
@@ -13,12 +10,6 @@ public class ClassReportsController : ReportsBaseController
     {
         _classReportService = classReportService;
     }
-
-
-
-
-
-
 
     [HttpGet("classes/{classId:guid}/daily")]
     public async Task<ActionResult<ClassDailyReportDto>> GetDailyReport(
@@ -35,12 +26,6 @@ public class ClassReportsController : ReportsBaseController
         return Ok(result.Value);
     }
 
-
-
-
-
-
-
     [HttpGet("classes/{classId:guid}/weekly")]
     public async Task<ActionResult<ClassWeeklyReportDto>> GetWeeklyReport(
         [FromRoute] Guid classId,
@@ -55,13 +40,6 @@ public class ClassReportsController : ReportsBaseController
 
         return Ok(result.Value);
     }
-
-
-
-
-
-
-
 
     [HttpGet("classes/{classId:guid}/monthly")]
     public async Task<ActionResult<ClassMonthlyReportDto>> GetMonthlyReport(
@@ -81,12 +59,6 @@ public class ClassReportsController : ReportsBaseController
         return Ok(result.Value);
     }
 
-
-
-
-
-
-
     [HttpGet("classes/{classId:guid}/semesters/{semesterId:guid}")]
     public async Task<ActionResult<ClassSemesterReportDto>> GetSemesterReport(
         [FromRoute] Guid classId,
@@ -100,13 +72,6 @@ public class ClassReportsController : ReportsBaseController
 
         return Ok(result.Value);
     }
-
-
-
-
-
-
-
 
     [HttpGet("classes/{classId:guid}/attendance")]
     public async Task<ActionResult<ClassAttendanceSummary>> GetAttendanceSummary(
@@ -127,12 +92,6 @@ public class ClassReportsController : ReportsBaseController
         return Ok(result.Value.AttendanceSummary);
     }
 
-
-
-
-
-
-
     [HttpGet("classes/{classId:guid}/points")]
     public async Task<ActionResult<ClassPointsSummary>> GetPointsSummary(
         [FromRoute] Guid classId,
@@ -147,12 +106,6 @@ public class ClassReportsController : ReportsBaseController
 
         return Ok(result.Value.PointsSummary);
     }
-
-
-
-
-
-
 
     [HttpGet("classes/{classId:guid}/memorization")]
     public async Task<ActionResult<ClassMemorizationSummary>> GetMemorizationSummary(

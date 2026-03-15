@@ -26,7 +26,6 @@ public class EntityMappingProfile : Profile
         CreateMap<CreateContactInfoDto, ContactInfo>();
         CreateMap<UpdateContactInfoDto, ContactInfo>();
 
-
         CreateMap<User, UserDto>().ReverseMap();
         CreateMap<CreateUserDto, User>();
         CreateMap<UpdateUserDto, User>();
@@ -34,14 +33,12 @@ public class EntityMappingProfile : Profile
         CreateMap<Role, RoleDto>().ReverseMap();
         CreateMap<Permission, PermissionDto>().ReverseMap();
 
-
         CreateMap<Manager, ManagerDto>().ReverseMap();
         CreateMap<CreateManagerDto, Manager>();
         CreateMap<UpdateManagerDto, Manager>();
 
         CreateMap<ManagerContactInfo, ManagerContactInfoDto>().ReverseMap();
         CreateMap<ManagerAttachment, ManagerAttachmentDto>().ReverseMap();
-
 
         CreateMap<Teacher, TeacherDto>().ReverseMap();
         CreateMap<CreateTeacherDto, Teacher>();
@@ -52,15 +49,10 @@ public class EntityMappingProfile : Profile
         CreateMap<TeacherAttencance, TeacherAttencanceDto>().ReverseMap();
         CreateMap<ClassTeacherEnrollment, ClassTeacherEnrollmentDto>().ReverseMap();
 
-
-
-
         CreateMap<CreateStudentDto, Student>();
         CreateMap<UpdateStudentDto, Student>();
 
-
         CreateMap<StudentAttendance, StudentAttendanceDto>().ReverseMap();
-
 
         CreateMap<Book, BookDto>().ReverseMap();
         CreateMap<CreateBookDto, Book>();
@@ -89,7 +81,6 @@ public class EntityMappingProfile : Profile
         CreateMap<Point, PointDto>().ReverseMap();
         CreateMap<CreatePointDto, Point>();
         CreateMap<UpdatePointDto, Point>();
-
 
         CreateMap<Form, FormDto>().ReverseMap();
         CreateMap<CreateFormDto, FormDto>();

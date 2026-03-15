@@ -1,5 +1,5 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using AlAshmar.Domain.Entities.Academic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AlAshmar.Domain.Entities.Students;
 
@@ -27,4 +27,3 @@ public class StudentClassEventsPoint : Entity<Guid>
     public int BehaviorPoints { get; set; }
     public int TotalPoints { get; set; }
 }
-

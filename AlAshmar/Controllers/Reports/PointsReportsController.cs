@@ -2,9 +2,6 @@ using AlAshmar.Application.Interfaces.Reports;
 
 namespace AlAshmar.Controllers.Reports;
 
-
-
-
 public class PointsReportsController : ReportsBaseController
 {
     private readonly IPointsReportService _pointsReportService;
@@ -13,13 +10,6 @@ public class PointsReportsController : ReportsBaseController
     {
         _pointsReportService = pointsReportService;
     }
-
-
-
-
-
-
-
 
     [HttpGet("points/overview")]
     public async Task<ActionResult<PointsOverviewReportDto>> GetOverviewReport(
@@ -39,13 +29,6 @@ public class PointsReportsController : ReportsBaseController
         return Ok(result.Value);
     }
 
-
-
-
-
-
-
-
     [HttpGet("points/summary")]
     public async Task<ActionResult<PointsSummaryDto>> GetPointsSummary(
         [FromQuery] Guid? semesterId = null,
@@ -63,15 +46,6 @@ public class PointsReportsController : ReportsBaseController
 
         return Ok(result.Value.OverallSummary);
     }
-
-
-
-
-
-
-
-
-
 
     [HttpGet("points/students")]
     public async Task<ActionResult<PagedList<StudentPointsDetailDto>>> GetStudentPointsReport(
@@ -94,15 +68,6 @@ public class PointsReportsController : ReportsBaseController
         return CreatePagedResponse(result.Value);
     }
 
-
-
-
-
-
-
-
-
-
     [HttpGet("points/teachers")]
     public async Task<ActionResult<PagedList<TeacherPointsGivenDto>>> GetTeacherPointsReport(
         [FromQuery] Guid? semesterId = null,
@@ -123,13 +88,6 @@ public class PointsReportsController : ReportsBaseController
 
         return CreatePagedResponse(result.Value);
     }
-
-
-
-
-
-
-
 
     [HttpGet("points/by-category")]
     public async Task<ActionResult<object>> GetPointsByCategory(
@@ -159,12 +117,6 @@ public class PointsReportsController : ReportsBaseController
         return Ok(breakdown);
     }
 
-
-
-
-
-
-
     [HttpGet("points/top-students")]
     public async Task<ActionResult<List<StudentPointsDetailDto>>> GetTopStudentsByPoints(
         [FromQuery] Guid? semesterId = null,
@@ -179,12 +131,6 @@ public class PointsReportsController : ReportsBaseController
 
         return Ok(result.Value.Items.ToList());
     }
-
-
-
-
-
-
 
     [HttpGet("points/top-teachers")]
     public async Task<ActionResult<List<TeacherPointsGivenDto>>> GetTopTeachersByPoints(
@@ -201,11 +147,6 @@ public class PointsReportsController : ReportsBaseController
         return Ok(result.Value.Items.ToList());
     }
 
-
-
-
-
-
     [HttpGet("points/daily")]
     public async Task<ActionResult<PointsOverviewReportDto>> GetDailyPoints(
         [FromQuery] DateTime? date = null,
@@ -219,11 +160,6 @@ public class PointsReportsController : ReportsBaseController
 
         return Ok(result.Value);
     }
-
-
-
-
-
 
     [HttpGet("points/weekly")]
     public async Task<ActionResult<PointsOverviewReportDto>> GetWeeklyPoints(
@@ -240,12 +176,6 @@ public class PointsReportsController : ReportsBaseController
 
         return Ok(result.Value);
     }
-
-
-
-
-
-
 
     [HttpGet("points/monthly")]
     public async Task<ActionResult<PointsOverviewReportDto>> GetMonthlyPoints(

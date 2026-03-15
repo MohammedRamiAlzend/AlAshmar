@@ -3,10 +3,6 @@ using AlAshmar.Domain.Entities.Forms;
 
 namespace AlAshmar.Controllers.Forms;
 
-
-
-
-
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
@@ -46,10 +42,6 @@ public class FormsController : ControllerBase
             return result.TopError.Type == ErrorKind.NotFound ? NotFound(result.Errors) : BadRequest(result.Errors);
         return Ok(result.Value);
     }
-
-
-
-
 
     [AllowAnonymous]
     [HttpGet("access/{accessToken:guid}")]
@@ -99,9 +91,6 @@ public class FormsController : ControllerBase
         return NoContent();
     }
 }
-
-
-
 
 [ApiController]
 [Route("api/[controller]")]
@@ -168,9 +157,6 @@ public class FormQuestionsController : ControllerBase
     }
 }
 
-
-
-
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
@@ -229,9 +215,6 @@ public class FormQuestionOptionsController : ControllerBase
     }
 }
 
-
-
-
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
@@ -261,10 +244,6 @@ public class FormResponsesController : ControllerBase
         var result = await _service.FindAsync(r => r.FormId == formId, cancellationToken);
         return result.IsError ? BadRequest(result.Errors) : Ok(result.Value);
     }
-
-
-
-
 
     [AllowAnonymous]
     [HttpPost("submit")]

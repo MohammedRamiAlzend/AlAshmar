@@ -1,4 +1,3 @@
-
 namespace AlAshmar.Domain.Entities.Students;
 
 public class StudentAttendance : Entity<Guid>

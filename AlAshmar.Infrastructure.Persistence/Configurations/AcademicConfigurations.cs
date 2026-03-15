@@ -1,6 +1,6 @@
+using AlAshmar.Domain.Entities.Academic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using AlAshmar.Domain.Entities.Academic;
 
 namespace AlAshmar.Infrastructure.Persistence.Configurations;
 
@@ -94,7 +94,7 @@ public class CourseConfiguration : IEntityTypeConfiguration<Course>
         builder.Property(m => m.Id)
             .ValueGeneratedOnAdd();
 
-        builder.Property(m => m.EventName)
+        builder.Property(m => m.CourseName)
             .IsRequired()
             .HasMaxLength(200);
 
@@ -123,7 +123,7 @@ public class HalaqaConfiguration : IEntityTypeConfiguration<Halaqa>
         builder.Property(h => h.Id)
             .ValueGeneratedOnAdd();
 
-        builder.Property(h => h.ClassName)
+        builder.Property(h => h.HalaqaName)
             .IsRequired()
             .HasMaxLength(200);
 

@@ -1,4 +1,3 @@
-
 namespace AlAshmar.Domain.Commons;
 
 public class PagedList<TData>

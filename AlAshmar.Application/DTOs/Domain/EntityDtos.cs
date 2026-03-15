@@ -1,7 +1,5 @@
 namespace AlAshmar.Application.DTOs.Domain;
 
-
-
 public record AllowableExtentionDto(
     Guid Id,
     string ExtName
@@ -24,8 +22,6 @@ public record ContactInfoDto(
     bool IsActive
 );
 
-
-
 public record UserDto(
     Guid Id,
     string UserName,
@@ -46,8 +42,6 @@ public record PermissionDto(
     string Resource,
     string Action
 );
-
-
 
 public record ManagerDto(
     Guid Id,
@@ -71,8 +65,6 @@ public record ManagerAttachmentDto(
     ManagerDto? Manager,
     AttacmentDto? Attachment
 );
-
-
 
 public record TeacherDto(
     Guid Id,
@@ -116,8 +108,6 @@ public record ClassTeacherEnrollmentDto(
     bool IsMainTeacher,
     Guid ClassId
 );
-
-
 
 public record BookDto(
     Guid Id,
@@ -171,9 +161,6 @@ public record PointDto(
     Guid? GivenByTeacherId
 );
 
-
-
-
 public record CreateAllowableExtentionDto(string ExtName);
 public record UpdateAllowableExtentionDto(string ExtName);
 
@@ -185,18 +172,14 @@ public record UpdateContactInfoDto(string Number, string? Email, bool IsActive);
 
 public record UpdatePasswordDto(string NewPassword);
 
-
 public record CreateUserDto(string UserName, string Password, Guid? RoleId);
 public record UpdateUserDto(string UserName, Guid? RoleId);
-
 
 public record CreateManagerDto(string Name, Guid? UserId);
 public record UpdateManagerDto(string Name, Guid? UserId);
 
-
 public record CreateTeacherDto(string Name, string FatherName, string MotherName, string NationalityNumber, string? Email, Guid? UserId);
 public record UpdateTeacherDto(string Name, string FatherName, string MotherName, string NationalityNumber, string? Email);
-
 
 public record CreateBookDto(string Name);
 public record UpdateBookDto(string Name);
@@ -219,11 +202,6 @@ public record UpdatePointCategoryDto(string Type);
 public record CreatePointDto(Guid StudentId, Guid EventId, Guid ClassId, Guid SmesterId, int PointValue, Guid? CategoryId, Guid? GivenByTeacherId);
 public record UpdatePointDto(int PointValue, Guid? CategoryId, Guid? GivenByTeacherId);
 
-
-
-
-
-
 public record StudentDto(
     Guid Id,
     string Name,
@@ -241,9 +219,6 @@ public record StudentDto(
     List<PointDto> Points
 );
 
-
-
-
 public record StudentContactInfoDto(
     Guid StudentId,
     Guid ContactInfoId,
@@ -251,18 +226,12 @@ public record StudentContactInfoDto(
     ContactInfoDto? ContactInfo
 );
 
-
-
-
 public record StudentAttachmentDto(
     Guid StudentId,
     Guid AttachmentId,
     StudentDto? Student,
     AttacmentDto? Attachment
 );
-
-
-
 
 public record StudentHadithDto(
     Guid Id,
@@ -275,9 +244,6 @@ public record StudentHadithDto(
     string? Notes
 );
 
-
-
-
 public record StudentQuraanPageDto(
     Guid Id,
     int PageNumber,
@@ -288,9 +254,6 @@ public record StudentQuraanPageDto(
     string? Status,
     string? Notes
 );
-
-
-
 
 public record StudentClassEventsPointDto(
     Guid Id,
@@ -305,18 +268,12 @@ public record StudentClassEventsPointDto(
     int TotalPoints
 );
 
-
-
-
 public record ClassStudentEnrollmentDto(
     Guid Id,
     Guid StudentId,
     StudentDto? Student,
     Guid ClassId
 );
-
-
-
 
 public record TeacherStatisticsDto(
     Guid TeacherId,

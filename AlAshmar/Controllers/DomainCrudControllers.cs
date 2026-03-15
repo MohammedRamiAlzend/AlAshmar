@@ -1,6 +1,6 @@
 using AlAshmar.Application.Services.Domain;
-using AlAshmar.Domain.Entities.Common;
 using AlAshmar.Domain.Entities.Academic;
+using AlAshmar.Domain.Entities.Common;
 
 namespace AlAshmar.Controllers;
 
@@ -9,12 +9,6 @@ public class AllowableExtentionsController(IAllowableExtentionService service, I
 {
     protected override Guid GetId(AllowableExtentionDto dto) => dto.Id;
 }
-
-
-
-
-
-
 
 public class ContactInfosController(IContactInfoService service, IMapper mapper) :
     BaseController<ContactInfo, ContactInfoDto, CreateContactInfoDto, UpdateContactInfoDto, Guid>(service, mapper)

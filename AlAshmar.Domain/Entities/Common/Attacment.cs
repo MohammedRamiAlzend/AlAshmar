@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using AlAshmar.Domain.Entities.Common;
 
 namespace AlAshmar.Domain.Entities.Common;
 

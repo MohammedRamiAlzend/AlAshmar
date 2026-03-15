@@ -1,4 +1,3 @@
-
 namespace AlAshmar.Application.Repos;
 
 public interface IRepositoryBase<TEntity, TKey>

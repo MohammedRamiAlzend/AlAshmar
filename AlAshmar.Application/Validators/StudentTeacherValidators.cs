@@ -4,6 +4,7 @@ using AlAshmar.Application.UseCases.Teachers.CreateTeacher;
 using AlAshmar.Application.UseCases.Teachers.UpdateTeacher;
 
 namespace AlAshmar.Application.Validators;
+
 public static class CreateStudentCommandValidator
 {
     public static List<string> Validate(CreateStudentCommand command)

@@ -2,9 +2,6 @@ using AlAshmar.Application.Interfaces.Reports;
 
 namespace AlAshmar.Controllers.Reports;
 
-
-
-
 public class TeacherReportsController : ReportsBaseController
 {
     private readonly ITeacherReportService _teacherReportService;
@@ -13,12 +10,6 @@ public class TeacherReportsController : ReportsBaseController
     {
         _teacherReportService = teacherReportService;
     }
-
-
-
-
-
-
 
     [HttpGet("teachers/{teacherId:guid}/daily")]
     public async Task<ActionResult<TeacherDailyReportDto>> GetDailyReport(
@@ -35,12 +26,6 @@ public class TeacherReportsController : ReportsBaseController
         return Ok(result.Value);
     }
 
-
-
-
-
-
-
     [HttpGet("teachers/{teacherId:guid}/weekly")]
     public async Task<ActionResult<TeacherWeeklyReportDto>> GetWeeklyReport(
         [FromRoute] Guid teacherId,
@@ -55,13 +40,6 @@ public class TeacherReportsController : ReportsBaseController
 
         return Ok(result.Value);
     }
-
-
-
-
-
-
-
 
     [HttpGet("teachers/{teacherId:guid}/monthly")]
     public async Task<ActionResult<TeacherMonthlyReportDto>> GetMonthlyReport(
@@ -81,12 +59,6 @@ public class TeacherReportsController : ReportsBaseController
         return Ok(result.Value);
     }
 
-
-
-
-
-
-
     [HttpGet("teachers/{teacherId:guid}/semesters/{semesterId:guid}")]
     public async Task<ActionResult<TeacherSemesterReportDto>> GetSemesterReport(
         [FromRoute] Guid teacherId,
@@ -101,16 +73,6 @@ public class TeacherReportsController : ReportsBaseController
         return Ok(result.Value);
     }
 
-
-
-
-
-
-
-
-
-
-
     [HttpGet("teachers/{teacherId:guid}/points")]
     public async Task<ActionResult<PagedList<PointCategoryBreakdownDto>>> GetPointsGiven(
         [FromRoute] Guid teacherId,
@@ -124,17 +86,8 @@ public class TeacherReportsController : ReportsBaseController
         if (!ValidateDateRange(fromDate, toDate, out var errorMessage))
             return BadRequest(errorMessage);
 
-
         return Ok(new PagedList<PointCategoryBreakdownDto>(new List<PointCategoryBreakdownDto>(), 0, page, pageSize));
     }
-
-
-
-
-
-
-
-
 
     [HttpGet("teachers/{teacherId:guid}/students-progress")]
     public async Task<ActionResult<PagedList<StudentProgressUnderTeacherDto>>> GetStudentProgress(

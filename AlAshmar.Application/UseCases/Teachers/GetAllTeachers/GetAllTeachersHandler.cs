@@ -1,7 +1,7 @@
 using AlAshmar.Application.DTOs;
-using AlAshmar.Domain.Entities.Teachers;
 using AlAshmar.Application.Repos;
 using AlAshmar.Application.Repos.Includes;
+using AlAshmar.Domain.Entities.Teachers;
 
 namespace AlAshmar.Application.UseCases.Teachers.GetAllTeachers;
 

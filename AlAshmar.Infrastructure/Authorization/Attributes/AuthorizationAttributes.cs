@@ -1,9 +1,4 @@
-
 namespace AlAshmar.Infrastructure.Authorization.Attributes;
-
-
-
-
 
 public class RequirePermissionAttribute : AuthorizeAttribute
 {
@@ -13,10 +8,6 @@ public class RequirePermissionAttribute : AuthorizeAttribute
     }
 }
 
-
-
-
-
 public class RequireOwnershipAttribute : AuthorizeAttribute
 {
     public RequireOwnershipAttribute(string resourceType)
@@ -24,10 +15,6 @@ public class RequireOwnershipAttribute : AuthorizeAttribute
     {
     }
 }
-
-
-
-
 
 public class RequireClassEnrollmentAttribute : AuthorizeAttribute
 {
@@ -37,10 +24,6 @@ public class RequireClassEnrollmentAttribute : AuthorizeAttribute
     }
 }
 
-
-
-
-
 public class RequireSchoolHoursAttribute : AuthorizeAttribute
 {
     public RequireSchoolHoursAttribute()
@@ -49,10 +32,6 @@ public class RequireSchoolHoursAttribute : AuthorizeAttribute
     }
 }
 
-
-
-
-
 public class RequireExamHoursAttribute : AuthorizeAttribute
 {
     public RequireExamHoursAttribute()
@@ -60,10 +39,6 @@ public class RequireExamHoursAttribute : AuthorizeAttribute
     {
     }
 }
-
-
-
-
 
 public class AuthorizeWithLayerAttribute : AuthorizeAttribute
 {

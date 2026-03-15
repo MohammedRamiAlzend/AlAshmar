@@ -2,17 +2,9 @@ using System.Security.Claims;
 
 namespace AlAshmar.Infrastructure.Authorization.Handlers;
 
-
-
-
-
 public class ClassEnrollmentRequirement : IAuthorizationRequirement
 {
 }
-
-
-
-
 
 public class ClassEnrollmentHandler : AuthorizationHandler<ClassEnrollmentRequirement>
 {
@@ -35,13 +27,11 @@ public class ClassEnrollmentHandler : AuthorizationHandler<ClassEnrollmentRequir
             return;
         }
 
-
         var httpContext = _httpContextAccessor.HttpContext;
         if (httpContext == null)
         {
             return;
         }
-
 
         var classIdString = httpContext.Request.RouteValues["classId"]?.ToString()
             ?? httpContext.Request.Query["classId"].FirstOrDefault();
@@ -49,11 +39,9 @@ public class ClassEnrollmentHandler : AuthorizationHandler<ClassEnrollmentRequir
         if (string.IsNullOrEmpty(classIdString) || !Guid.TryParse(classIdString, out var classId))
         {
 
-
             context.Succeed(requirement);
             return;
         }
-
 
         var isEnrolled = await _context.ClassTeacherEnrollments
             .AnyAsync(cte => cte.TeacherId == userId && cte.ClassId == classId);

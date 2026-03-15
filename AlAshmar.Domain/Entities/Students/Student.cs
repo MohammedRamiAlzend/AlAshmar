@@ -1,7 +1,7 @@
-using System.ComponentModel.DataAnnotations.Schema;
-using AlAshmar.Domain.Entities.Users;
 using AlAshmar.Domain.Entities.Academic;
 using AlAshmar.Domain.Entities.Students.Events;
+using AlAshmar.Domain.Entities.Users;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AlAshmar.Domain.Entities.Students;
 
@@ -23,7 +23,6 @@ public class Student : EntityWithEvents<Guid>
     public ICollection<StudentQuraanPage> StudentQuraanPages { get; set; } = new List<StudentQuraanPage>();
     public ICollection<StudentClassEventsPoint> StudentClassEventsPoints { get; set; } = new List<StudentClassEventsPoint>();
     public ICollection<Point> Points { get; set; } = new List<Point>();
-
 
     public void UpdateBasicInfo(string name, string fatherName, string motherName, string nationalityNumber, string? email)
     {

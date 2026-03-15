@@ -4,7 +4,6 @@ using AlAshmar.Application.UseCases.Managers.CreateManager;
 using AlAshmar.Application.UseCases.Students.CreateStudent;
 using AlAshmar.Application.UseCases.Teachers.CreateTeacher;
 using AlAshmar.Domain.Entities.Users;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace AlAshmar.Infrastructure.Services;
 

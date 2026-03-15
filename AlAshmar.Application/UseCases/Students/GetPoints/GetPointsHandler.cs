@@ -1,7 +1,7 @@
 using AlAshmar.Application.DTOs.Domain;
-using AlAshmar.Domain.Entities.Students;
-using AlAshmar.Domain.Entities.Academic;
 using AlAshmar.Application.Repos;
+using AlAshmar.Domain.Entities.Academic;
+using AlAshmar.Domain.Entities.Students;
 using Microsoft.EntityFrameworkCore;
 
 namespace AlAshmar.Application.UseCases.Students.GetPoints;

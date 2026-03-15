@@ -1,16 +1,10 @@
 namespace AlAshmar.Domain.Entities.Forms;
 
-
-
-
 public enum FormType
 {
     Normal,
     Quiz
 }
-
-
-
 
 public enum QuestionType
 {
@@ -20,9 +14,6 @@ public enum QuestionType
     Checkbox,
     Dropdown
 }
-
-
-
 
 public enum AudienceType
 {

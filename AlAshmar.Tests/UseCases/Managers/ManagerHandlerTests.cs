@@ -1,7 +1,6 @@
-using AlAshmar.Application.DTOs;
+using AlAshmar.Application.UseCases.Managers.AddAttachment;
 using AlAshmar.Application.UseCases.Managers.CreateManager;
 using AlAshmar.Application.UseCases.Managers.DeleteManager;
-using AlAshmar.Application.UseCases.Managers.AddAttachment;
 using AlAshmar.Application.UseCases.Managers.GetAllManagers;
 using AlAshmar.Application.UseCases.Managers.GetAttachments;
 using AlAshmar.Application.UseCases.Managers.GetManagerById;

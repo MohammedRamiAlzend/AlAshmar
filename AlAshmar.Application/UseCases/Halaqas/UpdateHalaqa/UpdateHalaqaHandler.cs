@@ -19,12 +19,12 @@ public class UpdateHalaqaHandler(IRepositoryBase<Halaqa, Guid> repository)
             return ApplicationErrors.HalaqaNotFound;
 
         var halaqa = result.Value;
-        halaqa.ClassName = command.ClassName;
+        halaqa.HalaqaName = command.ClassName;
 
         var updateResult = await repository.UpdateAsync(halaqa);
         if (updateResult.IsError)
             return updateResult.Errors;
 
-        return new HalaqaDto(halaqa.Id, halaqa.ClassName, halaqa.CourseId, null);
+        return new HalaqaDto(halaqa.Id, halaqa.HalaqaName, halaqa.CourseId, null);
     }
 }

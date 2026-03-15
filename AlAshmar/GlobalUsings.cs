@@ -1,5 +1,6 @@
 global using AlAshmar.Application.DTOs.Domain;
 global using AlAshmar.Application.Repos;
+global using AlAshmar.Application.UseCases.Managers.AddAttachment;
 global using AlAshmar.Application.UseCases.Managers.CreateManager;
 global using AlAshmar.Application.UseCases.Managers.DeleteManager;
 global using AlAshmar.Application.UseCases.Managers.GetAllManagers;
@@ -7,7 +8,6 @@ global using AlAshmar.Application.UseCases.Managers.GetAttachments;
 global using AlAshmar.Application.UseCases.Managers.GetManagerById;
 global using AlAshmar.Application.UseCases.Managers.UpdateManager;
 global using AlAshmar.Application.UseCases.Managers.UpdateManagerPassword;
-global using AlAshmar.Application.UseCases.Managers.AddAttachment;
 global using AlAshmar.Application.UseCases.Students.AddAttachment;
 global using AlAshmar.Application.UseCases.Students.CreateStudent;
 global using AlAshmar.Application.UseCases.Students.DeleteStudent;
@@ -41,3 +41,4 @@ global using System.Linq;
 global using System.Linq.Expressions;
 global using System.Threading;
 global using System.Threading.Tasks;
+

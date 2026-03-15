@@ -1,21 +1,9 @@
 namespace AlAshmar.Application.DTOs.Domain;
 
-
-
-
-
-
-
-
-
 public record StudentBasicInfoDto(
     Guid Id,
     string Name
 );
-
-
-
-
 
 public record StudentListItemDto(
     Guid Id,
@@ -28,9 +16,6 @@ public record StudentListItemDto(
     string? RoleType
 );
 
-
-
-
 public record StudentWithUserListItemDto(
     Guid Id,
     string Name,
@@ -40,12 +25,6 @@ public record StudentWithUserListItemDto(
     string? Email,
     UserBasicInfoDto User
 );
-
-
-
-
-
-
 
 public record StudentDetailDto(
     Guid Id,
@@ -64,10 +43,6 @@ public record StudentDetailDto(
     List<PointDetailDto> Points
 );
 
-
-
-
-
 public record StudentSummaryDto(
     Guid Id,
     string Name,
@@ -83,11 +58,6 @@ public record StudentSummaryDto(
     int ClassEnrollmentCount
 );
 
-
-
-
-
-
 public record StudentMemorizationProgressDto(
     Guid StudentId,
     List<StudentHadithSummaryDto> Hadiths,
@@ -96,19 +66,12 @@ public record StudentMemorizationProgressDto(
     int TotalQuranPagesMemorized
 );
 
-
-
-
-
 public record StudentAttendanceDto(
     Guid Id,
     DateTime StartDate,
     DateTime EndDate,
     Guid ClassStudentId
 );
-
-
-
 
 public record StudentPointDto(
     Guid Id,
@@ -122,9 +85,6 @@ public record StudentPointDto(
     Guid? GivenByTeacherId
 );
 
-
-
-
 public record StudentPointsSummaryDto(
     Guid StudentId,
     int TotalPoints,
@@ -136,11 +96,6 @@ public record StudentPointsSummaryDto(
     List<StudentClassEventsPointSummaryDto> ClassEventsPoints
 );
 
-
-
-
-
-
 public record StudentEnrollmentDto(
     Guid Id,
     Guid StudentId,
@@ -149,9 +104,6 @@ public record StudentEnrollmentDto(
     string? ClassName,
     DateTime EnrollmentDate
 );
-
-
-
 
 public record ClassEnrollmentWithStudentDto(
     Guid Id,
@@ -162,10 +114,6 @@ public record ClassEnrollmentWithStudentDto(
     bool IsActive
 );
 
-
-
-
-
 public record StudentContactInfoDetailDto(
     Guid StudentId,
     Guid ContactInfoId,
@@ -173,8 +121,6 @@ public record StudentContactInfoDetailDto(
     string? Email,
     bool IsActive
 );
-
-
 
 public record StudentAttachmentDetailDto(
     Guid StudentId,
@@ -191,8 +137,6 @@ public record AttachmentDetailDto(
     Guid? ExtentionId,
     AllowableExtentionDto? Extention
 );
-
-
 
 public record StudentHadithDetailDto(
     Guid Id,
@@ -224,8 +168,6 @@ public record StudentHadithSummaryDto(
     string? Status
 );
 
-
-
 public record StudentQuraanPageDetailDto(
     Guid Id,
     int PageNumber,
@@ -244,8 +186,6 @@ public record StudentQuraanPageSummaryDto(
     DateTime? MemorizedAt,
     string? Status
 );
-
-
 
 public record StudentClassEventsPointDetailDto(
     Guid Id,
@@ -269,8 +209,6 @@ public record StudentClassEventsPointSummaryDto(
     int TotalPoints
 );
 
-
-
 public record PointDetailDto(
     Guid Id,
     Guid StudentId,
@@ -287,8 +225,6 @@ public record PointCategorySummaryDto(
     Guid Id,
     string Type
 );
-
-
 
 public record UserBasicInfoDto(
     Guid Id,
@@ -307,14 +243,6 @@ public record RoleSummaryDto(
     string Type
 );
 
-
-
-
-
-
-
-
-
 public record CreateStudentDto(
     string Name,
     string FatherName,
@@ -322,10 +250,6 @@ public record CreateStudentDto(
     string NationalityNumber,
     string? Email
 );
-
-
-
-
 
 public record CreateStudentWithAccountDto(
     string Name,
@@ -337,18 +261,12 @@ public record CreateStudentWithAccountDto(
     string Password
 );
 
-
-
-
 public record CreateStudentContactInfoDto(
     Guid StudentId,
     string Number,
     string? Email,
     bool IsActive = true
 );
-
-
-
 
 public record CreateStudentAttachmentDto(
     Guid StudentId,
@@ -359,11 +277,6 @@ public record CreateStudentAttachmentDto(
     Guid? ExtentionId
 );
 
-
-
-
-
-
 public record UpdateStudentDto(
     string Name,
     string FatherName,
@@ -372,17 +285,11 @@ public record UpdateStudentDto(
     string? Email
 );
 
-
-
-
 public record UpdateStudentContactInfoDto(
     string Number,
     string? Email,
     bool IsActive
 );
-
-
-
 
 public record UpdateStudentAttachmentDto(
     string Path,
@@ -391,11 +298,6 @@ public record UpdateStudentAttachmentDto(
     string OriginalName,
     Guid? ExtentionId
 );
-
-
-
-
-
 
 public record RecordStudentHadithDto(
     Guid StudentId,
@@ -406,9 +308,6 @@ public record RecordStudentHadithDto(
     string? Notes
 );
 
-
-
-
 public record RecordStudentQuranPageDto(
     Guid StudentId,
     int PageNumber,
@@ -418,18 +317,10 @@ public record RecordStudentQuranPageDto(
     string? Notes
 );
 
-
-
-
 public record UpdateMemorizationStatusDto(
     string Status,
     string? Notes
 );
-
-
-
-
-
 
 public record AddStudentPointDto(
     Guid StudentId,
@@ -441,9 +332,6 @@ public record AddStudentPointDto(
     Guid? GivenByTeacherId
 );
 
-
-
-
 public record UpdateStudentClassEventsPointDto(
     int QuranPoints,
     int HadithPoints,
@@ -451,21 +339,10 @@ public record UpdateStudentClassEventsPointDto(
     int BehaviorPoints
 );
 
-
-
-
-
-
 public record EnrollStudentInClassDto(
     Guid StudentId,
     Guid ClassId
 );
-
-
-
-
-
-
 
 public record StudentFilterDto(
     Guid? ClassId = null,
@@ -477,26 +354,15 @@ public record StudentFilterDto(
     string? Email = null
 );
 
-
-
-
 public record PaginationDto(
     int PageNumber = 1,
     int PageSize = 10
 );
 
-
-
-
 public record StudentQueryRequestDto(
     StudentFilterDto? Filters = null,
     PaginationDto? Pagination = null
 );
-
-
-
-
-
 
 public record PagedResponse<T>(
     List<T> Items,
@@ -507,9 +373,6 @@ public record PagedResponse<T>(
     bool HasPreviousPage,
     bool HasNextPage
 );
-
-
-
 
 public record StudentPagedResponse(
     List<StudentListItemDto> Items,

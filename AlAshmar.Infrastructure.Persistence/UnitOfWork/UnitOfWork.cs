@@ -1,13 +1,10 @@
+using AlAshmar.Application.Repos;
+using AlAshmar.Domain.Entities.Abstraction;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
-using AlAshmar.Application.Repos;
-using AlAshmar.Domain.Entities.Abstraction;
 
 namespace AlAshmar.Infrastructure.Persistence.UnitOfWork;
-
-
-
 
 public class UnitOfWork : IUnitOfWork
 {

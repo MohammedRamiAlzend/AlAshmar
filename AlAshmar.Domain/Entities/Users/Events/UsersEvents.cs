@@ -1,7 +1,4 @@
-using System.Text;
-
 namespace AlAshmar.Domain.Entities.Users.Events;
-
 
 public class UserCreatedEvent : DomainEvent
 {

@@ -1,8 +1,5 @@
 namespace AlAshmar.Controllers.Teachers;
 
-
-
-
 [ApiController]
 [Route("api/teachers")]
 [Authorize]
@@ -15,9 +12,6 @@ public class TeacherAcademicController : ControllerBase
         _sender = sender;
     }
 
-
-
-
     [HttpGet("{id:guid}/attendance")]
     public async Task<IActionResult> GetAttendanceRecords(
         [FromRoute] Guid id,
@@ -27,9 +21,6 @@ public class TeacherAcademicController : ControllerBase
     {
         return Ok(new List<TeacherAttencanceDto>());
     }
-
-
-
 
     [HttpGet("{id:guid}/points-given")]
     public async Task<IActionResult> GetPointsGiven(

@@ -2,9 +2,6 @@ using AlAshmar.Application.Repos;
 
 namespace AlAshmar.Application.Services.Crud;
 
-
-
-
 public abstract class CrudServiceBase<TEntity, TDto, TKey> : IAdvancedCrudService<TEntity, TDto, TKey>
     where TEntity : Entity<TKey>
     where TDto : class

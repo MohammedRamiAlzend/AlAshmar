@@ -1,4 +1,3 @@
-
 namespace AlAshmar.Domain.Entities.Common;
 
 public class AllowableExtention : Entity<Guid>

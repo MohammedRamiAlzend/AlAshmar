@@ -1,9 +1,9 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using AlAshmar.Application.Interfaces;
 using AlAshmar.Domain.Entities.Users;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace AlAshmar.Infrastructure.Services;
 
@@ -35,7 +35,6 @@ public class TokenService : ITokenService
         {
             claims.Add(new Claim("RoleId", roleId.Value.ToString()));
 
-
             var role = await _context.Roles
                 .Include(r => r.Permissions)
                 .FirstOrDefaultAsync(r => r.Id == roleId.Value, cancellationToken);
@@ -43,7 +42,6 @@ public class TokenService : ITokenService
             if (role != null)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role.Type));
-
 
                 foreach (var permission in role.Permissions)
                 {

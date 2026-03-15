@@ -1,6 +1,6 @@
+using AlAshmar.Domain.Entities.Managers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using AlAshmar.Domain.Entities.Managers;
 
 namespace AlAshmar.Infrastructure.Persistence.Configurations;
 

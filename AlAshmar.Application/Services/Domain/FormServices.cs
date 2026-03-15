@@ -5,8 +5,6 @@ using AlAshmar.Domain.Entities.Forms;
 
 namespace AlAshmar.Application.Services.Domain;
 
-
-
 public interface IFormService : IAdvancedCrudService<Form, FormDto, Guid>
 {
 
@@ -49,9 +47,6 @@ public class FormQuestionOptionService : CrudServiceBase<FormQuestionOption, For
 public interface IFormResponseService : IAdvancedCrudService<FormResponse, FormResponseDto, Guid>
 {
 
-
-
-
     Task<Result<FormResponseDto>> SubmitAsync(SubmitFormResponseDto dto, CancellationToken cancellationToken = default);
 }
 
@@ -92,7 +87,6 @@ public class FormResponseService : CrudServiceBase<FormResponse, FormResponseDto
 
         if (form.EndsAt.HasValue && now > form.EndsAt.Value)
             return ApplicationErrors.FormAlreadyEnded;
-
 
         var response = new FormResponse
         {

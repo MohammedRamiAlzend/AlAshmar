@@ -1,5 +1,3 @@
-using AlAshmar.Application.Interfaces;
-
 namespace AlAshmar.Controllers;
 
 [ApiController]

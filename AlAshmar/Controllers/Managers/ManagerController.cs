@@ -1,8 +1,5 @@
 namespace AlAshmar.Controllers.Managers;
 
-
-
-
 [ApiController]
 [Route("api/managers")]
 [Authorize]
@@ -15,9 +12,6 @@ public class ManagerController : ControllerBase
         _sender = sender;
     }
 
-
-
-
     [HttpGet]
     public async Task<IActionResult> GetAllManagers(CancellationToken cancellationToken = default)
     {
@@ -25,9 +19,6 @@ public class ManagerController : ControllerBase
         var result = await _sender.Send(query, cancellationToken);
         return result.ToActionResult();
     }
-
-
-
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetManagerById(
@@ -39,9 +30,6 @@ public class ManagerController : ControllerBase
         return result.ToActionResult();
     }
 
-
-
-
     [HttpPost]
     public async Task<IActionResult> CreateManager(
         [FromBody] CreateManagerCommand command,
@@ -50,9 +38,6 @@ public class ManagerController : ControllerBase
         var result = await _sender.Send(command, cancellationToken);
         return result.ToActionResult();
     }
-
-
-
 
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateManager(
@@ -65,9 +50,6 @@ public class ManagerController : ControllerBase
         return result.ToActionResult();
     }
 
-
-
-
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteManager(
         [FromRoute] Guid id,
@@ -77,9 +59,6 @@ public class ManagerController : ControllerBase
         var result = await _sender.Send(command, cancellationToken);
         return result.ToActionResult();
     }
-
-
-
 
     [HttpPut("{id:guid}/password")]
     public async Task<IActionResult> UpdatePassword(

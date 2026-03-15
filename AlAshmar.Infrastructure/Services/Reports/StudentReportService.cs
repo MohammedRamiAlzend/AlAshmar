@@ -37,7 +37,6 @@ public class StudentReportService : IStudentReportService
 
         var student = studentResult.Value;
 
-
         var hadithsToday = await _hadithRepository.GetAllAsync(
             filter: h => h.StudentId == studentId && h.MemorizedAt.HasValue &&
                         h.MemorizedAt.Value.Date == date.Date);

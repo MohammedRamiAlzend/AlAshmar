@@ -1,8 +1,5 @@
-global using AlAshmar.Application.Common;
-global using AlAshmar.Application.DTOs;
 global using AlAshmar.Application.DTOs.Authorization;
 global using AlAshmar.Domain.Commons;
-global using AlAshmar.Domain.Entities.Abstraction;
 global using AlAshmar.Infrastructure.Authorization.Handlers;
 global using AlAshmar.Infrastructure.Persistence;
 global using AutoMapper;
@@ -15,6 +12,6 @@ global using Microsoft.Extensions.Logging;
 global using System;
 global using System.Collections.Generic;
 global using System.Linq;
-global using System.Linq.Expressions;
 global using System.Threading;
 global using System.Threading.Tasks;
+

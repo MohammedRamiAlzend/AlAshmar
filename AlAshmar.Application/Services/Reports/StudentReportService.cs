@@ -1,10 +1,7 @@
 using AlAshmar.Application.DTOs.Domain;
 using AlAshmar.Application.Interfaces.Reports;
 using AlAshmar.Application.Repos;
-using AlAshmar.Domain.Entities.Academic;
 using AlAshmar.Domain.Entities.Students;
-using AlAshmar.Domain.Entities.Teachers;
-using Microsoft.EntityFrameworkCore;
 
 namespace AlAshmar.Application.Services.Reports;
 

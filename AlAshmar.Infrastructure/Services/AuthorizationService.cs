@@ -1,10 +1,4 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
-using AlAshmar.Application.Interfaces;
 using AlAshmar.Domain.Entities.Users;
-using Microsoft.IdentityModel.Tokens;
 
 namespace AlAshmar.Infrastructure.Services;
 

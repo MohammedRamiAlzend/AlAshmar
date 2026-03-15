@@ -1,8 +1,5 @@
 namespace AlAshmar.Controllers.Teachers;
 
-
-
-
 [ApiController]
 [Route("api/teachers")]
 [Authorize]
@@ -14,9 +11,6 @@ public class TeacherEnrollmentController : ControllerBase
     {
         _sender = sender;
     }
-
-
-
 
     [HttpGet("{id:guid}/enrollments")]
     public async Task<IActionResult> GetClassEnrollments(

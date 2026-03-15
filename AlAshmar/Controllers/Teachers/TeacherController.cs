@@ -1,8 +1,5 @@
 namespace AlAshmar.Controllers.Teachers;
 
-
-
-
 [ApiController]
 [Route("api/teachers")]
 [Authorize]
@@ -14,10 +11,6 @@ public class TeacherController : ControllerBase
     {
         _sender = sender;
     }
-
-
-
-
 
     [HttpGet("filtered")]
     public async Task<IActionResult> GetAllTeachersFiltered(
@@ -33,9 +26,6 @@ public class TeacherController : ControllerBase
         return result.ToActionResult();
     }
 
-
-
-
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetTeacherById(
         [FromRoute] Guid id,
@@ -45,9 +35,6 @@ public class TeacherController : ControllerBase
         var result = await _sender.Send(query, cancellationToken);
         return result.ToActionResult();
     }
-
-
-
 
     [HttpPost]
     public async Task<IActionResult> CreateTeacher(
@@ -66,9 +53,6 @@ public class TeacherController : ControllerBase
         return result.ToActionResult();
     }
 
-
-
-
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateTeacher(
         [FromRoute] Guid id,
@@ -83,9 +67,6 @@ public class TeacherController : ControllerBase
         return result.ToActionResult();
     }
 
-
-
-
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteTeacher(
         [FromRoute] Guid id,
@@ -95,9 +76,6 @@ public class TeacherController : ControllerBase
         var result = await _sender.Send(command, cancellationToken);
         return result.ToActionResult();
     }
-
-
-
 
     [HttpPut("{id:guid}/password")]
     public async Task<IActionResult> UpdatePassword(

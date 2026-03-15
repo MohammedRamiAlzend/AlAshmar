@@ -1,10 +1,4 @@
-using System.Security.Claims;
-
 namespace AlAshmar.Infrastructure.Authorization.Handlers;
-
-
-
-
 
 public class ResourceOwnershipRequirement : IAuthorizationRequirement
 {
@@ -16,12 +10,6 @@ public class ResourceOwnershipRequirement : IAuthorizationRequirement
     }
 }
 
-
-
-
-
-
-
 public class ResourceOwnershipHandler : AuthorizationHandler<ResourceOwnershipRequirement>
 {
     protected override Task HandleRequirementAsync(
@@ -29,11 +17,8 @@ public class ResourceOwnershipHandler : AuthorizationHandler<ResourceOwnershipRe
         ResourceOwnershipRequirement requirement)
     {
 
-
         if (context.User.Identity?.IsAuthenticated == true)
         {
-
-
 
             context.Succeed(requirement);
         }

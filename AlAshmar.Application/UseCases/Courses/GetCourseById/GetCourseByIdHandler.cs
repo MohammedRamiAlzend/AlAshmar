@@ -28,9 +28,9 @@ public class GetCourseByIdHandler(IRepositoryBase<Course, Guid> repository)
             : null;
 
         var halaqaDtos = course.Halaqas
-            .Select(h => new HalaqaDto(h.Id, h.ClassName, h.CourseId, null))
+            .Select(h => new HalaqaDto(h.Id, h.HalaqaName, h.CourseId, null))
             .ToList();
 
-        return new CourseDto(course.Id, course.EventName, course.SemesterId, semesterDto, halaqaDtos);
+        return new CourseDto(course.Id, course.CourseName, course.SemesterId, semesterDto, halaqaDtos);
     }
 }

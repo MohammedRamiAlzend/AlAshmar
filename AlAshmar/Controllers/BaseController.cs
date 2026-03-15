@@ -1,12 +1,6 @@
 using AlAshmar.Application.Services.Crud;
-using AlAshmar.Domain.Commons;
-using AlAshmar.Infrastructure.Authorization.Attributes;
 
 namespace AlAshmar.Controllers;
-
-
-
-
 
 [ApiController]
 [Route("api/[controller]")]

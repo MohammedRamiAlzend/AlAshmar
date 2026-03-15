@@ -1,8 +1,4 @@
-
 namespace AlAshmar.Application.UseCases.Students.AddAttachment;
-
-
-
 
 public record AddAttachmentCommand(
     Guid StudentId,

@@ -1,13 +1,7 @@
-
 namespace AlAshmar.Infrastructure.Authorization.Policies;
-
-
-
 
 public static class AuthorizationPolicies
 {
-
-
 
     public static IServiceCollection AddAuthorizationPolicies(this IServiceCollection services)
     {
@@ -17,12 +11,8 @@ public static class AuthorizationPolicies
         services.AddScoped<IAuthorizationHandler, ClassEnrollmentHandler>();
         services.AddSingleton<IAuthorizationHandler, TimeBasedAuthorizationHandler>();
 
-
         services.AddAuthorization(options =>
         {
-
-
-
 
             options.AddPolicy("owns:students", policy =>
                 policy.RequireAuthenticatedUser()
@@ -32,11 +22,9 @@ public static class AuthorizationPolicies
                 policy.RequireAuthenticatedUser()
                       .AddRequirements(new ResourceOwnershipRequirement("teachers")));
 
-
             options.AddPolicy("EnrolledInClass", policy =>
                 policy.RequireAuthenticatedUser()
                       .AddRequirements(new ClassEnrollmentRequirement()));
-
 
             options.AddPolicy("SchoolHours", policy =>
                 policy.RequireAuthenticatedUser()
@@ -46,7 +34,6 @@ public static class AuthorizationPolicies
                 policy.RequireAuthenticatedUser()
                       .AddRequirements(new TimeBasedRequirement(8, 16, [DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday])));
 
-
             options.AddPolicy("AdminOnly", policy =>
                 policy.RequireRole("Admin", "SuperAdmin"));
 
@@ -55,7 +42,6 @@ public static class AuthorizationPolicies
 
             options.AddPolicy("StudentOnly", policy =>
                 policy.RequireRole("Student"));
-
 
             options.AddPolicy("CanManageStudents", policy =>
                 policy.RequireRole("Teacher", "Admin", "SuperAdmin")
@@ -71,7 +57,6 @@ public static class AuthorizationPolicies
               {
                   return context.User.Claims.Any(c => c.Type == "permission" && (c.Value == "points.assign" || c.Value == "points.*"));
               }));
-
 
             options.AddPolicy("SuperAdminOnly", policy =>
                 policy.RequireRole("SuperAdmin"));

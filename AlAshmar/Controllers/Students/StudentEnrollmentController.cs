@@ -1,8 +1,5 @@
 namespace AlAshmar.Controllers.Students;
 
-
-
-
 [ApiController]
 [Route("api/students")]
 [Authorize]
@@ -15,9 +12,6 @@ public class StudentEnrollmentController : ControllerBase
         _sender = sender;
     }
 
-
-
-
     [HttpPost("{id:guid}/enrollments")]
     public async Task<IActionResult> EnrollInClass(
         [FromRoute] Guid id,
@@ -28,9 +22,6 @@ public class StudentEnrollmentController : ControllerBase
         var result = await _sender.Send(command, cancellationToken);
         return result.ToActionResult();
     }
-
-
-
 
     [HttpGet("{id:guid}/enrollments")]
     public async Task<IActionResult> GetClassEnrollments(

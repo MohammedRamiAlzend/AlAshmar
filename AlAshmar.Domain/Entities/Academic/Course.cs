@@ -1,13 +1,8 @@
-
 namespace AlAshmar.Domain.Entities.Academic;
-
-
-
-
 
 public class Course : Entity<Guid>
 {
-    public string EventName { get; set; } = null!;
+    public string CourseName { get; set; } = null!;
 
     public Guid SemesterId { get; set; }
     public Semester? Semester { get; set; }
