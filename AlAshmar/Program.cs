@@ -73,11 +73,11 @@ var app = builder.Build();
 
 await SeedAuthorizationDataAsync(app.Services);
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference();
-}
+//if (app.Environment.IsDevelopment())
+//{
+app.MapOpenApi();
+app.MapScalarApiReference();
+//}
 
 app.UseHttpsRedirection();
 
