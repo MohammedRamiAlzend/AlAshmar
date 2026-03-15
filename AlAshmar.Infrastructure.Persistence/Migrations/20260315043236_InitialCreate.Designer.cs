@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlAshmar.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260315042608_InitialCreate")]
+    [Migration("20260315043236_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
