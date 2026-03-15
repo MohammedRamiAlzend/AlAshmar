@@ -18,9 +18,9 @@ public interface IStudentManagementService
         Guid? teacherId = null,
         CancellationToken cancellationToken = default);
 
-    Task<Result<StudentDto?>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<Result<StudentSummaryDto?>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
-    Task<Result<StudentDto>> CreateAsync(
+    Task<Result<StudentSummaryDto>> CreateAsync(
         string name,
         string fatherName,
         string motherName,
@@ -30,7 +30,7 @@ public interface IStudentManagementService
         string password,
         CancellationToken cancellationToken = default);
 
-    Task<Result<StudentDto>> UpdateAsync(
+    Task<Result<StudentSummaryDto>> UpdateAsync(
         Guid id,
         string name,
         string fatherName,
@@ -177,32 +177,25 @@ public class StudentManagementService : IStudentManagementService
         return studentDtos;
     }
 
-    public async Task<Result<StudentDto?>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Result<StudentSummaryDto?>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var student = await _studentRepository.GetByIdAsync(id);
 
         if (student.Value == null)
             return ApplicationErrors.StudentNotFound;
 
-        return new StudentDto(
+        return new StudentSummaryDto(
             student.Value.Id,
             student.Value.Name,
             student.Value.FatherName,
             student.Value.MotherName,
             student.Value.NationalityNumber,
             student.Value.Email,
-            student.Value.UserId,
-            null,
-            [],
-            [],
-            [],
-            [],
-            [],
-            []
+            student.Value.UserId
         );
     }
 
-    public async Task<Result<StudentDto>> CreateAsync(
+    public async Task<Result<StudentSummaryDto>> CreateAsync(
         string name,
         string fatherName,
         string motherName,
@@ -226,25 +219,18 @@ public class StudentManagementService : IStudentManagementService
         if (addResult.IsError)
             return addResult.Errors;
 
-        return new StudentDto(
+        return new StudentSummaryDto(
             student.Id,
             student.Name,
             student.FatherName,
             student.MotherName,
             student.NationalityNumber,
             student.Email,
-            student.UserId,
-            null,
-            [],
-            [],
-            [],
-            [],
-            [],
-            []
+            student.UserId
         );
     }
 
-    public async Task<Result<StudentDto>> UpdateAsync(
+    public async Task<Result<StudentSummaryDto>> UpdateAsync(
         Guid id,
         string name,
         string fatherName,
@@ -270,21 +256,14 @@ public class StudentManagementService : IStudentManagementService
         if (updateResult.IsError)
             return updateResult.Errors;
 
-        return new StudentDto(
+        return new StudentSummaryDto(
             student.Id,
             student.Name,
             student.FatherName,
             student.MotherName,
             student.NationalityNumber,
             student.Email,
-            student.UserId,
-            null,
-            [],
-            [],
-            [],
-            [],
-            [],
-            []
+            student.UserId
         );
     }
 

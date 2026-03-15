@@ -50,12 +50,7 @@ public record StudentSummaryDto(
     string MotherName,
     string? NationalityNumber,
     string? Email,
-    int ContactInfoCount,
-    int AttachmentCount,
-    int MemorizedHadithCount,
-    int MemorizedQuranPageCount,
-    int TotalPoints,
-    int ClassEnrollmentCount
+    Guid? UserId
 );
 
 public record StudentMemorizationProgressDto(
