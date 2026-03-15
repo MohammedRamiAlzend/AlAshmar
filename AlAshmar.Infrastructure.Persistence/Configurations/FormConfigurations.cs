@@ -72,7 +72,7 @@ public class FormConfiguration : IEntityTypeConfiguration<Form>
         builder.HasMany(f => f.Responses)
             .WithOne(r => r.Form)
             .HasForeignKey(r => r.FormId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasIndex(f => f.CreatedByManagerId);
         builder.HasIndex(f => f.CreatedByTeacherId);
