@@ -19,7 +19,9 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 
 AuthorizationPolicies.AddAuthorizationPolicies(builder.Services);
 
-builder.Services.AddAutoMapper(typeof(EntityMappingProfile).Assembly);
+builder.Services.AddAutoMapper(cfg => {
+    cfg.AddProfile<EntityMappingProfile>();
+});
 
 
 builder.Services.AddMediatR(cfg => {
