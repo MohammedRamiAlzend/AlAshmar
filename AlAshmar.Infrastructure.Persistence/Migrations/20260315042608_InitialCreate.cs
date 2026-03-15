@@ -549,8 +549,7 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                         name: "FK_Forms_Halaqas_HalaqaId",
                         column: x => x.HalaqaId,
                         principalTable: "Halaqas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Forms_Managers_CreatedByManagerId",
                         column: x => x.CreatedByManagerId,

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlAshmar.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260315041034_InitialCreate")]
+    [Migration("20260315042608_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -1169,8 +1169,7 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
 
                     b.HasOne("AlAshmar.Domain.Entities.Academic.Halaqa", "Halaqa")
                         .WithMany()
-                        .HasForeignKey("HalaqaId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("HalaqaId");
 
                     b.Navigation("Course");
 

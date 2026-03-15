@@ -57,7 +57,7 @@ public class FormConfiguration : IEntityTypeConfiguration<Form>
         builder.HasOne(f => f.Halaqa)
             .WithMany()
             .HasForeignKey(f => f.HalaqaId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.ClientSetNull);
 
         builder.HasOne(f => f.Course)
             .WithMany()

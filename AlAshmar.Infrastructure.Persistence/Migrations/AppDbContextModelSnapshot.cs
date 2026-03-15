@@ -1166,8 +1166,7 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
 
                     b.HasOne("AlAshmar.Domain.Entities.Academic.Halaqa", "Halaqa")
                         .WithMany()
-                        .HasForeignKey("HalaqaId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("HalaqaId");
 
                     b.Navigation("Course");
 
