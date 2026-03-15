@@ -1,4 +1,4 @@
-using AlAshmar.Application.DTOs.Domain;
+using AlAshmar.Application.DTOs;
 using AlAshmar.Application.Repos;
 using AlAshmar.Domain.Entities.Teachers;
 
@@ -53,8 +53,7 @@ public class UpdateTeacherHandler : IRequestHandler<UpdateTeacherCommand, Result
             teacher.MotherName,
             teacher.NationalityNumber,
             teacher.Email,
-            teacher.UserId,
-            null, [], [], []
+            teacher.UserId
         );
     }
 }
