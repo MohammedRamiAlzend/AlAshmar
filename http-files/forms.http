@@ -1,0 +1,295 @@
+### =============================================================
+### AlAshmar API - Forms, Questions, Options & Responses
+### Base URL: http://localhost:5107
+### =============================================================
+
+@baseUrl = http://localhost:5107
+@authToken = YOUR_JWT_TOKEN_HERE
+@formId        = 00000000-0000-0000-0000-000000000051
+@questionId    = 00000000-0000-0000-0000-000000000052
+@optionId      = 00000000-0000-0000-0000-000000000053
+@formResponseId = 00000000-0000-0000-0000-000000000054
+@accessToken   = 00000000-0000-0000-0000-000000000055
+@halaqaId      = 00000000-0000-0000-0000-000000000041
+@courseId      = 00000000-0000-0000-0000-000000000031
+@studentId     = 00000000-0000-0000-0000-000000000001
+@managerId     = 00000000-0000-0000-0000-000000000021
+
+# =============================================================
+# FormsController  - CRUD
+# =============================================================
+
+### Get all forms
+GET {{baseUrl}}/api/forms
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get forms (paged)
+GET {{baseUrl}}/api/forms/paged?page=1&pageSize=10
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get form by ID
+GET {{baseUrl}}/api/forms/{{formId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get form by access token (public - no auth required)
+GET {{baseUrl}}/api/forms/access/{{accessToken}}
+Accept: application/json
+
+###
+
+### Create form
+POST {{baseUrl}}/api/forms
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "title": "Weekly Memorization Evaluation",
+  "description": "Weekly quiz to evaluate students Quran memorization progress",
+  "formType": 0,
+  "audience": 0,
+  "timerMinutes": 30,
+  "isActive": true,
+  "allowMultipleResponses": false,
+  "startsAt": "2025-09-01T08:00:00Z",
+  "endsAt": "2025-09-07T23:59:59Z",
+  "createdByManagerId": "{{managerId}}",
+  "halaqaId": "{{halaqaId}}",
+  "courseId": "{{courseId}}"
+}
+
+###
+
+### Update form
+PUT {{baseUrl}}/api/forms/{{formId}}
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "title": "Weekly Memorization Evaluation (Updated)",
+  "description": "Updated description",
+  "formType": 0,
+  "audience": 0,
+  "timerMinutes": 45,
+  "isActive": true,
+  "allowMultipleResponses": false,
+  "startsAt": "2025-09-01T08:00:00Z",
+  "endsAt": "2025-09-14T23:59:59Z",
+  "halaqaId": "{{halaqaId}}",
+  "courseId": "{{courseId}}"
+}
+
+###
+
+### Delete form
+DELETE {{baseUrl}}/api/forms/{{formId}}
+Authorization: Bearer {{authToken}}
+
+###
+
+# =============================================================
+# FormQuestionsController  - Questions
+# =============================================================
+
+### Get all form questions
+GET {{baseUrl}}/api/formquestions
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get form question by ID
+GET {{baseUrl}}/api/formquestions/{{questionId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get questions by form
+GET {{baseUrl}}/api/formquestions/by-form/{{formId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Create form question (multiple choice)
+POST {{baseUrl}}/api/formquestions
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "formId": "{{formId}}",
+  "text": "How many Juz did you memorize this week?",
+  "description": "Select the number of Juz memorized",
+  "questionType": 1,
+  "order": 1,
+  "isRequired": true,
+  "points": 10,
+  "options": [
+    {
+      "questionId": "00000000-0000-0000-0000-000000000000",
+      "text": "None",
+      "order": 1,
+      "isCorrect": false
+    },
+    {
+      "questionId": "00000000-0000-0000-0000-000000000000",
+      "text": "Half Juz",
+      "order": 2,
+      "isCorrect": false
+    },
+    {
+      "questionId": "00000000-0000-0000-0000-000000000000",
+      "text": "One Juz",
+      "order": 3,
+      "isCorrect": true
+    }
+  ]
+}
+
+###
+
+### Create form question (text answer)
+POST {{baseUrl}}/api/formquestions
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "formId": "{{formId}}",
+  "text": "What areas need more practice?",
+  "description": "Describe the areas where the student needs improvement",
+  "questionType": 0,
+  "order": 2,
+  "isRequired": false,
+  "points": null,
+  "options": []
+}
+
+###
+
+### Update form question
+PUT {{baseUrl}}/api/formquestions/{{questionId}}
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "formId": "{{formId}}",
+  "text": "How many Juz did you memorize this week? (Updated)",
+  "description": "Updated description",
+  "questionType": 1,
+  "order": 1,
+  "isRequired": true,
+  "points": 15,
+  "options": []
+}
+
+###
+
+### Delete form question
+DELETE {{baseUrl}}/api/formquestions/{{questionId}}
+Authorization: Bearer {{authToken}}
+
+###
+
+# =============================================================
+# FormQuestionOptionsController  - Options
+# =============================================================
+
+### Get question option by ID
+GET {{baseUrl}}/api/formquestionoptions/{{optionId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get options by question
+GET {{baseUrl}}/api/formquestionoptions/by-question/{{questionId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Create question option
+POST {{baseUrl}}/api/formquestionoptions
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "questionId": "{{questionId}}",
+  "text": "Two Juz",
+  "order": 4,
+  "isCorrect": false
+}
+
+###
+
+### Update question option
+PUT {{baseUrl}}/api/formquestionoptions/{{optionId}}
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "questionId": "{{questionId}}",
+  "text": "Two Juz (Updated)",
+  "order": 4,
+  "isCorrect": true
+}
+
+###
+
+### Delete question option
+DELETE {{baseUrl}}/api/formquestionoptions/{{optionId}}
+Authorization: Bearer {{authToken}}
+
+###
+
+# =============================================================
+# FormResponsesController  - Responses
+# =============================================================
+
+### Get form response by ID
+GET {{baseUrl}}/api/formresponses/{{formResponseId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get all responses for a form
+GET {{baseUrl}}/api/formresponses/by-form/{{formId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Submit form response (public - no auth required)
+POST {{baseUrl}}/api/formresponses/submit
+Content-Type: application/json
+
+{
+  "formId": "{{formId}}",
+  "respondedByStudentId": "{{studentId}}",
+  "timeSpentSeconds": 420,
+  "answers": [
+    {
+      "questionId": "{{questionId}}",
+      "textAnswer": null,
+      "selectedOptionIds": ["{{optionId}}"]
+    }
+  ]
+}
+
+###
+
+### Delete form response
+DELETE {{baseUrl}}/api/formresponses/{{formResponseId}}
+Authorization: Bearer {{authToken}}
+
+###

@@ -1,0 +1,156 @@
+### =============================================================
+### AlAshmar API - Teachers Controller
+### Base URL: http://localhost:5107
+### =============================================================
+
+@baseUrl = http://localhost:5107
+@authToken = YOUR_JWT_TOKEN_HERE
+@teacherId  = 00000000-0000-0000-0000-000000000011
+@classId    = 00000000-0000-0000-0000-000000000002
+@semesterId = 00000000-0000-0000-0000-000000000003
+
+# =============================================================
+# TeacherController  - CRUD
+# =============================================================
+
+### Get filtered teachers (paged)
+GET {{baseUrl}}/api/teachers/filtered?pageNumber=1&pageSize=10
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get filtered teachers - filter by class and semester
+GET {{baseUrl}}/api/teachers/filtered?pageNumber=1&pageSize=10&classId={{classId}}&semesterId={{semesterId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get teacher by ID
+GET {{baseUrl}}/api/teachers/{{teacherId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Create teacher
+POST {{baseUrl}}/api/teachers
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Omar Abdullah",
+  "fatherName": "Abdullah Yusuf",
+  "motherName": "Maryam Ibrahim",
+  "nationalityNumber": "9876543210",
+  "email": "omar.teacher@example.com"
+}
+
+###
+
+### Update teacher
+PUT {{baseUrl}}/api/teachers/{{teacherId}}
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Omar Abdullah Updated",
+  "fatherName": "Abdullah Yusuf",
+  "motherName": "Maryam Ibrahim",
+  "nationalityNumber": "9876543210",
+  "email": "omar.updated@example.com"
+}
+
+###
+
+### Delete teacher
+DELETE {{baseUrl}}/api/teachers/{{teacherId}}
+Authorization: Bearer {{authToken}}
+
+###
+
+### Update teacher password
+PUT {{baseUrl}}/api/teachers/{{teacherId}}/password
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "newPassword": "NewPassword@123"
+}
+
+###
+
+# =============================================================
+# TeacherEnrollmentController  - Enrollments
+# =============================================================
+
+### Get teacher class enrollments
+GET {{baseUrl}}/api/teachers/{{teacherId}}/enrollments
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+# =============================================================
+# TeacherAttachmentController  - Attachments
+# =============================================================
+
+### Add attachment to teacher (multipart/form-data)
+POST {{baseUrl}}/api/teachers/{{teacherId}}/attachments
+Authorization: Bearer {{authToken}}
+Content-Type: multipart/form-data; boundary=----AttachBoundary
+
+------AttachBoundary
+Content-Disposition: form-data; name="file"; filename="teacher-cert.pdf"
+Content-Type: application/pdf
+
+< ./sample-document.pdf
+------AttachBoundary--
+
+###
+
+### Get teacher attachments
+GET {{baseUrl}}/api/teachers/{{teacherId}}/attachments
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Download teacher attachments as ZIP
+GET {{baseUrl}}/api/teachers/{{teacherId}}/attachments/zip
+Authorization: Bearer {{authToken}}
+
+###
+
+# =============================================================
+# TeacherAcademicController  - Academic Data
+# =============================================================
+
+### Get teacher attendance records (all)
+GET {{baseUrl}}/api/teachers/{{teacherId}}/attendance
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get teacher attendance records (date range)
+GET {{baseUrl}}/api/teachers/{{teacherId}}/attendance?fromDate=2025-01-01&toDate=2025-12-31
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get points given by teacher (all semesters)
+GET {{baseUrl}}/api/teachers/{{teacherId}}/points-given
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get points given by teacher in a specific semester
+GET {{baseUrl}}/api/teachers/{{teacherId}}/points-given?semesterId={{semesterId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###

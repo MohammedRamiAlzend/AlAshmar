@@ -1,0 +1,104 @@
+### =============================================================
+### AlAshmar API - Class Reports Controller
+### Base URL: http://localhost:5107
+### =============================================================
+
+@baseUrl = http://localhost:5107
+@authToken  = YOUR_JWT_TOKEN_HERE
+@classId    = 00000000-0000-0000-0000-000000000041
+@semesterId = 00000000-0000-0000-0000-000000000003
+
+# =============================================================
+# ClassReportsController  - Class-Level Reports
+# =============================================================
+
+### Get class daily report (today)
+GET {{baseUrl}}/api/reports/classes/{{classId}}/daily
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get class daily report (specific date)
+GET {{baseUrl}}/api/reports/classes/{{classId}}/daily?date=2025-03-15
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get class weekly report (current week)
+GET {{baseUrl}}/api/reports/classes/{{classId}}/weekly
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get class weekly report (specific week start)
+GET {{baseUrl}}/api/reports/classes/{{classId}}/weekly?weekStart=2025-03-10
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get class monthly report (current month)
+GET {{baseUrl}}/api/reports/classes/{{classId}}/monthly
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get class monthly report (specific month and year)
+GET {{baseUrl}}/api/reports/classes/{{classId}}/monthly?month=3&year=2025
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get class semester report
+GET {{baseUrl}}/api/reports/classes/{{classId}}/semesters/{{semesterId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get class attendance summary (all time)
+GET {{baseUrl}}/api/reports/classes/{{classId}}/attendance
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get class attendance summary (date range)
+GET {{baseUrl}}/api/reports/classes/{{classId}}/attendance?fromDate=2025-01-01&toDate=2025-12-31
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get class points summary (all semesters)
+GET {{baseUrl}}/api/reports/classes/{{classId}}/points
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get class points summary (specific semester)
+GET {{baseUrl}}/api/reports/classes/{{classId}}/points?semesterId={{semesterId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get class memorization summary (all semesters)
+GET {{baseUrl}}/api/reports/classes/{{classId}}/memorization
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get class memorization summary (specific semester)
+GET {{baseUrl}}/api/reports/classes/{{classId}}/memorization?semesterId={{semesterId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###

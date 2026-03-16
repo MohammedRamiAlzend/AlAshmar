@@ -1,0 +1,186 @@
+### =============================================================
+### AlAshmar API - Students Controller
+### Base URL: http://localhost:5107
+### =============================================================
+
+@baseUrl = http://localhost:5107
+@authToken = YOUR_JWT_TOKEN_HERE
+@studentId = 00000000-0000-0000-0000-000000000001
+@classId   = 00000000-0000-0000-0000-000000000002
+@semesterId = 00000000-0000-0000-0000-000000000003
+
+# =============================================================
+# StudentController  - CRUD
+# =============================================================
+
+### Get filtered students (paged)
+GET {{baseUrl}}/api/students/filtered?pageNumber=1&pageSize=10
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get filtered students - filter by class and semester
+GET {{baseUrl}}/api/students/filtered?pageNumber=1&pageSize=10&classId={{classId}}&semesterId={{semesterId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get student by ID
+GET {{baseUrl}}/api/students/{{studentId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Create student (multipart/form-data)
+POST {{baseUrl}}/api/students
+Authorization: Bearer {{authToken}}
+Content-Type: multipart/form-data; boundary=----FormBoundary
+
+------FormBoundary
+Content-Disposition: form-data; name="Name"
+
+Ahmed Mohammed
+------FormBoundary
+Content-Disposition: form-data; name="FatherName"
+
+Mohammed Ali
+------FormBoundary
+Content-Disposition: form-data; name="MotherName"
+
+Fatima Hassan
+------FormBoundary
+Content-Disposition: form-data; name="NationalityNumber"
+
+1234567890
+------FormBoundary
+Content-Disposition: form-data; name="Email"
+
+ahmed.mohammed@example.com
+------FormBoundary--
+
+###
+
+### Update student
+PUT {{baseUrl}}/api/students/{{studentId}}
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Ahmed Mohammed Updated",
+  "fatherName": "Mohammed Ali",
+  "motherName": "Fatima Hassan",
+  "nationalityNumber": "1234567890",
+  "email": "ahmed.updated@example.com"
+}
+
+###
+
+### Delete student
+DELETE {{baseUrl}}/api/students/{{studentId}}
+Authorization: Bearer {{authToken}}
+
+###
+
+### Update student password
+PUT {{baseUrl}}/api/students/{{studentId}}/password
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "newPassword": "NewPassword@123"
+}
+
+###
+
+# =============================================================
+# StudentEnrollmentController  - Enrollments
+# =============================================================
+
+### Enroll student in a class
+POST {{baseUrl}}/api/students/{{studentId}}/enrollments
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+"{{classId}}"
+
+###
+
+### Get student class enrollments
+GET {{baseUrl}}/api/students/{{studentId}}/enrollments
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+# =============================================================
+# StudentAttachmentController  - Attachments
+# =============================================================
+
+### Add attachment to student (multipart/form-data)
+POST {{baseUrl}}/api/students/{{studentId}}/attachments
+Authorization: Bearer {{authToken}}
+Content-Type: multipart/form-data; boundary=----AttachBoundary
+
+------AttachBoundary
+Content-Disposition: form-data; name="file"; filename="document.pdf"
+Content-Type: application/pdf
+
+< ./sample-document.pdf
+------AttachBoundary--
+
+###
+
+### Get student attachments
+GET {{baseUrl}}/api/students/{{studentId}}/attachments
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Download student attachments as ZIP
+GET {{baseUrl}}/api/students/{{studentId}}/attachments/zip
+Authorization: Bearer {{authToken}}
+
+###
+
+# =============================================================
+# StudentAcademicController  - Academic Data
+# =============================================================
+
+### Get student memorization progress
+GET {{baseUrl}}/api/students/{{studentId}}/memorization
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get student attendance records (all)
+GET {{baseUrl}}/api/students/{{studentId}}/attendance
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get student attendance records (date range)
+GET {{baseUrl}}/api/students/{{studentId}}/attendance?fromDate=2025-01-01&toDate=2025-12-31
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get student points (all semesters)
+GET {{baseUrl}}/api/students/{{studentId}}/points
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get student points for a specific semester
+GET {{baseUrl}}/api/students/{{studentId}}/points?semesterId={{semesterId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###

@@ -1,0 +1,163 @@
+### =============================================================
+### AlAshmar API - Flow: Register Student
+### =============================================================
+###
+### This file walks through the complete flow for registering a
+### new student in the system, including:
+###   Step 1 - Login as manager/admin to obtain a JWT token
+###   Step 2 - Create the academic semester (course)
+###   Step 3 - Create the class (halaqa)
+###   Step 4 - Register the student
+###   Step 5 - Enroll the student in the class
+###   Step 6 - Verify the student profile
+###
+### Instructions:
+###   1. Run each request in order (top to bottom).
+###   2. After Step 1, copy the "token" from the response and
+###      set it as the value of @authToken below.
+###   3. After Step 2, copy the course ID and set @courseId.
+###   4. After Step 3, copy the halaqa ID and set @classId.
+###   5. After Step 4, copy the student ID and set @studentId.
+### =============================================================
+
+@baseUrl = http://localhost:5107
+
+# Update these variables after each step with real response values:
+@authToken = YOUR_JWT_TOKEN_HERE
+@semesterId = 00000000-0000-0000-0000-000000000003
+@courseId   = COURSE_ID_FROM_STEP_2
+@classId    = CLASS_ID_FROM_STEP_3
+@studentId  = STUDENT_ID_FROM_STEP_4
+
+# -----------------------------------------------------------------
+# STEP 1 - Authenticate as admin/manager
+# -----------------------------------------------------------------
+
+### Step 1: Login
+# Run this first. Copy the returned "token" value into @authToken above.
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "Admin@1234"
+}
+
+###
+
+# -----------------------------------------------------------------
+# STEP 2 - Create a Course (semester event)
+# Optional: skip if a course already exists. Use its ID in Step 3.
+# -----------------------------------------------------------------
+
+### Step 2: Create course
+# Copy the returned "id" from the response and set it as @courseId above.
+POST {{baseUrl}}/api/courses
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "eventName": "Quran Memorization - Semester 1",
+  "semesterId": "{{semesterId}}"
+}
+
+###
+
+# -----------------------------------------------------------------
+# STEP 3 - Create a Halaqa (class)
+# Optional: skip if a class already exists. Use its ID in Step 5.
+# -----------------------------------------------------------------
+
+### Step 3: Create halaqa (class)
+# Copy the returned "id" from the response and set it as @classId above.
+POST {{baseUrl}}/api/halaqas
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "className": "Halaqa Al-Noor",
+  "courseId": "{{courseId}}"
+}
+
+###
+
+# -----------------------------------------------------------------
+# STEP 4 - Register the student
+# Uses multipart/form-data (student photo is optional).
+# Default login username = NationalityNumber
+# Default login password = NationalityNumber
+# -----------------------------------------------------------------
+
+### Step 4: Create student
+# Copy the returned "id" from the response and set it as @studentId above.
+POST {{baseUrl}}/api/students
+Authorization: Bearer {{authToken}}
+Content-Type: multipart/form-data; boundary=----StudentBoundary
+
+------StudentBoundary
+Content-Disposition: form-data; name="Name"
+
+Yusuf Ibrahim
+------StudentBoundary
+Content-Disposition: form-data; name="FatherName"
+
+Ibrahim Khalil
+------StudentBoundary
+Content-Disposition: form-data; name="MotherName"
+
+Khadijah Omar
+------StudentBoundary
+Content-Disposition: form-data; name="NationalityNumber"
+
+4455667788
+------StudentBoundary
+Content-Disposition: form-data; name="Email"
+
+yusuf.ibrahim@example.com
+------StudentBoundary--
+
+###
+
+# -----------------------------------------------------------------
+# STEP 5 - Enroll student in the halaqa (class)
+# -----------------------------------------------------------------
+
+### Step 5: Enroll student in class
+POST {{baseUrl}}/api/students/{{studentId}}/enrollments
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+"{{classId}}"
+
+###
+
+# -----------------------------------------------------------------
+# STEP 6 - Verify: Fetch the registered student profile
+# -----------------------------------------------------------------
+
+### Step 6: Get student profile
+GET {{baseUrl}}/api/students/{{studentId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 6b: Get student enrollments
+GET {{baseUrl}}/api/students/{{studentId}}/enrollments
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 6c: Login as the newly registered student to verify credentials
+# Username = NationalityNumber (4455667788)
+# Password = NationalityNumber (4455667788)
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "4455667788",
+  "password": "4455667788"
+}
+
+###

@@ -1,0 +1,24 @@
+### =============================================================
+### AlAshmar API - Auth Controller
+### Base URL: http://localhost:5107
+### =============================================================
+
+@baseUrl = http://localhost:5107
+
+# -----------------------------------------------------------------
+# Login
+# POST /api/auth/login
+# Returns a JWT token to use in all authenticated requests.
+# Copy the token value from the response and set @authToken below.
+# -----------------------------------------------------------------
+
+### Login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "Admin@1234"
+}
+
+###

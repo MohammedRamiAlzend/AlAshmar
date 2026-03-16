@@ -1,0 +1,63 @@
+### =============================================================
+### AlAshmar API - Halaqas (Classes) Controller
+### Base URL: http://localhost:5107
+### =============================================================
+
+@baseUrl = http://localhost:5107
+@authToken = YOUR_JWT_TOKEN_HERE
+@halaqaId = 00000000-0000-0000-0000-000000000041
+@courseId  = 00000000-0000-0000-0000-000000000031
+
+# =============================================================
+# HalaqasController  - CRUD
+# =============================================================
+
+### Get all halaqas
+GET {{baseUrl}}/api/halaqas
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get halaqas by course
+GET {{baseUrl}}/api/halaqas/by-course/{{courseId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get halaqa by ID
+GET {{baseUrl}}/api/halaqas/{{halaqaId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Create halaqa
+POST {{baseUrl}}/api/halaqas
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "className": "Halaqa Al-Fajr",
+  "courseId": "{{courseId}}"
+}
+
+###
+
+### Update halaqa
+PUT {{baseUrl}}/api/halaqas/{{halaqaId}}
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "className": "Halaqa Al-Fajr (Updated)"
+}
+
+###
+
+### Delete halaqa
+DELETE {{baseUrl}}/api/halaqas/{{halaqaId}}
+Authorization: Bearer {{authToken}}
+
+###

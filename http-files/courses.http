@@ -1,0 +1,63 @@
+### =============================================================
+### AlAshmar API - Courses Controller
+### Base URL: http://localhost:5107
+### =============================================================
+
+@baseUrl = http://localhost:5107
+@authToken = YOUR_JWT_TOKEN_HERE
+@courseId   = 00000000-0000-0000-0000-000000000031
+@semesterId = 00000000-0000-0000-0000-000000000003
+
+# =============================================================
+# CoursesController  - CRUD
+# =============================================================
+
+### Get all courses
+GET {{baseUrl}}/api/courses
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get courses by semester
+GET {{baseUrl}}/api/courses/by-semester/{{semesterId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get course by ID
+GET {{baseUrl}}/api/courses/{{courseId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Create course
+POST {{baseUrl}}/api/courses
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "eventName": "Quran Memorization - Level 1",
+  "semesterId": "{{semesterId}}"
+}
+
+###
+
+### Update course
+PUT {{baseUrl}}/api/courses/{{courseId}}
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "eventName": "Quran Memorization - Level 1 (Updated)"
+}
+
+###
+
+### Delete course
+DELETE {{baseUrl}}/api/courses/{{courseId}}
+Authorization: Bearer {{authToken}}
+
+###
