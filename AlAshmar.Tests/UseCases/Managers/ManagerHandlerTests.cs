@@ -53,7 +53,8 @@ public class DeleteManagerHandlerTests
     public async Task Handle_ExistingManager_ReturnsSuccess()
     {
         var managerId = Guid.NewGuid();
-        var manager = new Manager { Id = managerId, Name = "Test Manager" };
+        var manager = Manager.Create("Test Manager", "manager_user", "Pass@123");
+        manager.Id = managerId;
 
         _repoMock.Setup(r => r.GetByIdAsync(managerId)).ReturnsAsync(manager);
         _repoMock.Setup(r => r.RemoveAsync(It.IsAny<Expression<Func<Manager, bool>>>()))
@@ -87,8 +88,8 @@ public class GetAllManagersHandlerTests
     {
         var managers = new List<Manager>
         {
-            new() { Id = Guid.NewGuid(), Name = "Manager One" },
-            new() { Id = Guid.NewGuid(), Name = "Manager Two" }
+            Manager.Create("Manager One", "user1", "Pass@123"),
+            Manager.Create("Manager Two", "user2", "Pass@123")
         };
 
         _repoMock.Setup(r => r.GetAllAsync(
@@ -128,7 +129,8 @@ public class GetManagerByIdHandlerTests
     public async Task Handle_ExistingManager_ReturnsManagerDto()
     {
         var managerId = Guid.NewGuid();
-        var manager = new Manager { Id = managerId, Name = "Test Manager" };
+        var manager = Manager.Create("Test Manager", "manager_user", "Pass@123");
+        manager.Id = managerId;
 
         _repoMock.Setup(r => r.GetByIdAsync(managerId)).ReturnsAsync(manager);
 
@@ -162,7 +164,8 @@ public class UpdateManagerHandlerTests
     public async Task Handle_ExistingManager_UpdatesAndReturnsManagerDto()
     {
         var managerId = Guid.NewGuid();
-        var manager = new Manager { Id = managerId, Name = "Old Name" };
+        var manager = Manager.Create("Old Name", "manager_user", "Pass@123");
+        manager.Id = managerId;
 
         _repoMock.Setup(r => r.GetByIdAsync(managerId)).ReturnsAsync(manager);
         _repoMock.Setup(r => r.UpdateAsync(It.IsAny<Manager>())).ReturnsAsync(new Updated());
@@ -198,12 +201,8 @@ public class AddManagerAttachmentHandlerTests
     public async Task Handle_ExistingManager_AddsAttachmentAndReturnsSuccess()
     {
         var managerId = Guid.NewGuid();
-        var manager = new Manager
-        {
-            Id = managerId,
-            Name = "Manager",
-            ManagerAttachments = new List<ManagerAttachment>()
-        };
+        var manager = Manager.Create("Manager", "manager_user", "Pass@123");
+        manager.Id = managerId;
 
         _managerRepoMock.Setup(r => r.GetByIdAsync(managerId)).ReturnsAsync(manager);
         _attachmentRepoMock.Setup(r => r.AddAsync(It.IsAny<Attachment>())).ReturnsAsync(new Success());
@@ -242,16 +241,14 @@ public class GetManagerAttachmentsHandlerTests
     public async Task Handle_ExistingManager_ReturnsAttachments()
     {
         var managerId = Guid.NewGuid();
-        var manager = new Manager
+        var manager = Manager.Create("Manager", "manager_user", "Pass@123");
+        manager.Id = managerId;
+        manager.ManagerAttachments.Add(new ManagerAttachment
         {
-            Id = managerId,
-            Name = "Manager",
-            ManagerAttachments = new List<ManagerAttachment>
-            {
-                new() { ManagerId = managerId, AttachmentId = Guid.NewGuid(),
-                    Attachment = new Attachment { Id = Guid.NewGuid(), Path = "/file.pdf", Type = "application/pdf", SafeName = "safe.pdf", OriginalName = "orig.pdf" } }
-            }
-        };
+            ManagerId = managerId,
+            AttachmentId = Guid.NewGuid(),
+            Attachment = new Attachment { Id = Guid.NewGuid(), Path = "/file.pdf", Type = "application/pdf", SafeName = "safe.pdf", OriginalName = "orig.pdf" }
+        });
 
         _repoMock.Setup(r => r.GetAsync(
                 It.IsAny<Expression<Func<Manager, bool>>?>(),

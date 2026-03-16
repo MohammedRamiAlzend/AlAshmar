@@ -56,7 +56,8 @@ public class DeleteStudentHandlerTests
     public async Task Handle_ExistingStudent_ReturnsSuccess()
     {
         var studentId = Guid.NewGuid();
-        var student = new Student { Id = studentId, Name = "Test", FatherName = "F", MotherName = "M" };
+        var student = Student.Create("Test", "F", "M", "9876543210", null, "student_user", "Pass@123");
+        student.Id = studentId;
 
         _repoMock.Setup(r => r.GetByIdAsync(studentId))
             .ReturnsAsync(student);
@@ -94,8 +95,8 @@ public class GetAllStudentsHandlerTests
     {
         var students = new List<Student>
         {
-            new() { Id = Guid.NewGuid(), Name = "Ahmed", FatherName = "Ali", MotherName = "Fatima" },
-            new() { Id = Guid.NewGuid(), Name = "Sara", FatherName = "Omar", MotherName = "Hana" }
+            Student.Create("Ahmed", "Ali", "Fatima", "9876543210", null, "user1", "Pass@123"),
+            Student.Create("Sara", "Omar", "Hana", "1234567890", null, "user2", "Pass@123")
         };
 
         _repoMock.Setup(r => r.GetAllAsync(
@@ -136,11 +137,7 @@ public class GetAllStudentsFilteredHandlerTests
     {
         var students = new List<Student>
         {
-            new() { Id = Guid.NewGuid(), Name = "Ahmed", FatherName = "Ali", MotherName = "Fatima",
-                    StudentClassEventsPoints = new List<StudentClassEventsPoint>(),
-                    StudentHadiths = new List<StudentHadith>(),
-                    StudentQuraanPages = new List<StudentQuraanPage>(),
-                    Points = new List<Domain.Entities.Academic.Point>() }
+            Student.Create("Ahmed", "Ali", "Fatima", "9876543210", null, "user3", "Pass@123")
         };
 
         _repoMock.Setup(r => r.GetAllAsync(
@@ -189,19 +186,8 @@ public class GetStudentByIdHandlerTests
     public async Task Handle_ExistingStudent_ReturnsStudentDetail()
     {
         var studentId = Guid.NewGuid();
-        var student = new Student
-        {
-            Id = studentId,
-            Name = "Ahmed",
-            FatherName = "Ali",
-            MotherName = "Fatima",
-            StudentContactInfos = new List<StudentContactInfo>(),
-            StudentAttachments = new List<StudentAttachment>(),
-            StudentHadiths = new List<StudentHadith>(),
-            StudentQuraanPages = new List<StudentQuraanPage>(),
-            StudentClassEventsPoints = new List<StudentClassEventsPoint>(),
-            Points = new List<Domain.Entities.Academic.Point>()
-        };
+        var student = Student.Create("Ahmed", "Ali", "Fatima", "9876543210", null, "student_user4", "Pass@123");
+        student.Id = studentId;
 
         _repoMock.Setup(r => r.GetAllAsync(
                 It.IsAny<Expression<Func<Student, bool>>?>(),
@@ -243,7 +229,8 @@ public class UpdateStudentHandlerTests
     public async Task Handle_ExistingStudent_UpdatesAndReturnsSuccess()
     {
         var studentId = Guid.NewGuid();
-        var student = new Student { Id = studentId, Name = "Old Name", FatherName = "Ali", MotherName = "Fatima" };
+        var student = Student.Create("Old Name", "Ali", "Fatima", "9876543211", null, "student_user5", "Pass@123");
+        student.Id = studentId;
 
         _repoMock.Setup(r => r.GetByIdAsync(studentId)).ReturnsAsync(student);
         _repoMock.Setup(r => r.AnyAsync(It.IsAny<Expression<Func<Student, bool>>>(), It.IsAny<Func<IQueryable<Student>, IQueryable<Student>>?>()))

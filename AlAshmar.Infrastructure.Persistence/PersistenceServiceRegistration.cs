@@ -21,6 +21,8 @@ public static class PersistenceServiceRegistration
 
         services.AddScoped(typeof(IRepositoryBase<,>), typeof(RepositoryBase<,>));
 
+        services.AddScoped<ITokenRepository, Repos.TokenRepository>();
+
         services.AddScoped<AlAshmar.Infrastructure.Persistence.UnitOfWork.IUnitOfWork, AlAshmar.Infrastructure.Persistence.UnitOfWork.UnitOfWork>();
 
         return services;

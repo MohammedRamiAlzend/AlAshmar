@@ -20,14 +20,8 @@ public class AddAttachmentHandlerTests
     public async Task Handle_ExistingStudent_AddsAttachmentAndReturnsSuccess()
     {
         var studentId = Guid.NewGuid();
-        var student = new Student
-        {
-            Id = studentId,
-            Name = "Ahmed",
-            FatherName = "Ali",
-            MotherName = "Fatima",
-            StudentAttachments = new List<StudentAttachment>()
-        };
+        var student = Student.Create("Ahmed", "Ali", "Fatima", "9876543210", null, "student_user", "Pass@123");
+        student.Id = studentId;
 
         _studentRepoMock.Setup(r => r.GetByIdAsync(studentId)).ReturnsAsync(student);
         _attachmentRepoMock.Setup(r => r.AddAsync(It.IsAny<Attachment>())).ReturnsAsync(new Success());
@@ -62,7 +56,8 @@ public class AddAttachmentHandlerTests
     public async Task Handle_AttachmentRepositoryFailure_ReturnsError()
     {
         var studentId = Guid.NewGuid();
-        var student = new Student { Id = studentId, Name = "Ahmed", FatherName = "Ali", MotherName = "M", StudentAttachments = new List<StudentAttachment>() };
+        var student = Student.Create("Ahmed", "Ali", "M", "9876543210", null, "student_user2", "Pass@123");
+        student.Id = studentId;
 
         _studentRepoMock.Setup(r => r.GetByIdAsync(studentId)).ReturnsAsync(student);
         _attachmentRepoMock.Setup(r => r.AddAsync(It.IsAny<Attachment>()))
@@ -131,18 +126,14 @@ public class GetAttachmentsHandlerTests
     public async Task Handle_ExistingStudent_ReturnsAttachments()
     {
         var studentId = Guid.NewGuid();
-        var student = new Student
+        var student = Student.Create("Ahmed", "Ali", "Fatima", "9876543210", null, "student_user3", "Pass@123");
+        student.Id = studentId;
+        student.StudentAttachments.Add(new StudentAttachment
         {
-            Id = studentId,
-            Name = "Ahmed",
-            FatherName = "Ali",
-            MotherName = "Fatima",
-            StudentAttachments = new List<StudentAttachment>
-            {
-                new() { StudentId = studentId, AttachmentId = Guid.NewGuid(),
-                        Attachment = new Attachment { Id = Guid.NewGuid(), Path = "/file.jpg", Type = "image/jpeg", SafeName = "safe.jpg", OriginalName = "orig.jpg" } }
-            }
-        };
+            StudentId = studentId,
+            AttachmentId = Guid.NewGuid(),
+            Attachment = new Attachment { Id = Guid.NewGuid(), Path = "/file.jpg", Type = "image/jpeg", SafeName = "safe.jpg", OriginalName = "orig.jpg" }
+        });
 
         _repoMock.Setup(r => r.GetAsync(
                 It.IsAny<Expression<Func<Student, bool>>?>(),
@@ -222,10 +213,12 @@ public class GetClassEnrollmentsHandlerTests
     public async Task Handle_ReturnsEnrollments()
     {
         var studentId = Guid.NewGuid();
+        var studentInEnrollment = Student.Create("Ahmed", "Ali", "Fatima", "9876543210", null, "user6", "Pass@123");
+        studentInEnrollment.Id = studentId;
         var enrollments = new List<ClassStudentEnrollment>
         {
             new() { Id = Guid.NewGuid(), StudentId = studentId, ClassId = Guid.NewGuid(),
-                    Student = new Student { Id = studentId, Name = "Ahmed", FatherName = "Ali", MotherName = "Fatima" } }
+                    Student = studentInEnrollment }
         };
 
         _repoMock.Setup(r => r.GetAllAsync(

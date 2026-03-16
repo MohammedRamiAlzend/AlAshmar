@@ -7,22 +7,22 @@ namespace AlAshmar.Domain.Entities.Students;
 
 public class Student : EntityWithEvents<Guid>
 {
-    public string Name { get; set; } = null!;
-    public string FatherName { get; set; } = null!;
-    public string MotherName { get; set; } = null!;
-    public string NationalityNumber { get; set; } = null!;
-    public string? Email { get; set; }
+    public string Name { get; private set; } = null!;
+    public string FatherName { get; private set; } = null!;
+    public string MotherName { get; private set; } = null!;
+    public string NationalityNumber { get; private set; } = null!;
+    public string? Email { get; private set; }
 
-    public Guid? UserId { get; set; }
+    public Guid? UserId { get; private set; }
     [ForeignKey(nameof(UserId))]
-    public User? User { get; set; }
+    public User? User { get; private set; }
 
-    public ICollection<StudentContactInfo> StudentContactInfos { get; set; } = new List<StudentContactInfo>();
-    public ICollection<StudentAttachment> StudentAttachments { get; set; } = new List<StudentAttachment>();
-    public ICollection<StudentHadith> StudentHadiths { get; set; } = new List<StudentHadith>();
-    public ICollection<StudentQuraanPage> StudentQuraanPages { get; set; } = new List<StudentQuraanPage>();
-    public ICollection<StudentClassEventsPoint> StudentClassEventsPoints { get; set; } = new List<StudentClassEventsPoint>();
-    public ICollection<Point> Points { get; set; } = new List<Point>();
+    public ICollection<StudentContactInfo> StudentContactInfos { get; private set; } = new List<StudentContactInfo>();
+    public ICollection<StudentAttachment> StudentAttachments { get; private set; } = new List<StudentAttachment>();
+    public ICollection<StudentHadith> StudentHadiths { get; private set; } = new List<StudentHadith>();
+    public ICollection<StudentQuraanPage> StudentQuraanPages { get; private set; } = new List<StudentQuraanPage>();
+    public ICollection<StudentClassEventsPoint> StudentClassEventsPoints { get; private set; } = new List<StudentClassEventsPoint>();
+    public ICollection<Point> Points { get; private set; } = new List<Point>();
 
     public void UpdateBasicInfo(string name, string fatherName, string motherName, string nationalityNumber, string? email)
     {

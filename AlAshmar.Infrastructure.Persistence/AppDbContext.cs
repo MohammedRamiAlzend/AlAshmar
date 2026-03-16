@@ -1,3 +1,4 @@
+using AlAshmar.Domain.Entities.Abstraction;
 using AlAshmar.Domain.Entities.Academic;
 using AlAshmar.Domain.Entities.Common;
 using AlAshmar.Domain.Entities.Forms;
@@ -18,6 +19,24 @@ public class AppDbContext : DbContext
     public AppDbContext()
     {
 
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        var now = DateTime.UtcNow;
+        foreach (var entry in ChangeTracker.Entries<IAuditableEntity>())
+        {
+            if (entry.State == EntityState.Added)
+            {
+                entry.Entity.CreatedAt = now;
+                entry.Entity.UpdatedAt = now;
+            }
+            else if (entry.State == EntityState.Modified)
+            {
+                entry.Entity.UpdatedAt = now;
+            }
+        }
+        return base.SaveChangesAsync(cancellationToken);
     }
 
     public DbSet<User> Users { get; set; }
@@ -60,6 +79,8 @@ public class AppDbContext : DbContext
     public DbSet<FormResponse> FormResponses { get; set; }
     public DbSet<FormAnswer> FormAnswers { get; set; }
     public DbSet<FormAnswerSelectedOption> FormAnswerSelectedOptions { get; set; }
+
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
