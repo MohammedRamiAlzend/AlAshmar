@@ -271,11 +271,13 @@ Accept: application/json
 
 # -----------------------------------------------------------------
 # STEP 7 - Fetch the survey via its public access token
+#   Normal surveys (FormType=0) allow anonymous access.
+#   Only Quiz forms (FormType=1) require authentication.
 #   Share this URL with respondents:
 #   GET {{baseUrl}}/api/forms/access/<accessToken>
 # -----------------------------------------------------------------
 
-### Step 7: Get survey via access token (no auth needed)
+### Step 7: Get survey via access token (no auth needed — surveys are anonymous)
 GET {{baseUrl}}/api/forms/access/{{accessToken}}
 Accept: application/json
 
@@ -309,6 +311,8 @@ Accept: application/json
 
 # -----------------------------------------------------------------
 # STEP 10 - Submit a response as a student
+#   Surveys (FormType=0) allow anonymous submission — no auth needed.
+#   Quiz forms (FormType=1) require authentication at this endpoint.
 #   Set respondedByStudentId for student responses.
 #   Set respondedByTeacherId for teacher responses.
 #   Both can be null for truly anonymous responses.

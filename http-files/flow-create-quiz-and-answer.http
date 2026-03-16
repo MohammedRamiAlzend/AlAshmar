@@ -295,12 +295,15 @@ Content-Type: application/json
 
 # -----------------------------------------------------------------
 # STEP 8 - Fetch the quiz via its public access token
-#   This endpoint is [AllowAnonymous] - no auth header required.
-#   The accessToken was returned in Step 2 inside the form object.
+#   NOTE: Quizzes require authentication. The [AllowAnonymous] route
+#   checks whether the form is a Quiz and returns 401 if the caller
+#   is not authenticated. Include the student's auth token.
+#   (Normal surveys still allow anonymous access via this route.)
 # -----------------------------------------------------------------
 
-### Step 8: Get quiz via public access token (no auth needed)
+### Step 8: Get quiz via access token (auth required for quizzes)
 GET {{baseUrl}}/api/forms/access/{{accessToken}}
+Authorization: Bearer {{studentToken}}
 Accept: application/json
 
 ###
@@ -309,7 +312,7 @@ Accept: application/json
 # STEP 9 - Fetch all questions for the quiz
 # -----------------------------------------------------------------
 
-### Step 9: Get questions for the quiz (auth optional, public via token)
+### Step 9: Get questions for the quiz (auth required)
 GET {{baseUrl}}/api/formquestions/by-form/{{quizFormId}}
 Authorization: Bearer {{studentToken}}
 Accept: application/json
@@ -340,7 +343,9 @@ Accept: application/json
 
 # -----------------------------------------------------------------
 # STEP 11 - Submit quiz answers
-#   This endpoint is [AllowAnonymous] — auth header is optional.
+#   Quizzes require authentication. An unauthenticated request to
+#   this endpoint for a Quiz form will receive 401 Unauthorized.
+#   (Normal surveys remain accessible anonymously.)
 #   For auto-graded questions (MultipleChoice, Checkbox, Dropdown):
 #     - Provide the selected option IDs in "selectedOptionIds"
 #     - "textAnswer" should be null
@@ -355,6 +360,7 @@ Accept: application/json
 # Replace option IDs with the real IDs fetched in Step 10.
 # Copy the returned "id" into @formResponseId above.
 POST {{baseUrl}}/api/formresponses/submit
+Authorization: Bearer {{studentToken}}
 Content-Type: application/json
 
 {
@@ -387,6 +393,7 @@ Content-Type: application/json
 
 ### Step 11b: Submit quiz answers (wrong answers - to compare scores)
 POST {{baseUrl}}/api/formresponses/submit
+Authorization: Bearer {{studentToken}}
 Content-Type: application/json
 
 {

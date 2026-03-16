@@ -83,8 +83,8 @@ For a full walkthrough, start with the **flow files** which guide you step-by-st
 
 | Value | Enum | Meaning |
 |-------|------|---------|
-| `formType: 0` | `FormType.Normal` | Survey / feedback form — no auto-grading |
-| `formType: 1` | `FormType.Quiz` | Quiz — multiple-choice answers are auto-graded |
+| `formType: 0` | `FormType.Normal` | Survey / feedback form — no auto-grading, anonymous access allowed |
+| `formType: 1` | `FormType.Quiz` | Quiz — multiple-choice answers are auto-graded, **authentication required** |
 | `audience: 0` | `AudienceType.Students` | Only students can respond |
 | `audience: 1` | `AudienceType.Teachers` | Only teachers can respond |
 | `audience: 2` | `AudienceType.Both` | Both students and teachers can respond |
