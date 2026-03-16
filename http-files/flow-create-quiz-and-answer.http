@@ -1,0 +1,468 @@
+### =============================================================
+### AlAshmar API - Flow: Create Quiz and Answer It
+### =============================================================
+###
+### This file walks through the complete quiz lifecycle:
+###
+###   ADMIN SIDE (run once to set up the quiz)
+###   Step 1  - Login as admin/manager
+###   Step 2  - Create the quiz form  (FormType = 1)
+###   Step 3  - Add a multiple-choice question  (auto-graded)
+###   Step 4  - Add a checkbox question         (auto-graded)
+###   Step 5  - Add a short-text question        (manual grading)
+###   Step 6  - Activate the quiz and note the access token
+###
+###   STUDENT SIDE (run to take the quiz)
+###   Step 7  - Login as the student (or use anonymous access)
+###   Step 8  - Fetch the quiz via the public access token
+###   Step 9  - Fetch questions for the quiz
+###   Step 10 - Fetch options for each question
+###   Step 11 - Submit answers
+###
+###   ADMIN SIDE (run to review results)
+###   Step 12 - View all responses for the quiz
+###   Step 13 - View a specific student response with scores
+###
+### Instructions:
+###   Run each request in order. After each step that creates a
+###   resource, copy the returned "id" (or "accessToken") and
+###   update the matching variable below.
+### =============================================================
+
+@baseUrl = http://localhost:5107
+
+# ── Update these after each step ──────────────────────────────
+@adminToken    = YOUR_ADMIN_JWT_TOKEN_HERE
+@studentToken  = YOUR_STUDENT_JWT_TOKEN_HERE
+
+@quizFormId    = QUIZ_FORM_ID_FROM_STEP_2
+@accessToken   = ACCESS_TOKEN_FROM_STEP_2
+
+# Question IDs (set after Steps 3-5)
+@mcQuestionId   = MC_QUESTION_ID_FROM_STEP_3
+@cbQuestionId   = CB_QUESTION_ID_FROM_STEP_4
+@textQuestionId = TEXT_QUESTION_ID_FROM_STEP_5
+
+# Option IDs (set after Step 10 — fetch options)
+# Multiple-choice question options
+@mcOptionCorrect   = MC_CORRECT_OPTION_ID
+@mcOptionWrong1    = MC_WRONG_OPTION_ID_1
+@mcOptionWrong2    = MC_WRONG_OPTION_ID_2
+
+# Checkbox question options (two correct, two wrong)
+@cbOptionCorrect1  = CB_CORRECT_OPTION_ID_1
+@cbOptionCorrect2  = CB_CORRECT_OPTION_ID_2
+@cbOptionWrong1    = CB_WRONG_OPTION_ID_1
+
+# IDs from response
+@studentId         = 00000000-0000-0000-0000-000000000001
+@managerId         = 00000000-0000-0000-0000-000000000021
+@halaqaId          = 00000000-0000-0000-0000-000000000041
+@courseId          = 00000000-0000-0000-0000-000000000031
+@formResponseId    = RESPONSE_ID_FROM_STEP_11
+
+# =============================================================
+#  ADMIN SIDE — Build the quiz
+# =============================================================
+
+# -----------------------------------------------------------------
+# STEP 1 - Login as admin/manager to get an auth token
+# -----------------------------------------------------------------
+
+### Step 1: Admin login
+# Copy the returned "token" into @adminToken above.
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "Admin@1234"
+}
+
+###
+
+# -----------------------------------------------------------------
+# STEP 2 - Create the quiz form
+#
+#   formType   1  = Quiz  (auto-grades multiple-choice answers)
+#   formType   0  = Normal form / survey
+#   audience   0  = Students only
+#   audience   1  = Teachers only
+#   audience   2  = Both
+#
+#   isActive   true   = immediately open for responses
+#   The response contains an "accessToken" (GUID). Students use
+#   this token to access the quiz without authentication.
+# -----------------------------------------------------------------
+
+### Step 2: Create quiz
+# Copy "id" into @quizFormId and "accessToken" into @accessToken above.
+POST {{baseUrl}}/api/forms
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "Quran Memorization Quiz - Week 1",
+  "description": "Test your knowledge of Surah Al-Fatiha and Al-Baqarah verses 1-10",
+  "formType": 1,
+  "audience": 0,
+  "timerMinutes": 20,
+  "isActive": true,
+  "allowMultipleResponses": false,
+  "startsAt": null,
+  "endsAt": null,
+  "createdByManagerId": "{{managerId}}",
+  "halaqaId": "{{halaqaId}}",
+  "courseId": "{{courseId}}"
+}
+
+###
+
+# -----------------------------------------------------------------
+# STEP 3 - Add a multiple-choice question (auto-graded, 10 points)
+#
+#   questionType   2  = MultipleChoice  (single correct answer)
+#   questionType   3  = Checkbox        (one or more correct)
+#   questionType   0  = ShortText       (manual grading)
+#   questionType   1  = LongText        (manual grading)
+#   questionType   4  = Dropdown        (single correct answer)
+#
+#   Provide "options" inline — each option has isCorrect: true/false.
+#   For auto-grading, EXACTLY ONE option should be isCorrect: true
+#   for MultipleChoice / Dropdown questions.
+# -----------------------------------------------------------------
+
+### Step 3: Add multiple-choice question (10 pts)
+# Copy the returned "id" into @mcQuestionId above.
+POST {{baseUrl}}/api/formquestions
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "formId": "{{quizFormId}}",
+  "text": "How many verses (ayat) are in Surah Al-Fatiha?",
+  "description": "Count the Bismillah as verse 1",
+  "questionType": 2,
+  "order": 1,
+  "isRequired": true,
+  "points": 10,
+  "options": [
+    {
+      "questionId": "00000000-0000-0000-0000-000000000000",
+      "text": "5",
+      "order": 1,
+      "isCorrect": false
+    },
+    {
+      "questionId": "00000000-0000-0000-0000-000000000000",
+      "text": "6",
+      "order": 2,
+      "isCorrect": false
+    },
+    {
+      "questionId": "00000000-0000-0000-0000-000000000000",
+      "text": "7",
+      "order": 3,
+      "isCorrect": true
+    },
+    {
+      "questionId": "00000000-0000-0000-0000-000000000000",
+      "text": "8",
+      "order": 4,
+      "isCorrect": false
+    }
+  ]
+}
+
+###
+
+# -----------------------------------------------------------------
+# STEP 4 - Add a checkbox question (auto-graded, 15 points)
+#   Exact match required: the student must select ALL correct
+#   options and NO wrong ones to receive the points.
+# -----------------------------------------------------------------
+
+### Step 4: Add checkbox question (15 pts)
+# Copy the returned "id" into @cbQuestionId above.
+POST {{baseUrl}}/api/formquestions
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "formId": "{{quizFormId}}",
+  "text": "Which of the following are among the names of Surah Al-Fatiha? (select all that apply)",
+  "description": "There are multiple correct answers",
+  "questionType": 3,
+  "order": 2,
+  "isRequired": true,
+  "points": 15,
+  "options": [
+    {
+      "questionId": "00000000-0000-0000-0000-000000000000",
+      "text": "Umm Al-Kitab",
+      "order": 1,
+      "isCorrect": true
+    },
+    {
+      "questionId": "00000000-0000-0000-0000-000000000000",
+      "text": "As-Sab' Al-Mathani",
+      "order": 2,
+      "isCorrect": true
+    },
+    {
+      "questionId": "00000000-0000-0000-0000-000000000000",
+      "text": "Al-Ikhlas",
+      "order": 3,
+      "isCorrect": false
+    },
+    {
+      "questionId": "00000000-0000-0000-0000-000000000000",
+      "text": "Al-Hamd",
+      "order": 4,
+      "isCorrect": true
+    }
+  ]
+}
+
+###
+
+# -----------------------------------------------------------------
+# STEP 5 - Add a short-text question (manual grading, no points)
+#   Text questions are NOT auto-graded even when points is set.
+#   The teacher/admin must manually review and grade them.
+# -----------------------------------------------------------------
+
+### Step 5: Add short-text question (manual review)
+# Copy the returned "id" into @textQuestionId above.
+POST {{baseUrl}}/api/formquestions
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "formId": "{{quizFormId}}",
+  "text": "Write the Arabic text of the first verse of Surah Al-Fatiha.",
+  "description": "Write in Arabic script",
+  "questionType": 0,
+  "order": 3,
+  "isRequired": false,
+  "points": null,
+  "options": []
+}
+
+###
+
+# -----------------------------------------------------------------
+# STEP 6 - Verify: Fetch the complete quiz with all questions
+# -----------------------------------------------------------------
+
+### Step 6a: Get quiz form (confirm it looks right)
+GET {{baseUrl}}/api/forms/{{quizFormId}}
+Authorization: Bearer {{adminToken}}
+Accept: application/json
+
+###
+
+### Step 6b: Get all questions for this quiz
+GET {{baseUrl}}/api/formquestions/by-form/{{quizFormId}}
+Authorization: Bearer {{adminToken}}
+Accept: application/json
+
+###
+
+# =============================================================
+#  STUDENT SIDE — Take the quiz
+# =============================================================
+
+# -----------------------------------------------------------------
+# STEP 7 - Student login
+#   Default credentials when a student is created:
+#     username = NationalityNumber
+#     password = NationalityNumber
+#   (See flow-register-student.http for how to create a student.)
+# -----------------------------------------------------------------
+
+### Step 7: Student login
+# Copy the returned "token" into @studentToken above.
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "4455667788",
+  "password": "4455667788"
+}
+
+###
+
+# -----------------------------------------------------------------
+# STEP 8 - Fetch the quiz via its public access token
+#   This endpoint is [AllowAnonymous] - no auth header required.
+#   The accessToken was returned in Step 2 inside the form object.
+# -----------------------------------------------------------------
+
+### Step 8: Get quiz via public access token (no auth needed)
+GET {{baseUrl}}/api/forms/access/{{accessToken}}
+Accept: application/json
+
+###
+
+# -----------------------------------------------------------------
+# STEP 9 - Fetch all questions for the quiz
+# -----------------------------------------------------------------
+
+### Step 9: Get questions for the quiz (auth optional, public via token)
+GET {{baseUrl}}/api/formquestions/by-form/{{quizFormId}}
+Authorization: Bearer {{studentToken}}
+Accept: application/json
+
+###
+
+# -----------------------------------------------------------------
+# STEP 10 - Fetch answer options for each question
+#   Run once per multiple-choice / checkbox / dropdown question.
+#   From the responses, note which option IDs are listed and set the
+#   @mcOptionCorrect / @cbOptionCorrect1 etc. variables above.
+#   (The "isCorrect" flag is hidden from students in real use.)
+# -----------------------------------------------------------------
+
+### Step 10a: Get options for the multiple-choice question
+GET {{baseUrl}}/api/formquestionoptions/by-question/{{mcQuestionId}}
+Authorization: Bearer {{studentToken}}
+Accept: application/json
+
+###
+
+### Step 10b: Get options for the checkbox question
+GET {{baseUrl}}/api/formquestionoptions/by-question/{{cbQuestionId}}
+Authorization: Bearer {{studentToken}}
+Accept: application/json
+
+###
+
+# -----------------------------------------------------------------
+# STEP 11 - Submit quiz answers
+#   This endpoint is [AllowAnonymous] — auth header is optional.
+#   For auto-graded questions (MultipleChoice, Checkbox, Dropdown):
+#     - Provide the selected option IDs in "selectedOptionIds"
+#     - "textAnswer" should be null
+#   For text questions (ShortText, LongText):
+#     - Provide text in "textAnswer"
+#     - "selectedOptionIds" should be empty []
+#
+#   After submitting, copy "id" from the response into @formResponseId.
+# -----------------------------------------------------------------
+
+### Step 11: Submit quiz answers
+# Replace option IDs with the real IDs fetched in Step 10.
+# Copy the returned "id" into @formResponseId above.
+POST {{baseUrl}}/api/formresponses/submit
+Content-Type: application/json
+
+{
+  "formId": "{{quizFormId}}",
+  "respondedByStudentId": "{{studentId}}",
+  "timeSpentSeconds": 540,
+  "answers": [
+    {
+      "questionId": "{{mcQuestionId}}",
+      "textAnswer": null,
+      "selectedOptionIds": ["{{mcOptionCorrect}}"]
+    },
+    {
+      "questionId": "{{cbQuestionId}}",
+      "textAnswer": null,
+      "selectedOptionIds": [
+        "{{cbOptionCorrect1}}",
+        "{{cbOptionCorrect2}}"
+      ]
+    },
+    {
+      "questionId": "{{textQuestionId}}",
+      "textAnswer": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
+      "selectedOptionIds": []
+    }
+  ]
+}
+
+###
+
+### Step 11b: Submit quiz answers (wrong answers - to compare scores)
+POST {{baseUrl}}/api/formresponses/submit
+Content-Type: application/json
+
+{
+  "formId": "{{quizFormId}}",
+  "respondedByStudentId": "{{studentId}}",
+  "timeSpentSeconds": 120,
+  "answers": [
+    {
+      "questionId": "{{mcQuestionId}}",
+      "textAnswer": null,
+      "selectedOptionIds": ["{{mcOptionWrong1}}"]
+    },
+    {
+      "questionId": "{{cbQuestionId}}",
+      "textAnswer": null,
+      "selectedOptionIds": ["{{cbOptionWrong1}}"]
+    },
+    {
+      "questionId": "{{textQuestionId}}",
+      "textAnswer": "I don't know",
+      "selectedOptionIds": []
+    }
+  ]
+}
+
+###
+
+# =============================================================
+#  ADMIN SIDE — Review results
+# =============================================================
+
+# -----------------------------------------------------------------
+# STEP 12 - View all responses for the quiz
+#   Returns each student response with their totalScore.
+# -----------------------------------------------------------------
+
+### Step 12: Get all responses for this quiz
+GET {{baseUrl}}/api/formresponses/by-form/{{quizFormId}}
+Authorization: Bearer {{adminToken}}
+Accept: application/json
+
+###
+
+# -----------------------------------------------------------------
+# STEP 13 - View a specific student response in detail
+#   Shows each answer, whether it was correct, and points awarded.
+# -----------------------------------------------------------------
+
+### Step 13: Get specific student response
+GET {{baseUrl}}/api/formresponses/{{formResponseId}}
+Authorization: Bearer {{adminToken}}
+Accept: application/json
+
+###
+
+# -----------------------------------------------------------------
+# OPTIONAL - Deactivate quiz after the submission window closes
+# -----------------------------------------------------------------
+
+### Optional: Deactivate quiz
+PUT {{baseUrl}}/api/forms/{{quizFormId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "Quran Memorization Quiz - Week 1",
+  "description": "Test your knowledge of Surah Al-Fatiha and Al-Baqarah verses 1-10",
+  "formType": 1,
+  "audience": 0,
+  "timerMinutes": 20,
+  "isActive": false,
+  "allowMultipleResponses": false,
+  "startsAt": null,
+  "endsAt": null,
+  "halaqaId": "{{halaqaId}}",
+  "courseId": "{{courseId}}"
+}
+
+###

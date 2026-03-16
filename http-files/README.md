@@ -26,7 +26,7 @@ All endpoints (except login and public form endpoints) require a **JWT Bearer to
 
 | File | Description |
 |------|-------------|
-| [`auth.http`](auth.http) | Login endpoint |
+| [`auth.http`](auth.http) | Login for all roles (admin/manager, teacher, student) + token verification |
 | [`students.http`](students.http) | Student CRUD, enrollments, attachments, and academic data |
 | [`teachers.http`](teachers.http) | Teacher CRUD, enrollments, attachments, and academic data |
 | [`managers.http`](managers.http) | Manager CRUD and attachments |
@@ -47,6 +47,8 @@ End-to-end test flows that combine multiple API calls in a logical order:
 | File | Description |
 |------|-------------|
 | [`flow-register-student.http`](flow-register-student.http) | Complete flow: login → create course → create halaqa → register student → enroll → verify |
+| [`flow-create-quiz-and-answer.http`](flow-create-quiz-and-answer.http) | Complete quiz lifecycle: admin login → create quiz (FormType=1) → add questions with options → activate → student login → fetch quiz via access token → fetch questions/options → submit answers → admin views scores |
+| [`flow-create-survey-and-respond.http`](flow-create-survey-and-respond.http) | Complete survey lifecycle: admin login → create survey (FormType=0) → add questions → share access token → respondents submit anonymously → admin reviews responses |
 | [`flow-daily-report.http`](flow-daily-report.http) | Complete flow: login → student daily report → teacher daily report → class daily report → attendance → points |
 | [`flow-monthly-report.http`](flow-monthly-report.http) | Complete flow: login → student monthly → teacher monthly → class monthly → attendance monthly → points monthly → semester overview |
 
@@ -69,8 +71,28 @@ Each file declares variables at the top. Update the placeholder GUIDs with real 
 ## Quick Start
 
 1. Start the API server (`dotnet run` from the `AlAshmar` project).
-2. Open `auth.http` and run the **Login** request.
+2. Open `auth.http` and run the **Login** request matching your role.
 3. Copy the `token` from the response body.
 4. Open any other `.http` file, paste the token into `@authToken`, then run requests.
 
 For a full walkthrough, start with the **flow files** which guide you step-by-step.
+
+---
+
+## Form / Quiz Reference
+
+| Value | Enum | Meaning |
+|-------|------|---------|
+| `formType: 0` | `FormType.Normal` | Survey / feedback form — no auto-grading |
+| `formType: 1` | `FormType.Quiz` | Quiz — multiple-choice answers are auto-graded |
+| `audience: 0` | `AudienceType.Students` | Only students can respond |
+| `audience: 1` | `AudienceType.Teachers` | Only teachers can respond |
+| `audience: 2` | `AudienceType.Both` | Both students and teachers can respond |
+
+| Value | Enum | Meaning |
+|-------|------|---------|
+| `questionType: 0` | `QuestionType.ShortText` | Short free-text answer (manual grading) |
+| `questionType: 1` | `QuestionType.LongText` | Long free-text answer (manual grading) |
+| `questionType: 2` | `QuestionType.MultipleChoice` | Single correct option (auto-graded) |
+| `questionType: 3` | `QuestionType.Checkbox` | One or more correct options (auto-graded, exact match) |
+| `questionType: 4` | `QuestionType.Dropdown` | Single correct option via dropdown (auto-graded) |
