@@ -1,0 +1,236 @@
+### =============================================================
+### AlAshmar API - Flow: Generate Monthly Report
+### =============================================================
+###
+### This file walks through generating monthly reports for:
+###   - A specific student
+###   - A specific teacher
+###   - A specific class (halaqa)
+###   - Overall attendance (all students/teachers)
+###   - Overall points
+###
+### Instructions:
+###   1. Run Step 1 (Login) first and copy the token.
+###   2. Replace the placeholder IDs with real IDs from your DB.
+###   3. Set @reportMonth and @reportYear to the desired period.
+###   4. Run each report request individually.
+### =============================================================
+
+@baseUrl = http://localhost:5107
+
+# Update these variables with real values:
+@authToken   = YOUR_JWT_TOKEN_HERE
+@studentId   = 00000000-0000-0000-0000-000000000001
+@teacherId   = 00000000-0000-0000-0000-000000000011
+@classId     = 00000000-0000-0000-0000-000000000041
+@semesterId  = 00000000-0000-0000-0000-000000000003
+@reportMonth = 3
+@reportYear  = 2025
+
+# -----------------------------------------------------------------
+# STEP 1 - Authenticate
+# -----------------------------------------------------------------
+
+### Step 1: Login
+# Copy the returned "token" value into @authToken above.
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "Admin@1234"
+}
+
+###
+
+# -----------------------------------------------------------------
+# STEP 2 - Student Monthly Report
+# -----------------------------------------------------------------
+
+### Step 2a: Student monthly report (current month)
+GET {{baseUrl}}/api/reports/students/{{studentId}}/monthly
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 2b: Student monthly report (specific month and year)
+GET {{baseUrl}}/api/reports/students/{{studentId}}/monthly?month={{reportMonth}}&year={{reportYear}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 2c: Student all-time aggregated reports for review
+GET {{baseUrl}}/api/reports/students/{{studentId}}/all?periodType=AllTime
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+# -----------------------------------------------------------------
+# STEP 3 - Teacher Monthly Report
+# -----------------------------------------------------------------
+
+### Step 3a: Teacher monthly report (current month)
+GET {{baseUrl}}/api/reports/teachers/{{teacherId}}/monthly
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 3b: Teacher monthly report (specific month and year)
+GET {{baseUrl}}/api/reports/teachers/{{teacherId}}/monthly?month={{reportMonth}}&year={{reportYear}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 3c: Points given by teacher this month
+GET {{baseUrl}}/api/reports/teachers/{{teacherId}}/points?fromDate={{reportYear}}-{{reportMonth}}-01&toDate={{reportYear}}-{{reportMonth}}-31&page=1&pageSize=50
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 3d: Students progress under teacher (this semester)
+GET {{baseUrl}}/api/reports/teachers/{{teacherId}}/students-progress?semesterId={{semesterId}}&page=1&pageSize=50
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+# -----------------------------------------------------------------
+# STEP 4 - Class (Halaqa) Monthly Report
+# -----------------------------------------------------------------
+
+### Step 4a: Class monthly report (current month)
+GET {{baseUrl}}/api/reports/classes/{{classId}}/monthly
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 4b: Class monthly report (specific month and year)
+GET {{baseUrl}}/api/reports/classes/{{classId}}/monthly?month={{reportMonth}}&year={{reportYear}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 4c: Class memorization summary for semester
+GET {{baseUrl}}/api/reports/classes/{{classId}}/memorization?semesterId={{semesterId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 4d: Class points summary for semester
+GET {{baseUrl}}/api/reports/classes/{{classId}}/points?semesterId={{semesterId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+# -----------------------------------------------------------------
+# STEP 5 - Attendance Monthly Report (whole academy)
+# -----------------------------------------------------------------
+
+### Step 5a: Overall attendance monthly report (current month)
+GET {{baseUrl}}/api/reports/attendance/monthly
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 5b: Overall attendance monthly report (specific month and year)
+GET {{baseUrl}}/api/reports/attendance/monthly?month={{reportMonth}}&year={{reportYear}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 5c: Attendance summary for the month (date range)
+GET {{baseUrl}}/api/reports/attendance/summary?fromDate={{reportYear}}-{{reportMonth}}-01&toDate={{reportYear}}-{{reportMonth}}-31
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+# -----------------------------------------------------------------
+# STEP 6 - Points Monthly Report (whole academy)
+# -----------------------------------------------------------------
+
+### Step 6a: Overall points monthly report (current month)
+GET {{baseUrl}}/api/reports/points/monthly
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 6b: Overall points monthly report (specific month and year)
+GET {{baseUrl}}/api/reports/points/monthly?month={{reportMonth}}&year={{reportYear}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 6c: Points overview for this semester
+GET {{baseUrl}}/api/reports/points/overview?semesterId={{semesterId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 6d: Top students by points this semester
+GET {{baseUrl}}/api/reports/points/top-students?semesterId={{semesterId}}&top=10
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 6e: Top teachers by points this semester
+GET {{baseUrl}}/api/reports/points/top-teachers?semesterId={{semesterId}}&top=10
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+# -----------------------------------------------------------------
+# STEP 7 - Semester Overview (bonus - full semester summary)
+# -----------------------------------------------------------------
+
+### Step 7a: Full semester overview
+GET {{baseUrl}}/api/reports/semesters/{{semesterId}}/overview
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 7b: Semester statistics
+GET {{baseUrl}}/api/reports/semesters/{{semesterId}}/statistics
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 7c: Top 10 students in semester
+GET {{baseUrl}}/api/reports/semesters/{{semesterId}}/top-students?top=10
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 7d: Top 10 teachers in semester
+GET {{baseUrl}}/api/reports/semesters/{{semesterId}}/top-teachers?top=10
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 7e: Class summaries in semester
+GET {{baseUrl}}/api/reports/semesters/{{semesterId}}/classes
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###

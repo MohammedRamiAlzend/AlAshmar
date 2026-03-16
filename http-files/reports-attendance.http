@@ -1,0 +1,109 @@
+### =============================================================
+### AlAshmar API - Attendance Reports Controller
+### Base URL: http://localhost:5107
+### =============================================================
+
+@baseUrl = http://localhost:5107
+@authToken = YOUR_JWT_TOKEN_HERE
+
+# =============================================================
+# AttendanceReportsController  - Attendance Reports
+# =============================================================
+
+### Get attendance overview (all time)
+GET {{baseUrl}}/api/reports/attendance/overview
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get attendance overview (date range)
+GET {{baseUrl}}/api/reports/attendance/overview?fromDate=2025-01-01&toDate=2025-12-31
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get student attendance report (paged)
+GET {{baseUrl}}/api/reports/attendance/students?page=1&pageSize=10
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get student attendance report (date range, paged)
+GET {{baseUrl}}/api/reports/attendance/students?fromDate=2025-01-01&toDate=2025-12-31&page=1&pageSize=10
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get teacher attendance report (paged)
+GET {{baseUrl}}/api/reports/attendance/teachers?page=1&pageSize=10
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get teacher attendance report (date range, paged)
+GET {{baseUrl}}/api/reports/attendance/teachers?fromDate=2025-01-01&toDate=2025-12-31&page=1&pageSize=10
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get attendance summary
+GET {{baseUrl}}/api/reports/attendance/summary
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get attendance summary (date range)
+GET {{baseUrl}}/api/reports/attendance/summary?fromDate=2025-01-01&toDate=2025-12-31
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get daily attendance (today)
+GET {{baseUrl}}/api/reports/attendance/daily
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get daily attendance (specific date)
+GET {{baseUrl}}/api/reports/attendance/daily?date=2025-03-15
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get weekly attendance (current week)
+GET {{baseUrl}}/api/reports/attendance/weekly
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get weekly attendance (specific week start)
+GET {{baseUrl}}/api/reports/attendance/weekly?weekStart=2025-03-10
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get monthly attendance (current month)
+GET {{baseUrl}}/api/reports/attendance/monthly
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get monthly attendance (specific month and year)
+GET {{baseUrl}}/api/reports/attendance/monthly?month=3&year=2025
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###

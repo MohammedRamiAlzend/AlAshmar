@@ -1,0 +1,61 @@
+### =============================================================
+### AlAshmar API - Semester Reports Controller
+### Base URL: http://localhost:5107
+### =============================================================
+
+@baseUrl = http://localhost:5107
+@authToken  = YOUR_JWT_TOKEN_HERE
+@semesterId = 00000000-0000-0000-0000-000000000003
+
+# =============================================================
+# SemesterReportsController  - Semester-Level Reports
+# =============================================================
+
+### Get semester overview report
+GET {{baseUrl}}/api/reports/semesters/{{semesterId}}/overview
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get semester statistics
+GET {{baseUrl}}/api/reports/semesters/{{semesterId}}/statistics
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get top students in semester (default top count)
+GET {{baseUrl}}/api/reports/semesters/{{semesterId}}/top-students
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get top students in semester (custom top count)
+GET {{baseUrl}}/api/reports/semesters/{{semesterId}}/top-students?top=5
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get top teachers in semester (default top count)
+GET {{baseUrl}}/api/reports/semesters/{{semesterId}}/top-teachers
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get top teachers in semester (custom top count)
+GET {{baseUrl}}/api/reports/semesters/{{semesterId}}/top-teachers?top=5
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get class summaries in semester
+GET {{baseUrl}}/api/reports/semesters/{{semesterId}}/classes
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###

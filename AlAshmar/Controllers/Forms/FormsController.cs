@@ -52,6 +52,10 @@ public class FormsController : ControllerBase
             return result.TopError.Type == ErrorKind.NotFound ? NotFound(result.Errors) : BadRequest(result.Errors);
 
         var form = result.Value;
+
+        if (form.FormType == FormType.Quiz && !(User.Identity?.IsAuthenticated ?? false))
+            return Unauthorized();
+
         if (!form.IsActive)
             return BadRequest("Form is not active.");
 
@@ -221,11 +225,13 @@ public class FormQuestionOptionsController : ControllerBase
 public class FormResponsesController : ControllerBase
 {
     private readonly IFormResponseService _service;
+    private readonly IFormService _formService;
     private readonly IMapper _mapper;
 
-    public FormResponsesController(IFormResponseService service, IMapper mapper)
+    public FormResponsesController(IFormResponseService service, IFormService formService, IMapper mapper)
     {
         _service = service;
+        _formService = formService;
         _mapper = mapper;
     }
 
@@ -249,6 +255,13 @@ public class FormResponsesController : ControllerBase
     [HttpPost("submit")]
     public async Task<ActionResult<FormResponseDto>> Submit([FromBody] SubmitFormResponseDto dto, CancellationToken cancellationToken)
     {
+        if (!(User.Identity?.IsAuthenticated ?? false))
+        {
+            var formResult = await _formService.GetByIdAsync(dto.FormId, cancellationToken);
+            if (!formResult.IsError && formResult.Value?.FormType == FormType.Quiz)
+                return Unauthorized();
+        }
+
         var result = await _service.SubmitAsync(dto, cancellationToken);
         if (result.IsError)
             return result.TopError.Type == ErrorKind.NotFound ? NotFound(result.Errors) : BadRequest(result.Errors);

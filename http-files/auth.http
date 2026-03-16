@@ -1,0 +1,88 @@
+### =============================================================
+### AlAshmar API - Authentication
+### Base URL: http://localhost:5107
+### =============================================================
+###
+### HOW TO USE:
+###   1. Run one of the login requests below.
+###   2. From the response body, copy the value of "token".
+###   3. Paste it into any other .http file as the value of @authToken:
+###
+###        @authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+###
+###   4. All protected endpoints use:
+###        Authorization: Bearer {{authToken}}
+###
+###   Token is valid for 24 hours (configured in appsettings.json).
+### =============================================================
+
+@baseUrl = http://localhost:5107
+
+# -----------------------------------------------------------------
+# MANAGER / ADMIN LOGIN
+# Managers have full access to all endpoints.
+# -----------------------------------------------------------------
+
+### Login as admin / manager
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "Admin@1234"
+}
+
+###
+
+# -----------------------------------------------------------------
+# TEACHER LOGIN
+# Teachers can manage their own profile and classes.
+# Default credentials set when the teacher is created:
+#   username = NationalityNumber
+#   password = NationalityNumber
+# -----------------------------------------------------------------
+
+### Login as teacher
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "9876543210",
+  "password": "9876543210"
+}
+
+###
+
+# -----------------------------------------------------------------
+# STUDENT LOGIN
+# Students can view their own data and submit quiz/form responses.
+# Default credentials set when the student is registered:
+#   username = NationalityNumber
+#   password = NationalityNumber
+# -----------------------------------------------------------------
+
+### Login as student
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "4455667788",
+  "password": "4455667788"
+}
+
+###
+
+# -----------------------------------------------------------------
+# VERIFY TOKEN
+# Use any authenticated endpoint to confirm the token is valid.
+# Replace YOUR_JWT_TOKEN_HERE with the token from a login response.
+# -----------------------------------------------------------------
+
+@authToken = YOUR_JWT_TOKEN_HERE
+
+### Verify token - list managers (requires valid auth)
+GET {{baseUrl}}/api/managers
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###

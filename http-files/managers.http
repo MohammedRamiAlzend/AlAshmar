@@ -1,0 +1,98 @@
+### =============================================================
+### AlAshmar API - Managers Controller
+### Base URL: http://localhost:5107
+### =============================================================
+
+@baseUrl = http://localhost:5107
+@authToken = YOUR_JWT_TOKEN_HERE
+@managerId = 00000000-0000-0000-0000-000000000021
+
+# =============================================================
+# ManagerController  - CRUD
+# =============================================================
+
+### Get all managers
+GET {{baseUrl}}/api/managers
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get manager by ID
+GET {{baseUrl}}/api/managers/{{managerId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Create manager
+POST {{baseUrl}}/api/managers
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Khalid Al-Rashid",
+  "userName": "khalid.manager",
+  "password": "Manager@1234"
+}
+
+###
+
+### Update manager name
+PUT {{baseUrl}}/api/managers/{{managerId}}
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Khalid Al-Rashid Updated"
+}
+
+###
+
+### Delete manager
+DELETE {{baseUrl}}/api/managers/{{managerId}}
+Authorization: Bearer {{authToken}}
+
+###
+
+### Update manager password
+PUT {{baseUrl}}/api/managers/{{managerId}}/password
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "newPassword": "NewManager@5678"
+}
+
+###
+
+# =============================================================
+# ManagerAttachmentController  - Attachments
+# =============================================================
+
+### Add attachment to manager (multipart/form-data)
+POST {{baseUrl}}/api/managers/{{managerId}}/attachments
+Authorization: Bearer {{authToken}}
+Content-Type: multipart/form-data; boundary=----AttachBoundary
+
+------AttachBoundary
+Content-Disposition: form-data; name="file"; filename="manager-doc.pdf"
+Content-Type: application/pdf
+
+< ./sample-document.pdf
+------AttachBoundary--
+
+###
+
+### Get manager attachments
+GET {{baseUrl}}/api/managers/{{managerId}}/attachments
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Download manager attachments as ZIP
+GET {{baseUrl}}/api/managers/{{managerId}}/attachments/zip
+Authorization: Bearer {{authToken}}
+
+###

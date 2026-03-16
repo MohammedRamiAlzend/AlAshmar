@@ -1,0 +1,451 @@
+### =============================================================
+### AlAshmar API - Flow: Create Survey and Collect Responses
+### =============================================================
+###
+### This file walks through the complete survey lifecycle:
+###
+###   ADMIN/TEACHER SIDE (run once to set up the survey)
+###   Step 1  - Login as admin/manager
+###   Step 2  - Create the survey form  (FormType = 0)
+###   Step 3  - Add a multiple-choice question
+###   Step 4  - Add a checkbox (multi-select) question
+###   Step 5  - Add a short-text feedback question
+###   Step 6  - Share the survey (get the access token)
+###
+###   RESPONDENT SIDE — no login required (anonymous access)
+###   Step 7  - Fetch the survey via the public access token
+###   Step 8  - Fetch questions
+###   Step 9  - Fetch options for choice questions
+###   Step 10 - Submit a response (student)
+###   Step 11 - Submit a response (teacher)
+###
+###   ADMIN SIDE — Review collected responses
+###   Step 12 - View all responses
+###   Step 13 - View a specific response
+###   Step 14 - Delete a response if needed
+###
+### Instructions:
+###   Run each request in order. After each step that creates a
+###   resource, copy the returned "id" / "accessToken" and update
+###   the matching variable below.
+### =============================================================
+
+@baseUrl = http://localhost:5107
+
+# ── Update these after each step ──────────────────────────────
+@adminToken    = YOUR_ADMIN_JWT_TOKEN_HERE
+
+@surveyFormId  = SURVEY_FORM_ID_FROM_STEP_2
+@accessToken   = ACCESS_TOKEN_FROM_STEP_2
+
+@q1Id          = QUESTION_1_ID_FROM_STEP_3
+@q2Id          = QUESTION_2_ID_FROM_STEP_4
+@q3Id          = QUESTION_3_ID_FROM_STEP_5
+
+# Option IDs filled in after Step 9
+@q1Option1     = Q1_OPTION_1_ID
+@q1Option2     = Q1_OPTION_2_ID
+@q1Option3     = Q1_OPTION_3_ID
+
+@q2OptionA     = Q2_OPTION_A_ID
+@q2OptionB     = Q2_OPTION_B_ID
+@q2OptionC     = Q2_OPTION_C_ID
+
+# Respondent IDs (students/teachers already in the system)
+@studentId     = 00000000-0000-0000-0000-000000000001
+@teacherId     = 00000000-0000-0000-0000-000000000011
+@managerId     = 00000000-0000-0000-0000-000000000021
+@halaqaId      = 00000000-0000-0000-0000-000000000041
+@courseId      = 00000000-0000-0000-0000-000000000031
+
+@responseId    = RESPONSE_ID_FROM_STEP_10
+
+# =============================================================
+#  ADMIN/TEACHER SIDE — Build the survey
+# =============================================================
+
+# -----------------------------------------------------------------
+# STEP 1 - Login as admin/manager
+# -----------------------------------------------------------------
+
+### Step 1: Admin login
+# Copy the returned "token" into @adminToken above.
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "Admin@1234"
+}
+
+###
+
+# -----------------------------------------------------------------
+# STEP 2 - Create the survey form
+#
+#   formType   0  = Normal form / survey  (no auto-grading)
+#   formType   1  = Quiz                  (auto-grades)
+#   audience   2  = Both students and teachers
+#   allowMultipleResponses true = respondent can submit again
+# -----------------------------------------------------------------
+
+### Step 2: Create survey
+# Copy "id" into @surveyFormId and "accessToken" into @accessToken.
+POST {{baseUrl}}/api/forms
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "End-of-Month Feedback Survey",
+  "description": "Please share your feedback about this month's sessions to help us improve",
+  "formType": 0,
+  "audience": 2,
+  "timerMinutes": null,
+  "isActive": true,
+  "allowMultipleResponses": false,
+  "startsAt": null,
+  "endsAt": null,
+  "createdByManagerId": "{{managerId}}",
+  "halaqaId": "{{halaqaId}}",
+  "courseId": "{{courseId}}"
+}
+
+###
+
+# -----------------------------------------------------------------
+# STEP 3 - Add a single-select (multiple-choice) question
+#   For surveys, "isCorrect" is not meaningful — set all to false.
+#   Points is typically null for surveys.
+# -----------------------------------------------------------------
+
+### Step 3: Add rating question (multiple-choice)
+# Copy the returned "id" into @q1Id above.
+POST {{baseUrl}}/api/formquestions
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "formId": "{{surveyFormId}}",
+  "text": "How would you rate the quality of this month's sessions?",
+  "description": "1 = Poor, 5 = Excellent",
+  "questionType": 2,
+  "order": 1,
+  "isRequired": true,
+  "points": null,
+  "options": [
+    {
+      "questionId": "00000000-0000-0000-0000-000000000000",
+      "text": "1 - Poor",
+      "order": 1,
+      "isCorrect": false
+    },
+    {
+      "questionId": "00000000-0000-0000-0000-000000000000",
+      "text": "2 - Below Average",
+      "order": 2,
+      "isCorrect": false
+    },
+    {
+      "questionId": "00000000-0000-0000-0000-000000000000",
+      "text": "3 - Average",
+      "order": 3,
+      "isCorrect": false
+    },
+    {
+      "questionId": "00000000-0000-0000-0000-000000000000",
+      "text": "4 - Good",
+      "order": 4,
+      "isCorrect": false
+    },
+    {
+      "questionId": "00000000-0000-0000-0000-000000000000",
+      "text": "5 - Excellent",
+      "order": 5,
+      "isCorrect": false
+    }
+  ]
+}
+
+###
+
+# -----------------------------------------------------------------
+# STEP 4 - Add a multi-select (checkbox) question
+# -----------------------------------------------------------------
+
+### Step 4: Add multi-select question (checkbox)
+# Copy the returned "id" into @q2Id above.
+POST {{baseUrl}}/api/formquestions
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "formId": "{{surveyFormId}}",
+  "text": "Which topics would you like to focus on next month? (select all that apply)",
+  "description": null,
+  "questionType": 3,
+  "order": 2,
+  "isRequired": true,
+  "points": null,
+  "options": [
+    {
+      "questionId": "00000000-0000-0000-0000-000000000000",
+      "text": "Quran Memorization (Hifz)",
+      "order": 1,
+      "isCorrect": false
+    },
+    {
+      "questionId": "00000000-0000-0000-0000-000000000000",
+      "text": "Tajweed Rules",
+      "order": 2,
+      "isCorrect": false
+    },
+    {
+      "questionId": "00000000-0000-0000-0000-000000000000",
+      "text": "Hadith Studies",
+      "order": 3,
+      "isCorrect": false
+    },
+    {
+      "questionId": "00000000-0000-0000-0000-000000000000",
+      "text": "Islamic History (Seerah)",
+      "order": 4,
+      "isCorrect": false
+    },
+    {
+      "questionId": "00000000-0000-0000-0000-000000000000",
+      "text": "Arabic Language",
+      "order": 5,
+      "isCorrect": false
+    }
+  ]
+}
+
+###
+
+# -----------------------------------------------------------------
+# STEP 5 - Add an open-ended text question
+# -----------------------------------------------------------------
+
+### Step 5: Add open-ended feedback question
+# Copy the returned "id" into @q3Id above.
+POST {{baseUrl}}/api/formquestions
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "formId": "{{surveyFormId}}",
+  "text": "Do you have any suggestions or comments for the teaching team?",
+  "description": "Your feedback helps us improve",
+  "questionType": 1,
+  "order": 3,
+  "isRequired": false,
+  "points": null,
+  "options": []
+}
+
+###
+
+# -----------------------------------------------------------------
+# STEP 6 - Verify the survey is ready
+#   Note the "accessToken" in the form response — share this GUID
+#   with respondents so they can access the survey anonymously.
+# -----------------------------------------------------------------
+
+### Step 6: Get survey to verify + get the access token
+GET {{baseUrl}}/api/forms/{{surveyFormId}}
+Authorization: Bearer {{adminToken}}
+Accept: application/json
+
+###
+
+### Step 6b: Get all questions to confirm they were added
+GET {{baseUrl}}/api/formquestions/by-form/{{surveyFormId}}
+Authorization: Bearer {{adminToken}}
+Accept: application/json
+
+###
+
+# =============================================================
+#  RESPONDENT SIDE — Submit a response (anonymous, no login needed)
+# =============================================================
+
+# -----------------------------------------------------------------
+# STEP 7 - Fetch the survey via its public access token
+#   Normal surveys (FormType=0) allow anonymous access.
+#   Only Quiz forms (FormType=1) require authentication.
+#   Share this URL with respondents:
+#   GET {{baseUrl}}/api/forms/access/<accessToken>
+# -----------------------------------------------------------------
+
+### Step 7: Get survey via access token (no auth needed — surveys are anonymous)
+GET {{baseUrl}}/api/forms/access/{{accessToken}}
+Accept: application/json
+
+###
+
+# -----------------------------------------------------------------
+# STEP 8 - Fetch questions for the survey
+# -----------------------------------------------------------------
+
+### Step 8: Get survey questions
+GET {{baseUrl}}/api/formquestions/by-form/{{surveyFormId}}
+Accept: application/json
+
+###
+
+# -----------------------------------------------------------------
+# STEP 9 - Fetch answer options for choice questions
+# -----------------------------------------------------------------
+
+### Step 9a: Get options for the rating question
+GET {{baseUrl}}/api/formquestionoptions/by-question/{{q1Id}}
+Accept: application/json
+
+###
+
+### Step 9b: Get options for the topic preference question
+GET {{baseUrl}}/api/formquestionoptions/by-question/{{q2Id}}
+Accept: application/json
+
+###
+
+# -----------------------------------------------------------------
+# STEP 10 - Submit a response as a student
+#   Surveys (FormType=0) allow anonymous submission — no auth needed.
+#   Quiz forms (FormType=1) require authentication at this endpoint.
+#   Set respondedByStudentId for student responses.
+#   Set respondedByTeacherId for teacher responses.
+#   Both can be null for truly anonymous responses.
+# -----------------------------------------------------------------
+
+### Step 10: Submit survey response (student)
+# Copy the returned "id" into @responseId above.
+POST {{baseUrl}}/api/formresponses/submit
+Content-Type: application/json
+
+{
+  "formId": "{{surveyFormId}}",
+  "respondedByStudentId": "{{studentId}}",
+  "respondedByTeacherId": null,
+  "timeSpentSeconds": 180,
+  "answers": [
+    {
+      "questionId": "{{q1Id}}",
+      "textAnswer": null,
+      "selectedOptionIds": ["{{q1Option3}}"]
+    },
+    {
+      "questionId": "{{q2Id}}",
+      "textAnswer": null,
+      "selectedOptionIds": [
+        "{{q2OptionA}}",
+        "{{q2OptionB}}"
+      ]
+    },
+    {
+      "questionId": "{{q3Id}}",
+      "textAnswer": "The sessions are great. Could we have more practice time for memorization?",
+      "selectedOptionIds": []
+    }
+  ]
+}
+
+###
+
+# -----------------------------------------------------------------
+# STEP 11 - Submit a response as a teacher
+# -----------------------------------------------------------------
+
+### Step 11: Submit survey response (teacher)
+POST {{baseUrl}}/api/formresponses/submit
+Content-Type: application/json
+
+{
+  "formId": "{{surveyFormId}}",
+  "respondedByStudentId": null,
+  "respondedByTeacherId": "{{teacherId}}",
+  "timeSpentSeconds": 120,
+  "answers": [
+    {
+      "questionId": "{{q1Id}}",
+      "textAnswer": null,
+      "selectedOptionIds": ["{{q1Option2}}"]
+    },
+    {
+      "questionId": "{{q2Id}}",
+      "textAnswer": null,
+      "selectedOptionIds": [
+        "{{q2OptionA}}",
+        "{{q2OptionC}}"
+      ]
+    },
+    {
+      "questionId": "{{q3Id}}",
+      "textAnswer": "Would appreciate more structured lesson plans and teaching materials.",
+      "selectedOptionIds": []
+    }
+  ]
+}
+
+###
+
+# =============================================================
+#  ADMIN SIDE — Review collected responses
+# =============================================================
+
+# -----------------------------------------------------------------
+# STEP 12 - View all responses for the survey
+# -----------------------------------------------------------------
+
+### Step 12: Get all responses for this survey
+GET {{baseUrl}}/api/formresponses/by-form/{{surveyFormId}}
+Authorization: Bearer {{adminToken}}
+Accept: application/json
+
+###
+
+# -----------------------------------------------------------------
+# STEP 13 - View a specific response in detail
+# -----------------------------------------------------------------
+
+### Step 13: Get specific response
+GET {{baseUrl}}/api/formresponses/{{responseId}}
+Authorization: Bearer {{adminToken}}
+Accept: application/json
+
+###
+
+# -----------------------------------------------------------------
+# STEP 14 - Delete a response if needed
+# -----------------------------------------------------------------
+
+### Step 14: Delete a response
+DELETE {{baseUrl}}/api/formresponses/{{responseId}}
+Authorization: Bearer {{adminToken}}
+
+###
+
+# -----------------------------------------------------------------
+# OPTIONAL - Close the survey when done collecting responses
+# -----------------------------------------------------------------
+
+### Optional: Deactivate survey
+PUT {{baseUrl}}/api/forms/{{surveyFormId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "End-of-Month Feedback Survey",
+  "description": "Please share your feedback about this month's sessions to help us improve",
+  "formType": 0,
+  "audience": 2,
+  "timerMinutes": null,
+  "isActive": false,
+  "allowMultipleResponses": false,
+  "startsAt": null,
+  "endsAt": null,
+  "halaqaId": "{{halaqaId}}",
+  "courseId": "{{courseId}}"
+}
+
+###

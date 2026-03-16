@@ -1,0 +1,146 @@
+### =============================================================
+### AlAshmar API - Flow: Generate Daily Report
+### =============================================================
+###
+### This file walks through generating daily reports for:
+###   - A specific student
+###   - A specific teacher
+###   - A specific class (halaqa)
+###   - Overall attendance (all students/teachers)
+###   - Overall points
+###
+### Instructions:
+###   1. Run Step 1 (Login) first and copy the token.
+###   2. Replace the placeholder IDs with real IDs from your DB.
+###   3. Run each report request individually.
+### =============================================================
+
+@baseUrl = http://localhost:5107
+
+# Update these variables with real values:
+@authToken  = YOUR_JWT_TOKEN_HERE
+@studentId  = 00000000-0000-0000-0000-000000000001
+@teacherId  = 00000000-0000-0000-0000-000000000011
+@classId    = 00000000-0000-0000-0000-000000000041
+# Date format: YYYY-MM-DD  (leave blank to default to today)
+@reportDate = 2025-03-15
+
+# -----------------------------------------------------------------
+# STEP 1 - Authenticate
+# -----------------------------------------------------------------
+
+### Step 1: Login
+# Copy the returned "token" value into @authToken above.
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "Admin@1234"
+}
+
+###
+
+# -----------------------------------------------------------------
+# STEP 2 - Student Daily Report
+# -----------------------------------------------------------------
+
+### Step 2a: Student daily report (today)
+GET {{baseUrl}}/api/reports/students/{{studentId}}/daily
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 2b: Student daily report (specific date)
+GET {{baseUrl}}/api/reports/students/{{studentId}}/daily?date={{reportDate}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 2c: Export student daily report as JSON file
+GET {{baseUrl}}/api/reports/students/{{studentId}}/daily/export?date={{reportDate}}&format=json
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 2d: Export student daily report as XML file
+GET {{baseUrl}}/api/reports/students/{{studentId}}/daily/export?date={{reportDate}}&format=xml
+Authorization: Bearer {{authToken}}
+Accept: application/xml
+
+###
+
+# -----------------------------------------------------------------
+# STEP 3 - Teacher Daily Report
+# -----------------------------------------------------------------
+
+### Step 3a: Teacher daily report (today)
+GET {{baseUrl}}/api/reports/teachers/{{teacherId}}/daily
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 3b: Teacher daily report (specific date)
+GET {{baseUrl}}/api/reports/teachers/{{teacherId}}/daily?date={{reportDate}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+# -----------------------------------------------------------------
+# STEP 4 - Class (Halaqa) Daily Report
+# -----------------------------------------------------------------
+
+### Step 4a: Class daily report (today)
+GET {{baseUrl}}/api/reports/classes/{{classId}}/daily
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 4b: Class daily report (specific date)
+GET {{baseUrl}}/api/reports/classes/{{classId}}/daily?date={{reportDate}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+# -----------------------------------------------------------------
+# STEP 5 - Attendance Daily Report (whole academy)
+# -----------------------------------------------------------------
+
+### Step 5a: Overall attendance daily report (today)
+GET {{baseUrl}}/api/reports/attendance/daily
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 5b: Overall attendance daily report (specific date)
+GET {{baseUrl}}/api/reports/attendance/daily?date={{reportDate}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+# -----------------------------------------------------------------
+# STEP 6 - Points Daily Report (whole academy)
+# -----------------------------------------------------------------
+
+### Step 6a: Overall points daily report (today)
+GET {{baseUrl}}/api/reports/points/daily
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Step 6b: Overall points daily report (specific date)
+GET {{baseUrl}}/api/reports/points/daily?date={{reportDate}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###

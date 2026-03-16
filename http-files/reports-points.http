@@ -1,0 +1,131 @@
+### =============================================================
+### AlAshmar API - Points Reports Controller
+### Base URL: http://localhost:5107
+### =============================================================
+
+@baseUrl = http://localhost:5107
+@authToken  = YOUR_JWT_TOKEN_HERE
+@semesterId = 00000000-0000-0000-0000-000000000003
+
+# =============================================================
+# PointsReportsController  - Points Reports
+# =============================================================
+
+### Get points overview (all time)
+GET {{baseUrl}}/api/reports/points/overview
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get points overview (specific semester)
+GET {{baseUrl}}/api/reports/points/overview?semesterId={{semesterId}}
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get points overview (date range)
+GET {{baseUrl}}/api/reports/points/overview?fromDate=2025-01-01&toDate=2025-12-31
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get points summary
+GET {{baseUrl}}/api/reports/points/summary
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get student points report (paged)
+GET {{baseUrl}}/api/reports/points/students?page=1&pageSize=10
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get teacher points report (paged)
+GET {{baseUrl}}/api/reports/points/teachers?page=1&pageSize=10
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get points breakdown by category
+GET {{baseUrl}}/api/reports/points/by-category
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get top students by points (default count)
+GET {{baseUrl}}/api/reports/points/top-students
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get top students by points (specific semester, custom count)
+GET {{baseUrl}}/api/reports/points/top-students?semesterId={{semesterId}}&top=10
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get top teachers by points (default count)
+GET {{baseUrl}}/api/reports/points/top-teachers
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get top teachers by points (specific semester, custom count)
+GET {{baseUrl}}/api/reports/points/top-teachers?semesterId={{semesterId}}&top=10
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get daily points (today)
+GET {{baseUrl}}/api/reports/points/daily
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get daily points (specific date)
+GET {{baseUrl}}/api/reports/points/daily?date=2025-03-15
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get weekly points (current week)
+GET {{baseUrl}}/api/reports/points/weekly
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get weekly points (specific week start)
+GET {{baseUrl}}/api/reports/points/weekly?weekStart=2025-03-10
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get monthly points (current month)
+GET {{baseUrl}}/api/reports/points/monthly
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
+
+### Get monthly points (specific month and year)
+GET {{baseUrl}}/api/reports/points/monthly?month=3&year=2025
+Authorization: Bearer {{authToken}}
+Accept: application/json
+
+###
