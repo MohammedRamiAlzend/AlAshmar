@@ -61,8 +61,8 @@ public class GetStudentByIdHandler : IRequestHandler<GetStudentByIdQuery, Result
                     sa.Attachment.Type,
                     sa.Attachment.SafeName,
                     sa.Attachment.OriginalName,
-                    sa.Attachment.ExtentionId,
-                    sa.Attachment.Extention != null ? new AllowableExtentionDto(sa.Attachment.Extention.Id, sa.Attachment.Extention.ExtName) : null
+                    sa.Attachment.ExtensionId,
+                    sa.Attachment.Extension != null ? new AllowableExtensionDto(sa.Attachment.Extension.Id, sa.Attachment.Extension.ExtName) : null
                 )
             )).ToList(),
             student.StudentHadiths.Select(h => new StudentHadithDetailDto(

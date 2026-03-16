@@ -4,10 +4,10 @@ using AlAshmar.Domain.Entities.Common;
 
 namespace AlAshmar.Controllers;
 
-public class AllowableExtentionsController(IAllowableExtentionService service, IMapper mapper) :
-    BaseController<AllowableExtention, AllowableExtentionDto, CreateAllowableExtentionDto, UpdateAllowableExtentionDto, Guid>(service, mapper)
+public class AllowableExtensionsController(IAllowableExtensionService service, IMapper mapper) :
+    BaseController<AllowableExtension, AllowableExtensionDto, CreateAllowableExtensionDto, UpdateAllowableExtensionDto, Guid>(service, mapper)
 {
-    protected override Guid GetId(AllowableExtentionDto dto) => dto.Id;
+    protected override Guid GetId(AllowableExtensionDto dto) => dto.Id;
 }
 
 public class ContactInfosController(IContactInfoService service, IMapper mapper) :

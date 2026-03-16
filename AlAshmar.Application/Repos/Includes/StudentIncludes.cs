@@ -35,7 +35,7 @@ public sealed class StudentIncludes : IEntityIncludes<Student>
         Add(q => q.Include(s => s.StudentContactInfos).ThenInclude(sc => sc.ContactInfo));
 
     public StudentIncludes WithAttachments() =>
-        Add(q => q.Include(s => s.StudentAttachments).ThenInclude(sa => sa.Attachment).ThenInclude(a => a.Extention));
+        Add(q => q.Include(s => s.StudentAttachments).ThenInclude(sa => sa.Attachment).ThenInclude(a => a.Extension));
 
     public StudentIncludes WithHadiths() =>
         Add(q => q.Include(s => s.StudentHadiths).ThenInclude(h => h.Hadith).ThenInclude(h => h.Book));

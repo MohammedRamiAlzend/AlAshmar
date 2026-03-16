@@ -12,7 +12,7 @@ public class GetTeacherAttachmentsHandler(IRepositoryBase<Teacher, Guid> reposit
     {
         var teacher = await repository.GetAsync(
             t => t.Id == query.TeacherId,
-            q => q.Include(t => t.TeacherAttachments).ThenInclude(ta => ta.Attachment).ThenInclude(a => a.Extention));
+            q => q.Include(t => t.TeacherAttachments).ThenInclude(ta => ta.Attachment).ThenInclude(a => a.Extension));
 
         if (teacher.IsError) return teacher.Errors;
         if (teacher.Value == null)
@@ -23,14 +23,14 @@ public class GetTeacherAttachmentsHandler(IRepositoryBase<Teacher, Guid> reposit
                 ta.TeacherId,
                 ta.AttachmentId,
                 null,
-                ta.Attachment != null ? new AttacmentDto(
+                ta.Attachment != null ? new AttachmentDto(
                     ta.Attachment.Id,
                     ta.Attachment.Path,
                     ta.Attachment.Type,
                     ta.Attachment.SafeName,
                     ta.Attachment.OriginalName,
-                    ta.Attachment.ExtentionId,
-                    ta.Attachment.Extention != null ? new AllowableExtentionDto(ta.Attachment.Extention.Id, ta.Attachment.Extention.ExtName) : null) : null)).ToList();
+                    ta.Attachment.ExtensionId,
+                    ta.Attachment.Extension != null ? new AllowableExtensionDto(ta.Attachment.Extension.Id, ta.Attachment.Extension.ExtName) : null) : null)).ToList();
 
         return attachmentDtos;
     }

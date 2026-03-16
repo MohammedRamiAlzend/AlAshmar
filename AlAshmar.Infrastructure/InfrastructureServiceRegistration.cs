@@ -30,14 +30,14 @@ public static class InfrastructureServiceRegistration
         services.AddScoped<IStudentManagementService, StudentManagementService>();
         services.AddScoped<ITeacherManagementService, TeacherManagementService>();
 
-        services.AddScoped<IAllowableExtentionService, AllowableExtentionService>();
-        services.AddScoped<IAttacmentService, AttacmentService>();
+        services.AddScoped<IAllowableExtensionService, AllowableExtensionService>();
+        services.AddScoped<IAttachmentService, AttachmentService>();
         services.AddScoped<IContactInfoService, ContactInfoService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IManagerService, ManagerService>();
         services.AddScoped<ITeacherService, TeacherService>();
-        services.AddScoped<ITeacherAttencanceService, TeacherAttencanceService>();
+        services.AddScoped<ITeacherAttendanceService, TeacherAttendanceService>();
         services.AddScoped<IClassTeacherEnrollmentService, ClassTeacherEnrollmentService>();
         services.AddScoped<IStudentAttendanceService, StudentAttendanceService>();
         services.AddScoped<IClassStudentEnrollmentService, ClassStudentEnrollmentService>();

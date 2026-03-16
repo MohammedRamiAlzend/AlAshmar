@@ -14,13 +14,13 @@ public class EntityMappingProfile : Profile
     public EntityMappingProfile()
     {
 
-        CreateMap<AllowableExtention, AllowableExtentionDto>().ReverseMap();
-        CreateMap<CreateAllowableExtentionDto, AllowableExtention>();
-        CreateMap<UpdateAllowableExtentionDto, AllowableExtention>();
+        CreateMap<AllowableExtension, AllowableExtensionDto>().ReverseMap();
+        CreateMap<CreateAllowableExtensionDto, AllowableExtension>();
+        CreateMap<UpdateAllowableExtensionDto, AllowableExtension>();
 
-        CreateMap<Attacment, AttacmentDto>().ReverseMap();
-        CreateMap<CreateAttacmentDto, Attacment>();
-        CreateMap<UpdateAttacmentDto, Attacment>();
+        CreateMap<Attachment, AttachmentDto>().ReverseMap();
+        CreateMap<CreateAttachmentDto, Attachment>();
+        CreateMap<UpdateAttachmentDto, Attachment>();
 
         CreateMap<ContactInfo, ContactInfoDto>().ReverseMap();
         CreateMap<CreateContactInfoDto, ContactInfo>();
@@ -46,7 +46,7 @@ public class EntityMappingProfile : Profile
 
         CreateMap<TeacherContactInfo, TeacherContactInfoDto>().ReverseMap();
         CreateMap<TeacherAttachment, TeacherAttachmentDto>().ReverseMap();
-        CreateMap<TeacherAttencance, TeacherAttencanceDto>().ReverseMap();
+        CreateMap<TeacherAttendance, TeacherAttendanceDto>().ReverseMap();
         CreateMap<ClassTeacherEnrollment, ClassTeacherEnrollmentDto>().ReverseMap();
 
         CreateMap<CreateStudentDto, Student>();

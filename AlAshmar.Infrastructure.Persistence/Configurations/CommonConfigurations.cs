@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AlAshmar.Infrastructure.Persistence.Configurations;
 
-public class AllowableExtentionConfiguration : IEntityTypeConfiguration<AllowableExtention>
+public class AllowableExtensionConfiguration : IEntityTypeConfiguration<AllowableExtension>
 {
-    public void Configure(EntityTypeBuilder<AllowableExtention> builder)
+    public void Configure(EntityTypeBuilder<AllowableExtension> builder)
     {
-        builder.ToTable("AllowableExtentions");
+        builder.ToTable("AllowableExtensions");
 
         builder.HasKey(a => a.Id);
 
@@ -24,9 +24,9 @@ public class AllowableExtentionConfiguration : IEntityTypeConfiguration<Allowabl
     }
 }
 
-public class AttacmentConfiguration : IEntityTypeConfiguration<Attacment>
+public class AttachmentConfiguration : IEntityTypeConfiguration<Attachment>
 {
-    public void Configure(EntityTypeBuilder<Attacment> builder)
+    public void Configure(EntityTypeBuilder<Attachment> builder)
     {
         builder.ToTable("Attachments");
 
@@ -51,9 +51,9 @@ public class AttacmentConfiguration : IEntityTypeConfiguration<Attacment>
             .IsRequired()
             .HasMaxLength(255);
 
-        builder.HasOne(a => a.Extention)
+        builder.HasOne(a => a.Extension)
             .WithMany()
-            .HasForeignKey(a => a.ExtentionId)
+            .HasForeignKey(a => a.ExtensionId)
             .OnDelete(DeleteBehavior.SetNull);
 
         builder.HasIndex(a => a.SafeName);

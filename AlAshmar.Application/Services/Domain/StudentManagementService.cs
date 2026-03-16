@@ -89,7 +89,7 @@ public class StudentManagementService : IStudentManagementService
     private readonly IRepositoryBase<Point, Guid> _pointRepository;
     private readonly IRepositoryBase<StudentClassEventsPoint, Guid> _classEventsRepository;
     private readonly IRepositoryBase<ClassStudentEnrollment, Guid> _enrollmentRepository;
-    private readonly IRepositoryBase<Attacment, Guid> _attachmentRepository;
+    private readonly IRepositoryBase<Attachment, Guid> _attachmentRepository;
 
     public StudentManagementService(
         IRepositoryBase<Student, Guid> studentRepository,
@@ -99,7 +99,7 @@ public class StudentManagementService : IStudentManagementService
         IRepositoryBase<Point, Guid> pointRepository,
         IRepositoryBase<StudentClassEventsPoint, Guid> classEventsRepository,
         IRepositoryBase<ClassStudentEnrollment, Guid> enrollmentRepository,
-        IRepositoryBase<Attacment, Guid> attachmentRepository)
+        IRepositoryBase<Attachment, Guid> attachmentRepository)
     {
         _studentRepository = studentRepository;
         _hadithRepository = hadithRepository;
@@ -168,7 +168,7 @@ public class StudentManagementService : IStudentManagementService
                 sa.StudentId,
                 sa.AttachmentId,
                 null,
-                sa.Attachment != null ? new AttacmentDto(sa.Attachment.Id, sa.Attachment.Path, sa.Attachment.Type, sa.Attachment.SafeName, sa.Attachment.OriginalName, sa.Attachment.ExtentionId, null) : null)).ToList(),
+                sa.Attachment != null ? new AttachmentDto(sa.Attachment.Id, sa.Attachment.Path, sa.Attachment.Type, sa.Attachment.SafeName, sa.Attachment.OriginalName, sa.Attachment.ExtensionId, null) : null)).ToList(),
             s.StudentHadiths.Select(h => new StudentHadithDto(h.Id, h.HadithId, h.StudentId, h.TeacherId, h.ClassId, h.MemorizedAt, h.Status, h.Notes)).ToList(),
             s.StudentQuraanPages.Select(q => new StudentQuraanPageDto(q.Id, q.PageNumber, q.StudentId, q.TeacherId, q.ClassId, q.MemorizedAt, q.Status, q.Notes)).ToList(),
             s.StudentClassEventsPoints.Select(p => new StudentClassEventsPointDto(p.Id, p.StudentId, p.ClassId, p.SmesterId, p.EventId, p.QuranPoints, p.HadithPoints, p.AttendancePoints, p.BehaviorPoints, p.TotalPoints)).ToList(),
@@ -418,13 +418,13 @@ public class StudentManagementService : IStudentManagementService
         if (student.Value == null)
             return ApplicationErrors.StudentNotFound;
 
-        var attachment = new Attacment
+        var attachment = new Attachment
         {
             Path = path,
             Type = type,
             SafeName = safeName,
             OriginalName = originalName,
-            ExtentionId = extensionId
+            ExtensionId = extensionId
         };
 
         var addResult = await _attachmentRepository.AddAsync(attachment);
@@ -463,13 +463,13 @@ public class StudentManagementService : IStudentManagementService
                 sa.StudentId,
                 sa.AttachmentId,
                 null,
-                sa.Attachment != null ? new AttacmentDto(
+                sa.Attachment != null ? new AttachmentDto(
                     sa.Attachment.Id,
                     sa.Attachment.Path,
                     sa.Attachment.Type,
                     sa.Attachment.SafeName,
                     sa.Attachment.OriginalName,
-                    sa.Attachment.ExtentionId,
+                    sa.Attachment.ExtensionId,
                     null) : null)).ToList();
 
         return attachmentDtos;

@@ -14,7 +14,7 @@ namespace AlAshmar.Tests.UseCases.Students;
 public class AddAttachmentHandlerTests
 {
     private readonly Mock<IRepositoryBase<Student, Guid>> _studentRepoMock = new();
-    private readonly Mock<IRepositoryBase<Attacment, Guid>> _attachmentRepoMock = new();
+    private readonly Mock<IRepositoryBase<Attachment, Guid>> _attachmentRepoMock = new();
 
     [Fact]
     public async Task Handle_ExistingStudent_AddsAttachmentAndReturnsSuccess()
@@ -30,7 +30,7 @@ public class AddAttachmentHandlerTests
         };
 
         _studentRepoMock.Setup(r => r.GetByIdAsync(studentId)).ReturnsAsync(student);
-        _attachmentRepoMock.Setup(r => r.AddAsync(It.IsAny<Attacment>())).ReturnsAsync(new Success());
+        _attachmentRepoMock.Setup(r => r.AddAsync(It.IsAny<Attachment>())).ReturnsAsync(new Success());
         _studentRepoMock.Setup(r => r.UpdateAsync(It.IsAny<Student>())).ReturnsAsync(new Updated());
 
         var handler = new AddAttachmentHandler(_studentRepoMock.Object, _attachmentRepoMock.Object);
@@ -39,7 +39,7 @@ public class AddAttachmentHandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         Assert.False(result.IsError);
-        _attachmentRepoMock.Verify(r => r.AddAsync(It.IsAny<Attacment>()), Times.Once);
+        _attachmentRepoMock.Verify(r => r.AddAsync(It.IsAny<Attachment>()), Times.Once);
         _studentRepoMock.Verify(r => r.UpdateAsync(It.IsAny<Student>()), Times.Once);
     }
 
@@ -65,7 +65,7 @@ public class AddAttachmentHandlerTests
         var student = new Student { Id = studentId, Name = "Ahmed", FatherName = "Ali", MotherName = "M", StudentAttachments = new List<StudentAttachment>() };
 
         _studentRepoMock.Setup(r => r.GetByIdAsync(studentId)).ReturnsAsync(student);
-        _attachmentRepoMock.Setup(r => r.AddAsync(It.IsAny<Attacment>()))
+        _attachmentRepoMock.Setup(r => r.AddAsync(It.IsAny<Attachment>()))
             .ReturnsAsync(ApplicationErrors.DatabaseError);
 
         var handler = new AddAttachmentHandler(_studentRepoMock.Object, _attachmentRepoMock.Object);
@@ -140,7 +140,7 @@ public class GetAttachmentsHandlerTests
             StudentAttachments = new List<StudentAttachment>
             {
                 new() { StudentId = studentId, AttachmentId = Guid.NewGuid(),
-                        Attachment = new Attacment { Id = Guid.NewGuid(), Path = "/file.jpg", Type = "image/jpeg", SafeName = "safe.jpg", OriginalName = "orig.jpg" } }
+                        Attachment = new Attachment { Id = Guid.NewGuid(), Path = "/file.jpg", Type = "image/jpeg", SafeName = "safe.jpg", OriginalName = "orig.jpg" } }
             }
         };
 

@@ -76,7 +76,7 @@ public interface ITeacherManagementService
         Guid teacherId,
         CancellationToken cancellationToken = default);
 
-    Task<Result<List<TeacherAttencanceDto>>> GetAttendanceRecordsAsync(
+    Task<Result<List<TeacherAttendanceDto>>> GetAttendanceRecordsAsync(
         Guid teacherId,
         AttendanceFilterParameters filter,
         CancellationToken cancellationToken = default);
@@ -146,19 +146,19 @@ public interface ITeacherManagementService
 public class TeacherManagementService : ITeacherManagementService
 {
     private readonly IRepositoryBase<Teacher, Guid> _teacherRepository;
-    private readonly IRepositoryBase<TeacherAttencance, Guid> _attendanceRepository;
+    private readonly IRepositoryBase<TeacherAttendance, Guid> _attendanceRepository;
     private readonly IRepositoryBase<ClassTeacherEnrollment, Guid> _enrollmentRepository;
     private readonly IRepositoryBase<Point, Guid> _pointRepository;
-    private readonly IRepositoryBase<Attacment, Guid> _attachmentRepository;
+    private readonly IRepositoryBase<Attachment, Guid> _attachmentRepository;
     private readonly IRepositoryBase<ContactInfo, Guid> _contactInfoRepository;
     private readonly IRepositoryBase<ClassStudentEnrollment, Guid> _classStudentEnrollmentRepository;
 
     public TeacherManagementService(
         IRepositoryBase<Teacher, Guid> teacherRepository,
-        IRepositoryBase<TeacherAttencance, Guid> attendanceRepository,
+        IRepositoryBase<TeacherAttendance, Guid> attendanceRepository,
         IRepositoryBase<ClassTeacherEnrollment, Guid> enrollmentRepository,
         IRepositoryBase<Point, Guid> pointRepository,
-        IRepositoryBase<Attacment, Guid> attachmentRepository,
+        IRepositoryBase<Attachment, Guid> attachmentRepository,
         IRepositoryBase<ContactInfo, Guid> contactInfoRepository,
         IRepositoryBase<ClassStudentEnrollment, Guid> classStudentEnrollmentRepository)
     {
@@ -223,7 +223,7 @@ public class TeacherManagementService : ITeacherManagementService
                 ta.TeacherId,
                 ta.AttachmentId,
                 null,
-                ta.Attachment != null ? new AttacmentDto(ta.Attachment.Id, ta.Attachment.Path, ta.Attachment.Type, ta.Attachment.SafeName, ta.Attachment.OriginalName, ta.Attachment.ExtentionId, null) : null)).ToList(),
+                ta.Attachment != null ? new AttachmentDto(ta.Attachment.Id, ta.Attachment.Path, ta.Attachment.Type, ta.Attachment.SafeName, ta.Attachment.OriginalName, ta.Attachment.ExtensionId, null) : null)).ToList(),
             t.ClassTeacherEnrollments.Select(cte => new ClassTeacherEnrollmentDto(
                 cte.Id,
                 cte.TeacherId,
@@ -354,7 +354,7 @@ public class TeacherManagementService : ITeacherManagementService
         return enrollmentDtos;
     }
 
-    public async Task<Result<List<TeacherAttencanceDto>>> GetAttendanceRecordsAsync(
+    public async Task<Result<List<TeacherAttendanceDto>>> GetAttendanceRecordsAsync(
         Guid teacherId,
         AttendanceFilterParameters filter,
         CancellationToken cancellationToken = default)
@@ -367,7 +367,7 @@ public class TeacherManagementService : ITeacherManagementService
         if (attendances.IsError) return attendances.Errors;
 
         var attendanceDtos = attendances.Value
-            .Select(a => new TeacherAttencanceDto(
+            .Select(a => new TeacherAttendanceDto(
                 a.Id, a.StartDate, a.EndDate, a.ClassTeacherId)).ToList();
 
         return attendanceDtos;
@@ -408,13 +408,13 @@ public class TeacherManagementService : ITeacherManagementService
         if (teacher.Value == null)
             return ApplicationErrors.TeacherNotFound;
 
-        var attachment = new Attacment
+        var attachment = new Attachment
         {
             Path = path,
             Type = type,
             SafeName = safeName,
             OriginalName = originalName,
-            ExtentionId = extensionId
+            ExtensionId = extensionId
         };
 
         var addResult = await _attachmentRepository.AddAsync(attachment);
@@ -453,13 +453,13 @@ public class TeacherManagementService : ITeacherManagementService
                 ta.TeacherId,
                 ta.AttachmentId,
                 null,
-                ta.Attachment != null ? new AttacmentDto(
+                ta.Attachment != null ? new AttachmentDto(
                     ta.Attachment.Id,
                     ta.Attachment.Path,
                     ta.Attachment.Type,
                     ta.Attachment.SafeName,
                     ta.Attachment.OriginalName,
-                    ta.Attachment.ExtentionId,
+                    ta.Attachment.ExtensionId,
                     null) : null)).ToList();
 
         return attachmentDtos;

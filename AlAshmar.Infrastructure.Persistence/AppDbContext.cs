@@ -23,8 +23,8 @@ public class AppDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<Permission> Permissions { get; set; }
-    public DbSet<Attacment> Attachments { get; set; }
-    public DbSet<AllowableExtention> AllowableExtentions { get; set; }
+    public DbSet<Attachment> Attachments { get; set; }
+    public DbSet<AllowableExtension> AllowableExtensions { get; set; }
     public DbSet<ContactInfo> ContactInfos { get; set; }
 
     public DbSet<Manager> Managers { get; set; }
@@ -34,7 +34,7 @@ public class AppDbContext : DbContext
     public DbSet<Teacher> Teachers { get; set; }
     public DbSet<TeacherContactInfo> TeacherContactInfos { get; set; }
     public DbSet<TeacherAttachment> TeacherAttachments { get; set; }
-    public DbSet<TeacherAttencance> TeacherAttencances { get; set; }
+    public DbSet<TeacherAttendance> TeacherAttendances { get; set; }
     public DbSet<ClassTeacherEnrollment> ClassTeacherEnrollments { get; set; }
 
     public DbSet<Student> Students { get; set; }

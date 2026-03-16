@@ -1,18 +1,18 @@
 namespace AlAshmar.Application.DTOs.Domain;
 
-public record AllowableExtentionDto(
+public record AllowableExtensionDto(
     Guid Id,
     string ExtName
 );
 
-public record AttacmentDto(
+public record AttachmentDto(
     Guid Id,
     string Path,
     string Type,
     string SafeName,
     string OriginalName,
-    Guid? ExtentionId,
-    AllowableExtentionDto? Extention
+    Guid? ExtensionId,
+    AllowableExtensionDto? Extension
 );
 
 public record ContactInfoDto(
@@ -63,7 +63,7 @@ public record ManagerAttachmentDto(
     Guid ManagerId,
     Guid AttachmentId,
     ManagerDto? Manager,
-    AttacmentDto? Attachment
+    AttachmentDto? Attachment
 );
 
 public record TeacherDto(
@@ -91,10 +91,10 @@ public record TeacherAttachmentDto(
     Guid TeacherId,
     Guid AttachmentId,
     TeacherDto? Teacher,
-    AttacmentDto? Attachment
+    AttachmentDto? Attachment
 );
 
-public record TeacherAttencanceDto(
+public record TeacherAttendanceDto(
     Guid Id,
     DateTime StartDate,
     DateTime EndDate,
@@ -161,11 +161,11 @@ public record PointDto(
     Guid? GivenByTeacherId
 );
 
-public record CreateAllowableExtentionDto(string ExtName);
-public record UpdateAllowableExtentionDto(string ExtName);
+public record CreateAllowableExtensionDto(string ExtName);
+public record UpdateAllowableExtensionDto(string ExtName);
 
-public record CreateAttacmentDto(string Path, string Type, string SafeName, string OriginalName, Guid? ExtentionId);
-public record UpdateAttacmentDto(string Path, string Type, string SafeName, string OriginalName, Guid? ExtentionId);
+public record CreateAttachmentDto(string Path, string Type, string SafeName, string OriginalName, Guid? ExtensionId);
+public record UpdateAttachmentDto(string Path, string Type, string SafeName, string OriginalName, Guid? ExtensionId);
 
 public record CreateContactInfoDto(string Number, string? Email, bool IsActive);
 public record UpdateContactInfoDto(string Number, string? Email, bool IsActive);
@@ -230,7 +230,7 @@ public record StudentAttachmentDto(
     Guid StudentId,
     Guid AttachmentId,
     StudentDto? Student,
-    AttacmentDto? Attachment
+    AttachmentDto? Attachment
 );
 
 public record StudentHadithDto(

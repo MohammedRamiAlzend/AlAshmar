@@ -1,6 +1,6 @@
 namespace AlAshmar.Domain.Entities.Teachers;
 
-public class TeacherAttencance : Entity<Guid>
+public class TeacherAttendance : Entity<Guid>
 {
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }

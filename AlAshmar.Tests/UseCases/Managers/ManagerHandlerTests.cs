@@ -192,7 +192,7 @@ public class UpdateManagerHandlerTests
 public class AddManagerAttachmentHandlerTests
 {
     private readonly Mock<IRepositoryBase<Manager, Guid>> _managerRepoMock = new();
-    private readonly Mock<IRepositoryBase<Attacment, Guid>> _attachmentRepoMock = new();
+    private readonly Mock<IRepositoryBase<Attachment, Guid>> _attachmentRepoMock = new();
 
     [Fact]
     public async Task Handle_ExistingManager_AddsAttachmentAndReturnsSuccess()
@@ -206,7 +206,7 @@ public class AddManagerAttachmentHandlerTests
         };
 
         _managerRepoMock.Setup(r => r.GetByIdAsync(managerId)).ReturnsAsync(manager);
-        _attachmentRepoMock.Setup(r => r.AddAsync(It.IsAny<Attacment>())).ReturnsAsync(new Success());
+        _attachmentRepoMock.Setup(r => r.AddAsync(It.IsAny<Attachment>())).ReturnsAsync(new Success());
         _managerRepoMock.Setup(r => r.UpdateAsync(It.IsAny<Manager>())).ReturnsAsync(new Updated());
 
         var handler = new AddManagerAttachmentHandler(_managerRepoMock.Object, _attachmentRepoMock.Object);
@@ -215,7 +215,7 @@ public class AddManagerAttachmentHandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         Assert.False(result.IsError);
-        _attachmentRepoMock.Verify(r => r.AddAsync(It.IsAny<Attacment>()), Times.Once);
+        _attachmentRepoMock.Verify(r => r.AddAsync(It.IsAny<Attachment>()), Times.Once);
         _managerRepoMock.Verify(r => r.UpdateAsync(It.IsAny<Manager>()), Times.Once);
     }
 
@@ -249,7 +249,7 @@ public class GetManagerAttachmentsHandlerTests
             ManagerAttachments = new List<ManagerAttachment>
             {
                 new() { ManagerId = managerId, AttachmentId = Guid.NewGuid(),
-                    Attachment = new Attacment { Id = Guid.NewGuid(), Path = "/file.pdf", Type = "application/pdf", SafeName = "safe.pdf", OriginalName = "orig.pdf" } }
+                    Attachment = new Attachment { Id = Guid.NewGuid(), Path = "/file.pdf", Type = "application/pdf", SafeName = "safe.pdf", OriginalName = "orig.pdf" } }
             }
         };
 

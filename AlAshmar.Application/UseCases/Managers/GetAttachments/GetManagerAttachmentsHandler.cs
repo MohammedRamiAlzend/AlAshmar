@@ -12,7 +12,7 @@ public class GetManagerAttachmentsHandler(IRepositoryBase<Manager, Guid> reposit
     {
         var manager = await repository.GetAsync(
             m => m.Id == query.ManagerId,
-            q => q.Include(m => m.ManagerAttachments).ThenInclude(ma => ma.Attachment).ThenInclude(a => a.Extention));
+            q => q.Include(m => m.ManagerAttachments).ThenInclude(ma => ma.Attachment).ThenInclude(a => a.Extension));
 
         if (manager.IsError) return manager.Errors;
         if (manager.Value == null)
@@ -23,14 +23,14 @@ public class GetManagerAttachmentsHandler(IRepositoryBase<Manager, Guid> reposit
                 ma.ManagerId,
                 ma.AttachmentId,
                 null,
-                ma.Attachment != null ? new AttacmentDto(
+                ma.Attachment != null ? new AttachmentDto(
                     ma.Attachment.Id,
                     ma.Attachment.Path,
                     ma.Attachment.Type,
                     ma.Attachment.SafeName,
                     ma.Attachment.OriginalName,
-                    ma.Attachment.ExtentionId,
-                    ma.Attachment.Extention != null ? new AllowableExtentionDto(ma.Attachment.Extention.Id, ma.Attachment.Extention.ExtName) : null) : null)).ToList();
+                    ma.Attachment.ExtensionId,
+                    ma.Attachment.Extension != null ? new AllowableExtensionDto(ma.Attachment.Extension.Id, ma.Attachment.Extension.ExtName) : null) : null)).ToList();
 
         return attachmentDtos;
     }

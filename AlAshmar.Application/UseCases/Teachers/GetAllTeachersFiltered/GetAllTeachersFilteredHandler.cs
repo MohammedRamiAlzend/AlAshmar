@@ -61,7 +61,7 @@ public class GetAllTeachersFilteredHandler(IRepositoryBase<Teacher, Guid> reposi
                 ta.TeacherId,
                 ta.AttachmentId,
                 null,
-                ta.Attachment != null ? new AttacmentDto(ta.Attachment.Id, ta.Attachment.Path, ta.Attachment.Type, ta.Attachment.SafeName, ta.Attachment.OriginalName, ta.Attachment.ExtentionId, null) : null)).ToList(),
+                ta.Attachment != null ? new AttachmentDto(ta.Attachment.Id, ta.Attachment.Path, ta.Attachment.Type, ta.Attachment.SafeName, ta.Attachment.OriginalName, ta.Attachment.ExtensionId, null) : null)).ToList(),
             t.ClassTeacherEnrollments.Select(cte => new ClassTeacherEnrollmentDto(
                 cte.Id,
                 cte.TeacherId,

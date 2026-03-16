@@ -15,7 +15,7 @@ public record AddManagerAttachmentCommand(
 
 public class AddManagerAttachmentHandler(
     IRepositoryBase<Manager, Guid> repository,
-    IRepositoryBase<Attacment, Guid> attachmentRepository)
+    IRepositoryBase<Attachment, Guid> attachmentRepository)
     : IRequestHandler<AddManagerAttachmentCommand, Result<Success>>
 {
     public async Task<Result<Success>> Handle(AddManagerAttachmentCommand command, CancellationToken cancellationToken = default)
@@ -24,13 +24,13 @@ public class AddManagerAttachmentHandler(
         if (manager.Value == null)
             return ApplicationErrors.ManagerNotFound;
 
-        var attachment = new Attacment
+        var attachment = new Attachment
         {
             Path = command.Path,
             Type = command.Type,
             SafeName = command.SafeName,
             OriginalName = command.OriginalName,
-            ExtentionId = command.ExtensionId
+            ExtensionId = command.ExtensionId
         };
 
         var addResult = await attachmentRepository.AddAsync(attachment);

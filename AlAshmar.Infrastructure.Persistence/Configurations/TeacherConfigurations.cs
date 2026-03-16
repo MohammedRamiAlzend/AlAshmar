@@ -106,11 +106,11 @@ public class TeacherAttachmentConfiguration : IEntityTypeConfiguration<TeacherAt
     }
 }
 
-public class TeacherAttencanceConfiguration : IEntityTypeConfiguration<TeacherAttencance>
+public class TeacherAttendanceConfiguration : IEntityTypeConfiguration<TeacherAttendance>
 {
-    public void Configure(EntityTypeBuilder<TeacherAttencance> builder)
+    public void Configure(EntityTypeBuilder<TeacherAttendance> builder)
     {
-        builder.ToTable("TeacherAttencances");
+        builder.ToTable("TeacherAttendances");
 
         builder.HasKey(ta => ta.Id);
 
