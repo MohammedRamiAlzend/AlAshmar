@@ -132,7 +132,11 @@ public class GetManagerByIdHandlerTests
         var manager = Manager.Create("Test Manager", "manager_user", "Pass@123");
         manager.Id = managerId;
 
-        _repoMock.Setup(r => r.GetByIdAsync(managerId)).ReturnsAsync(manager);
+        _repoMock.Setup(r => r.GetAllAsync(
+                It.IsAny<Expression<Func<Manager, bool>>?>(),
+                It.IsAny<Func<IQueryable<Manager>, IQueryable<Manager>>?>(),
+                It.IsAny<Func<IQueryable<Manager>, IOrderedQueryable<Manager>>?>()))
+            .ReturnsAsync(new List<Manager> { manager });
 
         var handler = new GetManagerByIdHandler(_repoMock.Object);
         var result = await handler.Handle(new GetManagerByIdQuery(managerId), CancellationToken.None);
@@ -146,7 +150,11 @@ public class GetManagerByIdHandlerTests
     [Fact]
     public async Task Handle_NonExistingManager_ReturnsNotFoundError()
     {
-        _repoMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(ApplicationErrors.ManagerNotFound);
+        _repoMock.Setup(r => r.GetAllAsync(
+                It.IsAny<Expression<Func<Manager, bool>>?>(),
+                It.IsAny<Func<IQueryable<Manager>, IQueryable<Manager>>?>(),
+                It.IsAny<Func<IQueryable<Manager>, IOrderedQueryable<Manager>>?>()))
+            .ReturnsAsync(new List<Manager>());
 
         var handler = new GetManagerByIdHandler(_repoMock.Object);
         var result = await handler.Handle(new GetManagerByIdQuery(Guid.NewGuid()), CancellationToken.None);
