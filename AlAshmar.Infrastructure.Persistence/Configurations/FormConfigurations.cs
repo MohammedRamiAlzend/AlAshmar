@@ -64,6 +64,15 @@ public class FormConfiguration : IEntityTypeConfiguration<Form>
             .HasForeignKey(f => f.CourseId)
             .OnDelete(DeleteBehavior.SetNull);
 
+        builder.Property(f => f.PrimaryColor)
+            .HasMaxLength(20);
+
+        builder.Property(f => f.BackgroundColor)
+            .HasMaxLength(20);
+
+        builder.Property(f => f.FontFamily)
+            .HasMaxLength(100);
+
         builder.HasMany(f => f.Questions)
             .WithOne(q => q.Form)
             .HasForeignKey(q => q.FormId)
@@ -108,6 +117,16 @@ public class FormQuestionConfiguration : IEntityTypeConfiguration<FormQuestion>
         builder.Property(q => q.IsRequired)
             .IsRequired()
             .HasDefaultValue(false);
+
+        builder.Property(q => q.ColumnSpan)
+            .IsRequired()
+            .HasDefaultValue(12);
+
+        builder.Property(q => q.LabelColor)
+            .HasMaxLength(20);
+
+        builder.Property(q => q.FontFamily)
+            .HasMaxLength(100);
 
         builder.HasOne(q => q.Form)
             .WithMany(f => f.Questions)

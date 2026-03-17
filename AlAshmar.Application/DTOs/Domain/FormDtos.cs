@@ -18,6 +18,9 @@ public record FormDto(
     Guid? CreatedByTeacherId,
     Guid? HalaqaId,
     Guid? CourseId,
+    string? PrimaryColor,
+    string? BackgroundColor,
+    string? FontFamily,
     List<FormQuestionDto> Questions
 );
 
@@ -30,6 +33,10 @@ public record FormQuestionDto(
     int Order,
     bool IsRequired,
     int? Points,
+    int ColumnSpan,
+    string? LabelColor,
+    int? FontSize,
+    string? FontFamily,
     List<FormQuestionOptionDto> Options
 );
 
@@ -76,7 +83,10 @@ public record CreateFormDto(
     Guid? CreatedByManagerId,
     Guid? CreatedByTeacherId,
     Guid? HalaqaId,
-    Guid? CourseId
+    Guid? CourseId,
+    string? PrimaryColor,
+    string? BackgroundColor,
+    string? FontFamily
 );
 
 public record UpdateFormDto(
@@ -90,7 +100,10 @@ public record UpdateFormDto(
     DateTime? StartsAt,
     DateTime? EndsAt,
     Guid? HalaqaId,
-    Guid? CourseId
+    Guid? CourseId,
+    string? PrimaryColor,
+    string? BackgroundColor,
+    string? FontFamily
 );
 
 public record CreateFormQuestionDto(
@@ -101,6 +114,10 @@ public record CreateFormQuestionDto(
     int Order,
     bool IsRequired,
     int? Points,
+    int ColumnSpan,
+    string? LabelColor,
+    int? FontSize,
+    string? FontFamily,
     List<CreateFormQuestionOptionDto> Options
 );
 
@@ -110,7 +127,11 @@ public record UpdateFormQuestionDto(
     QuestionType QuestionType,
     int Order,
     bool IsRequired,
-    int? Points
+    int? Points,
+    int ColumnSpan,
+    string? LabelColor,
+    int? FontSize,
+    string? FontFamily
 );
 
 public record CreateFormQuestionOptionDto(

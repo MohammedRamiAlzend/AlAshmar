@@ -36,6 +36,10 @@ public class Form : Entity<Guid>
     public Guid? CourseId { get; set; }
     public Course? Course { get; set; }
 
+    public string? PrimaryColor { get; set; }
+    public string? BackgroundColor { get; set; }
+    public string? FontFamily { get; set; }
+
     public ICollection<FormQuestion> Questions { get; set; } = new List<FormQuestion>();
     public ICollection<FormResponse> Responses { get; set; } = new List<FormResponse>();
 }

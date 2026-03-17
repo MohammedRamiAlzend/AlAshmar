@@ -16,6 +16,11 @@ public class FormQuestion : Entity<Guid>
 
     public int? Points { get; set; }
 
+    public int ColumnSpan { get; set; } = 12;
+    public string? LabelColor { get; set; }
+    public int? FontSize { get; set; }
+    public string? FontFamily { get; set; }
+
     public ICollection<FormQuestionOption> Options { get; set; } = new List<FormQuestionOption>();
     public ICollection<FormAnswer> Answers { get; set; } = new List<FormAnswer>();
 }
