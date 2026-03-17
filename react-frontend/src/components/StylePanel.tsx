@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { FONT_FAMILIES } from '../config';
+import { FONT_FAMILIES_GROUPED } from '../config';
 
 interface StylePanelProps {
   labelColor?: string;
@@ -40,9 +40,14 @@ const StylePanel: FC<StylePanelProps> = ({ labelColor, fontSize, fontFamily, onC
           value={fontFamily || 'Inter'}
           onChange={e => onChange({ fontFamily: e.target.value })}
           className="flex-1 px-2 py-1 text-sm border border-gray-300 rounded"
+          style={{ fontFamily: fontFamily || 'Inter' }}
         >
-          {FONT_FAMILIES.map(f => (
-            <option key={f} value={f} style={{ fontFamily: f }}>{f}</option>
+          {FONT_FAMILIES_GROUPED.map(group => (
+            <optgroup key={group.group} label={group.group}>
+              {group.fonts.map(f => (
+                <option key={f} value={f} style={{ fontFamily: f }}>{f}</option>
+              ))}
+            </optgroup>
           ))}
         </select>
       </div>

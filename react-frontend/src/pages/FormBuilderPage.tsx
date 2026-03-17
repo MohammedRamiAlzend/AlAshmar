@@ -20,7 +20,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { formApi, questionApi } from '../api/formApi';
 import type { FormQuestionDto, QuestionType, FormType, AudienceType } from '../types/form';
 import QuestionEditor from '../components/QuestionEditor';
-import { FONT_FAMILIES } from '../config';
+import { FONT_FAMILIES_GROUPED } from '../config';
 
 function SortableQuestion({
   question,
@@ -400,9 +400,14 @@ export default function FormBuilderPage() {
                     value={fontFamily}
                     onChange={e => setFontFamily(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm outline-none"
+                    style={{ fontFamily }}
                   >
-                    {FONT_FAMILIES.map(f => (
-                      <option key={f} value={f} style={{ fontFamily: f }}>{f}</option>
+                    {FONT_FAMILIES_GROUPED.map(group => (
+                      <optgroup key={group.group} label={group.group}>
+                        {group.fonts.map(f => (
+                          <option key={f} value={f} style={{ fontFamily: f }}>{f}</option>
+                        ))}
+                      </optgroup>
                     ))}
                   </select>
                 </div>
