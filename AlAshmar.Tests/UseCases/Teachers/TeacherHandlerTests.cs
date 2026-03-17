@@ -58,7 +58,8 @@ public class DeleteTeacherHandlerTests
     public async Task Handle_ExistingTeacher_ReturnsSuccess()
     {
         var teacherId = Guid.NewGuid();
-        var teacher = new Teacher { Id = teacherId, Name = "Test", FatherName = "F", MotherName = "M" };
+        var teacher = Teacher.Create("Test", "F", "M", "9876543210", null, "teacher_user", "Pass@123");
+        teacher.Id = teacherId;
 
         _repoMock.Setup(r => r.GetByIdAsync(teacherId)).ReturnsAsync(teacher);
         _repoMock.Setup(r => r.RemoveAsync(It.IsAny<Expression<Func<Teacher, bool>>>()))
@@ -92,8 +93,8 @@ public class GetAllTeachersHandlerTests
     {
         var teachers = new List<Teacher>
         {
-            new() { Id = Guid.NewGuid(), Name = "Khalid", FatherName = "Ahmad", MotherName = "Sara" },
-            new() { Id = Guid.NewGuid(), Name = "Noor", FatherName = "Hassan", MotherName = "Layla" }
+            Teacher.Create("Khalid", "Ahmad", "Sara", "9876543210", null, "user1", "Pass@123"),
+            Teacher.Create("Noor", "Hassan", "Layla", "1234567890", null, "user2", "Pass@123")
         };
 
         _repoMock.Setup(r => r.GetAllAsync(
@@ -134,11 +135,7 @@ public class GetAllTeachersFilteredHandlerTests
     {
         var teachers = new List<Teacher>
         {
-            new() { Id = Guid.NewGuid(), Name = "Khalid", FatherName = "Ahmad", MotherName = "Sara",
-                    TeacherContactInfos = new List<TeacherContactInfo>(),
-                    TeacherAttachments = new List<TeacherAttachment>(),
-                    ClassTeacherEnrollments = new List<ClassTeacherEnrollment>(),
-                    GivenPoints = new List<Domain.Entities.Academic.Point>() }
+            Teacher.Create("Khalid", "Ahmad", "Sara", "9876543210", null, "user1", "Pass@123")
         };
 
         _repoMock.Setup(r => r.GetAllAsync(
@@ -185,16 +182,8 @@ public class GetTeacherByIdHandlerTests
     public async Task Handle_ExistingTeacher_ReturnsTeacherDto()
     {
         var teacherId = Guid.NewGuid();
-        var teacher = new Teacher
-        {
-            Id = teacherId,
-            Name = "Khalid",
-            FatherName = "Ahmad",
-            MotherName = "Sara",
-            TeacherContactInfos = new List<TeacherContactInfo>(),
-            TeacherAttachments = new List<TeacherAttachment>(),
-            ClassTeacherEnrollments = new List<ClassTeacherEnrollment>()
-        };
+        var teacher = Teacher.Create("Khalid", "Ahmad", "Sara", "9876543210", null, "user1", "Pass@123");
+        teacher.Id = teacherId;
 
         _repoMock.Setup(r => r.GetAllAsync(
                 It.IsAny<Expression<Func<Teacher, bool>>?>(),
@@ -236,16 +225,8 @@ public class UpdateTeacherHandlerTests
     public async Task Handle_ExistingTeacher_UpdatesAndReturnsTeacherDto()
     {
         var teacherId = Guid.NewGuid();
-        var teacher = new Teacher
-        {
-            Id = teacherId,
-            Name = "Old Name",
-            FatherName = "Ahmad",
-            MotherName = "Sara",
-            TeacherContactInfos = new List<TeacherContactInfo>(),
-            TeacherAttachments = new List<TeacherAttachment>(),
-            ClassTeacherEnrollments = new List<ClassTeacherEnrollment>()
-        };
+        var teacher = Teacher.Create("Old Name", "Ahmad", "Sara", "9876543210", null, "user1", "Pass@123");
+        teacher.Id = teacherId;
 
         _repoMock.Setup(r => r.GetByIdAsync(teacherId)).ReturnsAsync(teacher);
         _repoMock.Setup(r => r.AnyAsync(It.IsAny<Expression<Func<Teacher, bool>>>(), It.IsAny<Func<IQueryable<Teacher>, IQueryable<Teacher>>?>()))
@@ -277,23 +258,17 @@ public class UpdateTeacherHandlerTests
 public class AddTeacherAttachmentHandlerTests
 {
     private readonly Mock<IRepositoryBase<Teacher, Guid>> _teacherRepoMock = new();
-    private readonly Mock<IRepositoryBase<Attacment, Guid>> _attachmentRepoMock = new();
+    private readonly Mock<IRepositoryBase<Attachment, Guid>> _attachmentRepoMock = new();
 
     [Fact]
     public async Task Handle_ExistingTeacher_AddsAttachmentAndReturnsSuccess()
     {
         var teacherId = Guid.NewGuid();
-        var teacher = new Teacher
-        {
-            Id = teacherId,
-            Name = "Khalid",
-            FatherName = "Ahmad",
-            MotherName = "Sara",
-            TeacherAttachments = new List<TeacherAttachment>()
-        };
+        var teacher = Teacher.Create("Khalid", "Ahmad", "Sara", "9876543210", null, "user1", "Pass@123");
+        teacher.Id = teacherId;
 
         _teacherRepoMock.Setup(r => r.GetByIdAsync(teacherId)).ReturnsAsync(teacher);
-        _attachmentRepoMock.Setup(r => r.AddAsync(It.IsAny<Attacment>())).ReturnsAsync(new Success());
+        _attachmentRepoMock.Setup(r => r.AddAsync(It.IsAny<Attachment>())).ReturnsAsync(new Success());
         _teacherRepoMock.Setup(r => r.UpdateAsync(It.IsAny<Teacher>())).ReturnsAsync(new Updated());
 
         var handler = new AddTeacherAttachmentHandler(_teacherRepoMock.Object, _attachmentRepoMock.Object);
@@ -302,7 +277,7 @@ public class AddTeacherAttachmentHandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         Assert.False(result.IsError);
-        _attachmentRepoMock.Verify(r => r.AddAsync(It.IsAny<Attacment>()), Times.Once);
+        _attachmentRepoMock.Verify(r => r.AddAsync(It.IsAny<Attachment>()), Times.Once);
         _teacherRepoMock.Verify(r => r.UpdateAsync(It.IsAny<Teacher>()), Times.Once);
     }
 
@@ -329,18 +304,14 @@ public class GetTeacherAttachmentsHandlerTests
     public async Task Handle_ExistingTeacher_ReturnsAttachments()
     {
         var teacherId = Guid.NewGuid();
-        var teacher = new Teacher
+        var teacher = Teacher.Create("Khalid", "Ahmad", "Sara", "9876543210", null, "user1", "Pass@123");
+        teacher.Id = teacherId;
+        teacher.TeacherAttachments.Add(new TeacherAttachment
         {
-            Id = teacherId,
-            Name = "Khalid",
-            FatherName = "Ahmad",
-            MotherName = "Sara",
-            TeacherAttachments = new List<TeacherAttachment>
-            {
-                new() { TeacherId = teacherId, AttachmentId = Guid.NewGuid(),
-                    Attachment = new Attacment { Id = Guid.NewGuid(), Path = "/file.pdf", Type = "application/pdf", SafeName = "safe.pdf", OriginalName = "orig.pdf" } }
-            }
-        };
+            TeacherId = teacherId,
+            AttachmentId = Guid.NewGuid(),
+            Attachment = new Attachment { Id = Guid.NewGuid(), Path = "/file.pdf", Type = "application/pdf", SafeName = "safe.pdf", OriginalName = "orig.pdf" }
+        });
 
         _repoMock.Setup(r => r.GetAsync(
                 It.IsAny<Expression<Func<Teacher, bool>>?>(),

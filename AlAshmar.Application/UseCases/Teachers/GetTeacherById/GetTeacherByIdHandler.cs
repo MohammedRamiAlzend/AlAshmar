@@ -46,7 +46,7 @@ public class GetTeacherByIdHandler : IRequestHandler<GetTeacherByIdQuery, Result
             )).ToList(),
             teacher.TeacherAttachments.Select(ta => new TeacherAttachmentDto(
                 ta.TeacherId, ta.AttachmentId, null,
-                ta.Attachment != null ? new AttacmentDto(ta.Attachment.Id, ta.Attachment.Path, ta.Attachment.Type, ta.Attachment.SafeName, ta.Attachment.OriginalName, ta.Attachment.ExtentionId, null) : null
+                ta.Attachment != null ? new AttachmentDto(ta.Attachment.Id, ta.Attachment.Path, ta.Attachment.Type, ta.Attachment.SafeName, ta.Attachment.OriginalName, ta.Attachment.ExtensionId, null) : null
             )).ToList(),
             teacher.ClassTeacherEnrollments.Select(ce => new ClassTeacherEnrollmentDto(
                 ce.Id, ce.TeacherId, null, ce.IsMainTeacher, ce.ClassId

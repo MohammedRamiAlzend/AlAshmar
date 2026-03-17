@@ -1,8 +1,10 @@
 using AlAshmar.Application.Interfaces;
+using AlAshmar.Application.Repos;
 using AlAshmar.Domain.Entities.Users;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace AlAshmar.Infrastructure.Services;
@@ -10,12 +12,12 @@ namespace AlAshmar.Infrastructure.Services;
 public class TokenService : ITokenService
 {
     private readonly IConfiguration _configuration;
-    private readonly AppDbContext _context;
+    private readonly ITokenRepository _tokenRepository;
 
-    public TokenService(IConfiguration configuration, AppDbContext context)
+    public TokenService(IConfiguration configuration, ITokenRepository tokenRepository)
     {
         _configuration = configuration;
-        _context = context;
+        _tokenRepository = tokenRepository;
     }
 
     public async Task<string> GenerateTokenAsync(string username, Guid userId, Guid? roleId, CancellationToken cancellationToken = default)
@@ -35,9 +37,7 @@ public class TokenService : ITokenService
         {
             claims.Add(new Claim("RoleId", roleId.Value.ToString()));
 
-            var role = await _context.Roles
-                .Include(r => r.Permissions)
-                .FirstOrDefaultAsync(r => r.Id == roleId.Value, cancellationToken);
+            var role = await _tokenRepository.GetRoleWithPermissionsAsync(roleId.Value, cancellationToken);
 
             if (role != null)
             {
@@ -62,6 +62,36 @@ public class TokenService : ITokenService
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    public async Task<string> GenerateRefreshTokenAsync(Guid userId, CancellationToken cancellationToken = default)
+    {
+        var tokenBytes = RandomNumberGenerator.GetBytes(64);
+        var tokenString = Convert.ToBase64String(tokenBytes);
+
+        var refreshToken = new RefreshToken
+        {
+            Token = tokenString,
+            UserId = userId,
+            ExpiresAt = DateTime.UtcNow.AddDays(
+                int.TryParse(_configuration["Jwt:RefreshTokenExpiresInDays"], out var days) ? days : 7),
+            IsRevoked = false
+        };
+
+        await _tokenRepository.AddRefreshTokenAsync(refreshToken, cancellationToken);
+        return tokenString;
+    }
+
+    public async Task<string?> RefreshAccessTokenAsync(string refreshToken, CancellationToken cancellationToken = default)
+    {
+        var storedToken = await _tokenRepository.GetValidRefreshTokenAsync(refreshToken, cancellationToken);
+        if (storedToken == null)
+            return null;
+
+        await _tokenRepository.RevokeRefreshTokenAsync(storedToken, cancellationToken);
+
+        var user = storedToken.User;
+        return await GenerateTokenAsync(user.UserName, user.Id, user.RoleId, cancellationToken);
     }
 
     public async Task<bool> ValidateTokenAsync(string token, CancellationToken cancellationToken = default)

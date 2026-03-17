@@ -12,5 +12,5 @@ public class StudentAttachment
 
     public Guid AttachmentId { get; set; }
     [ForeignKey(nameof(AttachmentId))]
-    public Attacment? Attachment { get; set; }
+    public Attachment? Attachment { get; set; }
 }

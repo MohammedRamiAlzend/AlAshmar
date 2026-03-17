@@ -53,7 +53,8 @@ public class DeleteManagerHandlerTests
     public async Task Handle_ExistingManager_ReturnsSuccess()
     {
         var managerId = Guid.NewGuid();
-        var manager = new Manager { Id = managerId, Name = "Test Manager" };
+        var manager = Manager.Create("Test Manager", "manager_user", "Pass@123");
+        manager.Id = managerId;
 
         _repoMock.Setup(r => r.GetByIdAsync(managerId)).ReturnsAsync(manager);
         _repoMock.Setup(r => r.RemoveAsync(It.IsAny<Expression<Func<Manager, bool>>>()))
@@ -87,8 +88,8 @@ public class GetAllManagersHandlerTests
     {
         var managers = new List<Manager>
         {
-            new() { Id = Guid.NewGuid(), Name = "Manager One" },
-            new() { Id = Guid.NewGuid(), Name = "Manager Two" }
+            Manager.Create("Manager One", "user1", "Pass@123"),
+            Manager.Create("Manager Two", "user2", "Pass@123")
         };
 
         _repoMock.Setup(r => r.GetAllAsync(
@@ -128,9 +129,14 @@ public class GetManagerByIdHandlerTests
     public async Task Handle_ExistingManager_ReturnsManagerDto()
     {
         var managerId = Guid.NewGuid();
-        var manager = new Manager { Id = managerId, Name = "Test Manager" };
+        var manager = Manager.Create("Test Manager", "manager_user", "Pass@123");
+        manager.Id = managerId;
 
-        _repoMock.Setup(r => r.GetByIdAsync(managerId)).ReturnsAsync(manager);
+        _repoMock.Setup(r => r.GetAllAsync(
+                It.IsAny<Expression<Func<Manager, bool>>?>(),
+                It.IsAny<Func<IQueryable<Manager>, IQueryable<Manager>>?>(),
+                It.IsAny<Func<IQueryable<Manager>, IOrderedQueryable<Manager>>?>()))
+            .ReturnsAsync(new List<Manager> { manager });
 
         var handler = new GetManagerByIdHandler(_repoMock.Object);
         var result = await handler.Handle(new GetManagerByIdQuery(managerId), CancellationToken.None);
@@ -144,7 +150,11 @@ public class GetManagerByIdHandlerTests
     [Fact]
     public async Task Handle_NonExistingManager_ReturnsNotFoundError()
     {
-        _repoMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(ApplicationErrors.ManagerNotFound);
+        _repoMock.Setup(r => r.GetAllAsync(
+                It.IsAny<Expression<Func<Manager, bool>>?>(),
+                It.IsAny<Func<IQueryable<Manager>, IQueryable<Manager>>?>(),
+                It.IsAny<Func<IQueryable<Manager>, IOrderedQueryable<Manager>>?>()))
+            .ReturnsAsync(new List<Manager>());
 
         var handler = new GetManagerByIdHandler(_repoMock.Object);
         var result = await handler.Handle(new GetManagerByIdQuery(Guid.NewGuid()), CancellationToken.None);
@@ -162,7 +172,8 @@ public class UpdateManagerHandlerTests
     public async Task Handle_ExistingManager_UpdatesAndReturnsManagerDto()
     {
         var managerId = Guid.NewGuid();
-        var manager = new Manager { Id = managerId, Name = "Old Name" };
+        var manager = Manager.Create("Old Name", "manager_user", "Pass@123");
+        manager.Id = managerId;
 
         _repoMock.Setup(r => r.GetByIdAsync(managerId)).ReturnsAsync(manager);
         _repoMock.Setup(r => r.UpdateAsync(It.IsAny<Manager>())).ReturnsAsync(new Updated());
@@ -192,21 +203,17 @@ public class UpdateManagerHandlerTests
 public class AddManagerAttachmentHandlerTests
 {
     private readonly Mock<IRepositoryBase<Manager, Guid>> _managerRepoMock = new();
-    private readonly Mock<IRepositoryBase<Attacment, Guid>> _attachmentRepoMock = new();
+    private readonly Mock<IRepositoryBase<Attachment, Guid>> _attachmentRepoMock = new();
 
     [Fact]
     public async Task Handle_ExistingManager_AddsAttachmentAndReturnsSuccess()
     {
         var managerId = Guid.NewGuid();
-        var manager = new Manager
-        {
-            Id = managerId,
-            Name = "Manager",
-            ManagerAttachments = new List<ManagerAttachment>()
-        };
+        var manager = Manager.Create("Manager", "manager_user", "Pass@123");
+        manager.Id = managerId;
 
         _managerRepoMock.Setup(r => r.GetByIdAsync(managerId)).ReturnsAsync(manager);
-        _attachmentRepoMock.Setup(r => r.AddAsync(It.IsAny<Attacment>())).ReturnsAsync(new Success());
+        _attachmentRepoMock.Setup(r => r.AddAsync(It.IsAny<Attachment>())).ReturnsAsync(new Success());
         _managerRepoMock.Setup(r => r.UpdateAsync(It.IsAny<Manager>())).ReturnsAsync(new Updated());
 
         var handler = new AddManagerAttachmentHandler(_managerRepoMock.Object, _attachmentRepoMock.Object);
@@ -215,7 +222,7 @@ public class AddManagerAttachmentHandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         Assert.False(result.IsError);
-        _attachmentRepoMock.Verify(r => r.AddAsync(It.IsAny<Attacment>()), Times.Once);
+        _attachmentRepoMock.Verify(r => r.AddAsync(It.IsAny<Attachment>()), Times.Once);
         _managerRepoMock.Verify(r => r.UpdateAsync(It.IsAny<Manager>()), Times.Once);
     }
 
@@ -242,16 +249,14 @@ public class GetManagerAttachmentsHandlerTests
     public async Task Handle_ExistingManager_ReturnsAttachments()
     {
         var managerId = Guid.NewGuid();
-        var manager = new Manager
+        var manager = Manager.Create("Manager", "manager_user", "Pass@123");
+        manager.Id = managerId;
+        manager.ManagerAttachments.Add(new ManagerAttachment
         {
-            Id = managerId,
-            Name = "Manager",
-            ManagerAttachments = new List<ManagerAttachment>
-            {
-                new() { ManagerId = managerId, AttachmentId = Guid.NewGuid(),
-                    Attachment = new Attacment { Id = Guid.NewGuid(), Path = "/file.pdf", Type = "application/pdf", SafeName = "safe.pdf", OriginalName = "orig.pdf" } }
-            }
-        };
+            ManagerId = managerId,
+            AttachmentId = Guid.NewGuid(),
+            Attachment = new Attachment { Id = Guid.NewGuid(), Path = "/file.pdf", Type = "application/pdf", SafeName = "safe.pdf", OriginalName = "orig.pdf" }
+        });
 
         _repoMock.Setup(r => r.GetAsync(
                 It.IsAny<Expression<Func<Manager, bool>>?>(),

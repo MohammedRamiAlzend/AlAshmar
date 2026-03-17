@@ -15,9 +15,9 @@ public class RolesController(IRoleService service, IMapper mapper) : BaseControl
     protected override Guid GetId(RoleDto dto) => dto.Id;
 }
 
-public class TeacherAttencancesController(ITeacherAttencanceService service, IMapper mapper) : BaseController<TeacherAttencance, TeacherAttencanceDto, TeacherAttencanceDto, TeacherAttencanceDto, Guid>(service, mapper)
+public class TeacherAttendancesController(ITeacherAttendanceService service, IMapper mapper) : BaseController<TeacherAttendance, TeacherAttendanceDto, TeacherAttendanceDto, TeacherAttendanceDto, Guid>(service, mapper)
 {
-    protected override Guid GetId(TeacherAttencanceDto dto) => dto.Id;
+    protected override Guid GetId(TeacherAttendanceDto dto) => dto.Id;
 }
 
 public class ClassTeacherEnrollmentsController(IClassTeacherEnrollmentService service, IMapper mapper) : BaseController<ClassTeacherEnrollment, ClassTeacherEnrollmentDto, ClassTeacherEnrollmentDto, ClassTeacherEnrollmentDto, Guid>(service, mapper)

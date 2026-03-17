@@ -25,7 +25,7 @@ public class UpdateManagerHandler : IRequestHandler<UpdateManagerCommand, Result
             return ApplicationErrors.ManagerNotFound;
 
         var manager = managerResult.Value;
-        manager.Name = command.Name;
+        manager.UpdateBasicInfo(command.Name);
 
         var updateResult = await _repository.UpdateAsync(manager);
         if (updateResult.IsError)

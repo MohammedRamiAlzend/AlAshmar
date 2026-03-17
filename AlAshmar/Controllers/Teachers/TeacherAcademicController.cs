@@ -19,7 +19,7 @@ public class TeacherAcademicController : ControllerBase
         [FromQuery] DateTime? toDate = null,
         CancellationToken cancellationToken = default)
     {
-        return Ok(new List<TeacherAttencanceDto>());
+        return Ok(new List<TeacherAttendanceDto>());
     }
 
     [HttpGet("{id:guid}/points-given")]

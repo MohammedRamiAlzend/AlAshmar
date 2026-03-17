@@ -1,3 +1,4 @@
+using AlAshmar.Domain.Entities.Abstraction;
 using AlAshmar.Domain.Entities.Academic;
 using AlAshmar.Domain.Entities.Common;
 using AlAshmar.Domain.Entities.Forms;
@@ -20,11 +21,29 @@ public class AppDbContext : DbContext
 
     }
 
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        var now = DateTime.UtcNow;
+        foreach (var entry in ChangeTracker.Entries<IAuditableEntity>())
+        {
+            if (entry.State == EntityState.Added)
+            {
+                entry.Entity.CreatedAt = now;
+                entry.Entity.UpdatedAt = now;
+            }
+            else if (entry.State == EntityState.Modified)
+            {
+                entry.Entity.UpdatedAt = now;
+            }
+        }
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<Permission> Permissions { get; set; }
-    public DbSet<Attacment> Attachments { get; set; }
-    public DbSet<AllowableExtention> AllowableExtentions { get; set; }
+    public DbSet<Attachment> Attachments { get; set; }
+    public DbSet<AllowableExtension> AllowableExtensions { get; set; }
     public DbSet<ContactInfo> ContactInfos { get; set; }
 
     public DbSet<Manager> Managers { get; set; }
@@ -34,7 +53,7 @@ public class AppDbContext : DbContext
     public DbSet<Teacher> Teachers { get; set; }
     public DbSet<TeacherContactInfo> TeacherContactInfos { get; set; }
     public DbSet<TeacherAttachment> TeacherAttachments { get; set; }
-    public DbSet<TeacherAttencance> TeacherAttencances { get; set; }
+    public DbSet<TeacherAttendance> TeacherAttendances { get; set; }
     public DbSet<ClassTeacherEnrollment> ClassTeacherEnrollments { get; set; }
 
     public DbSet<Student> Students { get; set; }
@@ -60,6 +79,8 @@ public class AppDbContext : DbContext
     public DbSet<FormResponse> FormResponses { get; set; }
     public DbSet<FormAnswer> FormAnswers { get; set; }
     public DbSet<FormAnswerSelectedOption> FormAnswerSelectedOptions { get; set; }
+
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

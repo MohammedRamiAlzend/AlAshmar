@@ -9,11 +9,11 @@ namespace AlAshmar.Infrastructure.Services.Reports;
 public class AttendanceReportService : IAttendanceReportService
 {
     private readonly IRepositoryBase<StudentAttendance, Guid> _studentAttendanceRepository;
-    private readonly IRepositoryBase<TeacherAttencance, Guid> _teacherAttendanceRepository;
+    private readonly IRepositoryBase<TeacherAttendance, Guid> _teacherAttendanceRepository;
 
     public AttendanceReportService(
         IRepositoryBase<StudentAttendance, Guid> studentAttendanceRepository,
-        IRepositoryBase<TeacherAttencance, Guid> teacherAttendanceRepository)
+        IRepositoryBase<TeacherAttendance, Guid> teacherAttendanceRepository)
     {
         _studentAttendanceRepository = studentAttendanceRepository;
         _teacherAttendanceRepository = teacherAttendanceRepository;
@@ -28,7 +28,7 @@ public class AttendanceReportService : IAttendanceReportService
             filter: a => a.StartDate.Date <= toDate && a.EndDate.Date >= fromDate);
 
         var studentRecords = studentAttendanceResult.Value?.ToList() ?? new List<StudentAttendance>();
-        var teacherRecords = teacherAttendanceResult.Value?.ToList() ?? new List<TeacherAttencance>();
+        var teacherRecords = teacherAttendanceResult.Value?.ToList() ?? new List<TeacherAttendance>();
 
         var overallSummary = new AttendanceSummaryDto(
             studentRecords.Count + teacherRecords.Count,
@@ -76,7 +76,7 @@ public class AttendanceReportService : IAttendanceReportService
         var teacherAttendanceResult = await _teacherAttendanceRepository.GetAllAsync(
             filter: a => a.StartDate.Date <= toDate && a.EndDate.Date >= fromDate);
 
-        var teacherRecords = teacherAttendanceResult.Value?.ToList() ?? new List<TeacherAttencance>();
+        var teacherRecords = teacherAttendanceResult.Value?.ToList() ?? new List<TeacherAttendance>();
 
         var teacherDetails = teacherRecords
             .Select(a => new TeacherAttendanceDetailDto(

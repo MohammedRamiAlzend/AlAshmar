@@ -12,7 +12,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.5" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.5" />
     <PackageReference Include="Moq" Version="4.20.72" />
     <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
@@ -28,6 +30,8 @@
   <ItemGroup>
     <ProjectReference Include="..\AlAshmar.Application\AlAshmar.Application.csproj" />
     <ProjectReference Include="..\AlAshmar.Domain\AlAshmar.Domain.csproj" />
+    <ProjectReference Include="..\AlAshmar.Infrastructure.Persistence\AlAshmar.Infrastructure.Persistence.csproj" />
+    <ProjectReference Include="..\ExpressionBuilderLib\ExpressionBuilderLib.csproj" />
   </ItemGroup>
 
 </Project>

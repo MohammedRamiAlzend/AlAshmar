@@ -15,11 +15,7 @@ public class CreateManagerHandler(IRepositoryBase<Manager, Guid> repository)
 {
     public async Task<Result<ManagerDto>> Handle(CreateManagerCommand command, CancellationToken cancellationToken = default)
     {
-        var manager = new Manager
-        {
-            Name = command.Name,
-            User = Domain.Entities.Users.User.Create(command.UserName, command.Password, Constants.DefaultManagerRoleId)
-        };
+        var manager = Manager.Create(command.Name, command.UserName, command.Password);
 
         var addResult = await repository.AddAsync(manager);
         if (addResult.IsError)

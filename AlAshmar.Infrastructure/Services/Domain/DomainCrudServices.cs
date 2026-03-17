@@ -10,17 +10,17 @@ using AlAshmar.Domain.Entities.Users;
 
 namespace AlAshmar.Infrastructure.Services.Domain;
 
-public interface IAllowableExtentionService : IAdvancedCrudService<AllowableExtention, AllowableExtentionDto, Guid> { }
-public class AllowableExtentionService : CrudServiceBase<AllowableExtention, AllowableExtentionDto, Guid>, IAllowableExtentionService
+public interface IAllowableExtensionService : IAdvancedCrudService<AllowableExtension, AllowableExtensionDto, Guid> { }
+public class AllowableExtensionService : CrudServiceBase<AllowableExtension, AllowableExtensionDto, Guid>, IAllowableExtensionService
 {
-    public AllowableExtentionService(IRepositoryBase<AllowableExtention, Guid> repository, IMapper mapper)
+    public AllowableExtensionService(IRepositoryBase<AllowableExtension, Guid> repository, IMapper mapper)
         : base(repository, mapper) { }
 }
 
-public interface IAttacmentService : IAdvancedCrudService<Attacment, AttacmentDto, Guid> { }
-public class AttacmentService : CrudServiceBase<Attacment, AttacmentDto, Guid>, IAttacmentService
+public interface IAttachmentService : IAdvancedCrudService<Attachment, AttachmentDto, Guid> { }
+public class AttachmentService : CrudServiceBase<Attachment, AttachmentDto, Guid>, IAttachmentService
 {
-    public AttacmentService(IRepositoryBase<Attacment, Guid> repository, IMapper mapper)
+    public AttachmentService(IRepositoryBase<Attachment, Guid> repository, IMapper mapper)
         : base(repository, mapper) { }
 }
 
@@ -59,10 +59,10 @@ public class TeacherService : CrudServiceBase<Teacher, AlAshmar.Application.DTOs
         : base(repository, mapper) { }
 }
 
-public interface ITeacherAttencanceService : IAdvancedCrudService<TeacherAttencance, TeacherAttencanceDto, Guid> { }
-public class TeacherAttencanceService : CrudServiceBase<TeacherAttencance, TeacherAttencanceDto, Guid>, ITeacherAttencanceService
+public interface ITeacherAttendanceService : IAdvancedCrudService<TeacherAttendance, TeacherAttendanceDto, Guid> { }
+public class TeacherAttendanceService : CrudServiceBase<TeacherAttendance, TeacherAttendanceDto, Guid>, ITeacherAttendanceService
 {
-    public TeacherAttencanceService(IRepositoryBase<TeacherAttencance, Guid> repository, IMapper mapper)
+    public TeacherAttendanceService(IRepositoryBase<TeacherAttendance, Guid> repository, IMapper mapper)
         : base(repository, mapper) { }
 }
 

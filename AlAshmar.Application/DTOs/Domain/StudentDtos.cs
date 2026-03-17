@@ -129,8 +129,8 @@ public record AttachmentDetailDto(
     string Type,
     string SafeName,
     string OriginalName,
-    Guid? ExtentionId,
-    AllowableExtentionDto? Extention
+    Guid? ExtensionId,
+    AllowableExtensionDto? Extension
 );
 
 public record StudentHadithDetailDto(
@@ -269,7 +269,7 @@ public record CreateStudentAttachmentDto(
     string Type,
     string SafeName,
     string OriginalName,
-    Guid? ExtentionId
+    Guid? ExtensionId
 );
 
 public record UpdateStudentDto(
@@ -291,7 +291,7 @@ public record UpdateStudentAttachmentDto(
     string Type,
     string SafeName,
     string OriginalName,
-    Guid? ExtentionId
+    Guid? ExtensionId
 );
 
 public record RecordStudentHadithDto(

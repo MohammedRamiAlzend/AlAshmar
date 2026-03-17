@@ -15,7 +15,7 @@ public record AddTeacherAttachmentCommand(
 
 public class AddTeacherAttachmentHandler(
     IRepositoryBase<Teacher, Guid> repository,
-    IRepositoryBase<Attacment, Guid> attachmentRepository)
+    IRepositoryBase<Attachment, Guid> attachmentRepository)
     : IRequestHandler<AddTeacherAttachmentCommand, Result<Success>>
 {
     public async Task<Result<Success>> Handle(AddTeacherAttachmentCommand command, CancellationToken cancellationToken = default)
@@ -24,13 +24,13 @@ public class AddTeacherAttachmentHandler(
         if (teacher.Value == null)
             return ApplicationErrors.TeacherNotFound;
 
-        var attachment = new Attacment
+        var attachment = new Attachment
         {
             Path = command.Path,
             Type = command.Type,
             SafeName = command.SafeName,
             OriginalName = command.OriginalName,
-            ExtentionId = command.ExtensionId
+            ExtensionId = command.ExtensionId
         };
 
         var addResult = await attachmentRepository.AddAsync(attachment);

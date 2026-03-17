@@ -6,7 +6,7 @@ namespace AlAshmar.Application.UseCases.Students.AddAttachment;
 
 public class AddAttachmentHandler(
     IRepositoryBase<Student, Guid> repository,
-    IRepositoryBase<Attacment, Guid> attachmentRepository)
+    IRepositoryBase<Attachment, Guid> attachmentRepository)
     : IRequestHandler<AddAttachmentCommand, Result<Success>>
 {
     public async Task<Result<Success>> Handle(AddAttachmentCommand command, CancellationToken cancellationToken = default)
@@ -15,13 +15,13 @@ public class AddAttachmentHandler(
         if (student.Value == null)
             return ApplicationErrors.StudentNotFound;
 
-        var attachment = new Attacment
+        var attachment = new Attachment
         {
             Path = command.Path,
             Type = command.Type,
             SafeName = command.SafeName,
             OriginalName = command.OriginalName,
-            ExtentionId = command.ExtensionId
+            ExtensionId = command.ExtensionId
         };
 
         var addResult = await attachmentRepository.AddAsync(attachment);
