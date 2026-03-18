@@ -38,11 +38,11 @@ export const authApi = {
 
 export const formApi = {
   list: (page = 1, pageSize = 20) =>
-    api.get<PaginatedResult<FormDto>>(`/forms?page=${page}&pageSize=${pageSize}`).then(r => r.data),
+    api.get<PaginatedResult<FormDto>>(`/forms/paged?page=${page}&pageSize=${pageSize}`).then(r => r.data),
   get: (id: string) =>
     api.get<FormDto>(`/forms/${id}`).then(r => r.data),
   getByToken: (token: string) =>
-    api.get<FormDto>(`/forms/by-access-token/${token}`).then(r => r.data),
+    api.get<FormDto>(`/forms/access/${token}`).then(r => r.data),
   create: (data: CreateFormDto) =>
     api.post<FormDto>('/forms', data).then(r => r.data),
   update: (id: string, data: UpdateFormDto) =>
@@ -53,25 +53,25 @@ export const formApi = {
 
 export const questionApi = {
   create: (data: CreateFormQuestionDto) =>
-    api.post<FormQuestionDto>('/form-questions', data).then(r => r.data),
+    api.post<FormQuestionDto>('/formquestions', data).then(r => r.data),
   update: (id: string, data: UpdateFormQuestionDto) =>
-    api.put<FormQuestionDto>(`/form-questions/${id}`, data).then(r => r.data),
+    api.put<FormQuestionDto>(`/formquestions/${id}`, data).then(r => r.data),
   delete: (id: string) =>
-    api.delete(`/form-questions/${id}`),
+    api.delete(`/formquestions/${id}`),
 };
 
 export const optionApi = {
   create: (data: CreateFormQuestionOptionDto & { questionId: string }) =>
-    api.post<FormQuestionOptionDto>('/form-question-options', data).then(r => r.data),
+    api.post<FormQuestionOptionDto>('/formquestionoptions', data).then(r => r.data),
   update: (id: string, data: UpdateFormQuestionOptionDto) =>
-    api.put<FormQuestionOptionDto>(`/form-question-options/${id}`, data).then(r => r.data),
+    api.put<FormQuestionOptionDto>(`/formquestionoptions/${id}`, data).then(r => r.data),
   delete: (id: string) =>
-    api.delete(`/form-question-options/${id}`),
+    api.delete(`/formquestionoptions/${id}`),
 };
 
 export const responseApi = {
   submit: (data: SubmitFormResponseDto) =>
-    api.post<FormResponseDto>('/form-responses', data).then(r => r.data),
+    api.post<FormResponseDto>('/formresponses/submit', data).then(r => r.data),
   list: (formId: string) =>
-    api.get<FormResponseDto[]>(`/form-responses?formId=${formId}`).then(r => r.data),
+    api.get<FormResponseDto[]>(`/formresponses/by-form/${formId}`).then(r => r.data),
 };

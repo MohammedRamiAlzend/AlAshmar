@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import {
   DndContext,
@@ -17,8 +17,14 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { formApi, questionApi } from '../api/formApi';
-import type { FormQuestionDto, QuestionType, FormType, AudienceType } from '../types/form';
+import { formApi, questionApi, optionApi } from '../api/formApi';
+import type {
+  FormQuestionDto,
+  FormQuestionOptionDto,
+  QuestionType,
+  FormType,
+  AudienceType,
+} from '../types/form';
 import QuestionEditor from '../components/QuestionEditor';
 import { FONT_FAMILIES_GROUPED } from '../config';
 import AppHeader from '../components/AppHeader';
@@ -69,25 +75,15 @@ function SortableQuestion({
   );
 }
 
-const DEFAULT_QUESTION: Omit<FormQuestionDto, 'id' | 'formId'> = {
-  text: '',
-  questionType: 'ShortText',
-  order: 0,
-  isRequired: false,
-  columnSpan: 12,
-  options: [],
-};
-
 export default function FormBuilderPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const isEdit = Boolean(id);
   const t = useT();
 
-  const [loading, setLoading] = useState(isEdit);
-  const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [autoSaving, setAutoSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
   const [title, setTitle] = useState('Untitled Form');
   const [description, setDescription] = useState('');
@@ -96,19 +92,68 @@ export default function FormBuilderPage() {
   const [isActive, setIsActive] = useState(true);
   const [allowMultipleResponses, setAllowMultipleResponses] = useState(false);
   const [timerMinutes, setTimerMinutes] = useState<number | undefined>(undefined);
-
   const [primaryColor, setPrimaryColor] = useState('#3b82f6');
   const [backgroundColor, setBackgroundColor] = useState('#f9fafb');
   const [fontFamily, setFontFamily] = useState('Inter');
-
   const [questions, setQuestions] = useState<FormQuestionDto[]>([]);
   const [showStylePanel, setShowStylePanel] = useState(false);
+
+  // Refs for debounced auto-save
+  const formSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const questionSaveTimers = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
+  const optionSaveTimers = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
+
+  // Latest form data ref to avoid stale closures in debounced save
+  const latestFormData = useRef({
+    title: 'Untitled Form',
+    description: '',
+    formType: 'Normal' as FormType,
+    audience: 'Students' as AudienceType,
+    isActive: true,
+    allowMultipleResponses: false,
+    timerMinutes: undefined as number | undefined,
+    primaryColor: '#3b82f6',
+    backgroundColor: '#f9fafb',
+    fontFamily: 'Inter',
+  });
+
+  // Mirror questions to a ref for use in callbacks that must not re-create on every render
+  const questionsRef = useRef<FormQuestionDto[]>([]);
+  useEffect(() => { questionsRef.current = questions; }, [questions]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
+  // Cleanup all timers on unmount
+  useEffect(() => {
+    return () => {
+      if (formSaveTimerRef.current) clearTimeout(formSaveTimerRef.current);
+      questionSaveTimers.current.forEach(t => clearTimeout(t));
+      optionSaveTimers.current.forEach(t => clearTimeout(t));
+    };
+  }, []);
+
+  // For new forms: auto-create via API on mount, then navigate to edit URL
+  useEffect(() => {
+    if (!isEdit) {
+      formApi.create({
+        title: 'Untitled Form',
+        formType: 'Normal',
+        audience: 'Students',
+        isActive: true,
+        allowMultipleResponses: false,
+      }).then(created => {
+        navigate(`/forms/${created.id}/edit`, { replace: true });
+      }).catch(() => {
+        setError('Failed to create form. Please try again.');
+        setLoading(false);
+      });
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // For edit forms: load existing form data
   useEffect(() => {
     if (isEdit && id) {
       formApi.get(id)
@@ -125,120 +170,262 @@ export default function FormBuilderPage() {
           setFontFamily(form.fontFamily || 'Inter');
           const sorted = [...(form.questions || [])].sort((a, b) => a.order - b.order);
           setQuestions(sorted);
+          latestFormData.current = {
+            title: form.title,
+            description: form.description || '',
+            formType: form.formType,
+            audience: form.audience,
+            isActive: form.isActive,
+            allowMultipleResponses: form.allowMultipleResponses,
+            timerMinutes: form.timerMinutes,
+            primaryColor: form.primaryColor || '#3b82f6',
+            backgroundColor: form.backgroundColor || '#f9fafb',
+            fontFamily: form.fontFamily || 'Inter',
+          };
         })
         .catch(() => setError('Failed to load form'))
         .finally(() => setLoading(false));
     }
   }, [id, isEdit]);
 
+  // Schedule a debounced form auto-save (1 second after last change)
+  const scheduleFormSave = useCallback(() => {
+    if (!id) return;
+    if (formSaveTimerRef.current) clearTimeout(formSaveTimerRef.current);
+    setAutoSaving(true);
+    formSaveTimerRef.current = setTimeout(async () => {
+      const data = latestFormData.current;
+      try {
+        await formApi.update(id, {
+          title: data.title.trim() || 'Untitled Form',
+          description: data.description.trim() || undefined,
+          formType: data.formType,
+          audience: data.audience,
+          isActive: data.isActive,
+          allowMultipleResponses: data.allowMultipleResponses,
+          timerMinutes: data.timerMinutes || undefined,
+          primaryColor: data.primaryColor,
+          backgroundColor: data.backgroundColor,
+          fontFamily: data.fontFamily,
+        });
+      } catch {
+        // Silent auto-save failure
+      } finally {
+        setAutoSaving(false);
+      }
+    }, 1000);
+  }, [id]);
+
+  // Schedule a debounced question auto-save (1 second after last change)
+  const scheduleQuestionSave = (question: FormQuestionDto) => {
+    if (question.id.startsWith('temp-')) return;
+    const key = question.id;
+    if (questionSaveTimers.current.has(key)) clearTimeout(questionSaveTimers.current.get(key)!);
+    questionSaveTimers.current.set(key, setTimeout(async () => {
+      try {
+        await questionApi.update(question.id, {
+          text: question.text || 'Question',
+          description: question.description,
+          questionType: question.questionType,
+          order: question.order,
+          isRequired: question.isRequired,
+          points: question.points,
+          columnSpan: question.columnSpan,
+          labelColor: question.labelColor,
+          fontSize: question.fontSize,
+          fontFamily: question.fontFamily,
+        });
+      } catch {
+        // Silent auto-save failure
+      }
+      questionSaveTimers.current.delete(key);
+    }, 1000));
+  };
+
+  // Schedule a debounced option auto-save (1 second after last change)
+  const scheduleOptionSave = (option: FormQuestionOptionDto) => {
+    if (option.id.startsWith('temp-')) return;
+    const key = option.id;
+    if (optionSaveTimers.current.has(key)) clearTimeout(optionSaveTimers.current.get(key)!);
+    optionSaveTimers.current.set(key, setTimeout(async () => {
+      try {
+        await optionApi.update(option.id, {
+          text: option.text,
+          order: option.order,
+          isCorrect: option.isCorrect,
+        });
+      } catch {
+        // Silent auto-save failure
+      }
+      optionSaveTimers.current.delete(key);
+    }, 1000));
+  };
+
+  // Form field change handlers — update state + ref + schedule save
+  const handleTitleChange = (val: string) => {
+    setTitle(val);
+    latestFormData.current = { ...latestFormData.current, title: val };
+    scheduleFormSave();
+  };
+
+  const handleDescriptionChange = (val: string) => {
+    setDescription(val);
+    latestFormData.current = { ...latestFormData.current, description: val };
+    scheduleFormSave();
+  };
+
+  const handleFormTypeChange = (val: FormType) => {
+    setFormType(val);
+    latestFormData.current = { ...latestFormData.current, formType: val };
+    scheduleFormSave();
+  };
+
+  const handleAudienceChange = (val: AudienceType) => {
+    setAudience(val);
+    latestFormData.current = { ...latestFormData.current, audience: val };
+    scheduleFormSave();
+  };
+
+  const handleIsActiveToggle = () => {
+    const val = !latestFormData.current.isActive;
+    setIsActive(val);
+    latestFormData.current = { ...latestFormData.current, isActive: val };
+    scheduleFormSave();
+  };
+
+  const handleAllowMultipleToggle = () => {
+    const val = !latestFormData.current.allowMultipleResponses;
+    setAllowMultipleResponses(val);
+    latestFormData.current = { ...latestFormData.current, allowMultipleResponses: val };
+    scheduleFormSave();
+  };
+
+  const handleTimerChange = (val: number | undefined) => {
+    setTimerMinutes(val);
+    latestFormData.current = { ...latestFormData.current, timerMinutes: val };
+    scheduleFormSave();
+  };
+
+  const handlePrimaryColorChange = (val: string) => {
+    setPrimaryColor(val);
+    latestFormData.current = { ...latestFormData.current, primaryColor: val };
+    scheduleFormSave();
+  };
+
+  const handleBackgroundColorChange = (val: string) => {
+    setBackgroundColor(val);
+    latestFormData.current = { ...latestFormData.current, backgroundColor: val };
+    scheduleFormSave();
+  };
+
+  const handleFontFamilyChange = (val: string) => {
+    setFontFamily(val);
+    latestFormData.current = { ...latestFormData.current, fontFamily: val };
+    scheduleFormSave();
+  };
+
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
-    setQuestions(qs => {
-      const oldIdx = qs.findIndex(q => q.id === active.id);
-      const newIdx = qs.findIndex(q => q.id === over.id);
-      return arrayMove(qs, oldIdx, newIdx).map((q, i) => ({ ...q, order: i }));
-    });
-  }, []);
 
-  const addQuestion = (type: QuestionType = 'ShortText') => {
-    const newQ: FormQuestionDto = {
-      ...DEFAULT_QUESTION,
-      id: `temp-${Date.now()}`,
-      formId: id || '',
-      text: '',
-      questionType: type,
-      order: questions.length,
-      options: [],
-    };
-    setQuestions(qs => [...qs, newQ]);
-  };
+    const qs = questionsRef.current;
+    const oldIdx = qs.findIndex(q => q.id === active.id);
+    const newIdx = qs.findIndex(q => q.id === over.id);
+    if (oldIdx === -1 || newIdx === -1) return;
 
-  const updateQuestion = (idx: number, updated: FormQuestionDto) => {
-    setQuestions(qs => qs.map((q, i) => i === idx ? updated : q));
-  };
+    const reordered = arrayMove(qs, oldIdx, newIdx).map((q, i) => ({ ...q, order: i }));
+    setQuestions(reordered);
 
-  const deleteQuestion = (idx: number) => {
-    setQuestions(qs => qs.filter((_, i) => i !== idx).map((q, i) => ({ ...q, order: i })));
-  };
+    // Schedule API saves for all reordered questions
+    reordered.forEach(q => { scheduleQuestionSave(q); });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleSave = async () => {
-    if (!title.trim()) {
-      setError('Form title is required');
-      return;
-    }
-    setSaving(true);
-    setError(null);
-    setSuccessMsg(null);
+  // Add a new question: immediately create it via API
+  const addQuestion = async (type: QuestionType = 'ShortText') => {
+    if (!id) return;
     try {
-      let formId = id;
-      const formData = {
-        title: title.trim(),
-        description: description.trim() || undefined,
-        formType,
-        audience,
-        isActive,
-        allowMultipleResponses,
-        timerMinutes: timerMinutes || undefined,
-        primaryColor,
-        backgroundColor,
-        fontFamily,
-      };
+      const created = await questionApi.create({
+        formId: id,
+        text: '',
+        questionType: type,
+        order: questionsRef.current.length,
+        isRequired: false,
+        columnSpan: 12,
+        options: [],
+      });
+      setQuestions(qs => [...qs, created]);
+    } catch {
+      setError('Failed to add question. Please try again.');
+    }
+  };
 
-      if (isEdit && id) {
-        await formApi.update(id, formData);
-      } else {
-        const created = await formApi.create(formData);
-        formId = created.id;
-      }
+  // Update a question locally and sync changes to the API
+  const updateQuestion = (idx: number, updated: FormQuestionDto) => {
+    const old = questionsRef.current[idx];
+    if (!old) return;
 
-      if (formId) {
-        for (let i = 0; i < questions.length; i++) {
-          const q = { ...questions[i], order: i };
-          if (q.id.startsWith('temp-')) {
-            const created = await questionApi.create({
-              formId,
-              text: q.text || 'Question',
-              description: q.description,
-              questionType: q.questionType,
-              order: q.order,
-              isRequired: q.isRequired,
-              points: q.points,
-              columnSpan: q.columnSpan,
-              labelColor: q.labelColor,
-              fontSize: q.fontSize,
-              fontFamily: q.fontFamily,
-              options: q.options
-                .filter(o => o.id.startsWith('temp-'))
-                .map((o, oi) => ({ text: o.text, order: oi, isCorrect: o.isCorrect })),
-            });
-            setQuestions(prev => prev.map(pq => pq.id === q.id ? { ...created } : pq));
-          } else {
-            await questionApi.update(q.id, {
-              text: q.text || 'Question',
-              description: q.description,
-              questionType: q.questionType,
-              order: q.order,
-              isRequired: q.isRequired,
-              points: q.points,
-              columnSpan: q.columnSpan,
-              labelColor: q.labelColor,
-              fontSize: q.fontSize,
-              fontFamily: q.fontFamily,
-            });
-          }
+    setQuestions(qs => qs.map((q, i) => i === idx ? updated : q));
+
+    // Skip API sync for questions not yet persisted
+    if (updated.id.startsWith('temp-')) return;
+
+    // Detect option changes
+    const oldOptionMap = new Map(old.options.map(o => [o.id, o]));
+    const newOptionIds = new Set(updated.options.map(o => o.id));
+
+    // New options (temp- ID) → create via API immediately
+    updated.options.forEach(option => {
+      if (option.id.startsWith('temp-')) {
+        optionApi.create({
+          questionId: updated.id,
+          text: option.text || `Option ${option.order + 1}`,
+          order: option.order,
+          isCorrect: option.isCorrect,
+        }).then(created => {
+          setQuestions(prev => prev.map(q =>
+            q.id === updated.id
+              ? { ...q, options: q.options.map(o => o.id === option.id ? created : o) }
+              : q
+          ));
+        }).catch(() => {});
+      } else if (oldOptionMap.has(option.id)) {
+        // Existing option that was changed → debounced update
+        const oldOpt = oldOptionMap.get(option.id)!;
+        if (
+          oldOpt.text !== option.text ||
+          oldOpt.isCorrect !== option.isCorrect ||
+          oldOpt.order !== option.order
+        ) {
+          scheduleOptionSave(option);
         }
       }
+    });
 
-      setSuccessMsg('Form saved successfully!');
-      if (!isEdit && formId) {
-        navigate(`/forms/${formId}/edit`);
+    // Removed options → delete via API immediately
+    old.options.forEach(oldOpt => {
+      if (!newOptionIds.has(oldOpt.id) && !oldOpt.id.startsWith('temp-')) {
+        optionApi.delete(oldOpt.id).catch(() => {});
       }
-    } catch {
-      setError('Failed to save form. Please try again.');
-    } finally {
-      setSaving(false);
+    });
+
+    // Schedule debounced question save for text/property changes
+    scheduleQuestionSave(updated);
+  };
+
+  // Delete a question: remove from API then from state
+  const deleteQuestion = async (idx: number) => {
+    const q = questionsRef.current[idx];
+    if (!q) return;
+
+    if (!q.id.startsWith('temp-')) {
+      try {
+        await questionApi.delete(q.id);
+      } catch {
+        setError('Failed to delete question. Please try again.');
+        return;
+      }
     }
+    setQuestions(qs => qs.filter((_, i) => i !== idx).map((q, i) => ({ ...q, order: i })));
   };
 
   if (loading) {
@@ -259,18 +446,26 @@ export default function FormBuilderPage() {
           <input
             type="text"
             value={title}
-            onChange={e => setTitle(e.target.value)}
+            onChange={e => handleTitleChange(e.target.value)}
             placeholder="Form title"
             className="text-base font-semibold text-gray-900 dark:text-white border-none outline-none bg-transparent w-48 sm:w-64"
           />
         </div>
       </AppHeader>
 
-      {/* Save bar */}
+      {/* Auto-save status bar */}
       <div className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
         <div className="max-w-5xl mx-auto px-4 py-2 flex items-center justify-end gap-3">
           {error && <span className="text-sm text-red-500">{error}</span>}
-          {successMsg && <span className="text-sm text-green-600 dark:text-green-400">{successMsg}</span>}
+          {autoSaving && (
+            <span className="text-xs text-gray-400 dark:text-slate-500 flex items-center gap-1.5">
+              <span className="inline-block w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+              {t.saving}
+            </span>
+          )}
+          {!autoSaving && !error && isEdit && (
+            <span className="text-xs text-green-600 dark:text-green-400">✓ {t.save}d</span>
+          )}
           {isEdit && (
             <Link
               to={`/forms/${id}/preview`}
@@ -279,13 +474,6 @@ export default function FormBuilderPage() {
               {t.preview}
             </Link>
           )}
-          <button
-            onClick={handleSave}
-            disabled={saving}
-            className="px-5 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
-          >
-            {saving ? t.saving : t.save}
-          </button>
         </div>
       </div>
 
@@ -294,14 +482,14 @@ export default function FormBuilderPage() {
         <div className="bg-white dark:bg-slate-800 rounded-xl border-t-8 shadow-sm p-6 space-y-4" style={{ borderTopColor: primaryColor }}>
           <textarea
             value={title}
-            onChange={e => setTitle(e.target.value)}
+            onChange={e => handleTitleChange(e.target.value)}
             placeholder="Form Title"
             rows={1}
             className="w-full text-3xl font-bold text-gray-900 dark:text-white border-none outline-none resize-none bg-transparent"
           />
           <textarea
             value={description}
-            onChange={e => setDescription(e.target.value)}
+            onChange={e => handleDescriptionChange(e.target.value)}
             placeholder="Form description (optional)"
             rows={2}
             className="w-full text-base text-gray-500 dark:text-slate-400 border-none outline-none resize-none bg-transparent"
@@ -313,7 +501,7 @@ export default function FormBuilderPage() {
               <label className="text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wide">Form Type</label>
               <select
                 value={formType}
-                onChange={e => setFormType(e.target.value as FormType)}
+                onChange={e => handleFormTypeChange(e.target.value as FormType)}
                 className="mt-1 w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
               >
                 <option value="Normal">Normal</option>
@@ -324,7 +512,7 @@ export default function FormBuilderPage() {
               <label className="text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wide">Audience</label>
               <select
                 value={audience}
-                onChange={e => setAudience(e.target.value as AudienceType)}
+                onChange={e => handleAudienceChange(e.target.value as AudienceType)}
                 className="mt-1 w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
               >
                 <option value="Students">Students</option>
@@ -337,7 +525,7 @@ export default function FormBuilderPage() {
               <input
                 type="number"
                 value={timerMinutes || ''}
-                onChange={e => setTimerMinutes(e.target.value ? parseInt(e.target.value) : undefined)}
+                onChange={e => handleTimerChange(e.target.value ? parseInt(e.target.value) : undefined)}
                 placeholder="No timer"
                 min={1}
                 className="mt-1 w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
@@ -346,7 +534,7 @@ export default function FormBuilderPage() {
             <div className="flex flex-col gap-3 pt-4">
               <label className="flex items-center gap-3 cursor-pointer">
                 <div
-                  onClick={() => setIsActive(a => !a)}
+                  onClick={handleIsActiveToggle}
                   className={`relative w-10 h-5 rounded-full transition-colors cursor-pointer ${isActive ? 'bg-blue-600' : 'bg-gray-300 dark:bg-slate-600'}`}
                 >
                   <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${isActive ? 'translate-x-5' : 'translate-x-0.5'}`} />
@@ -355,7 +543,7 @@ export default function FormBuilderPage() {
               </label>
               <label className="flex items-center gap-3 cursor-pointer">
                 <div
-                  onClick={() => setAllowMultipleResponses(a => !a)}
+                  onClick={handleAllowMultipleToggle}
                   className={`relative w-10 h-5 rounded-full transition-colors cursor-pointer ${allowMultipleResponses ? 'bg-blue-600' : 'bg-gray-300 dark:bg-slate-600'}`}
                 >
                   <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${allowMultipleResponses ? 'translate-x-5' : 'translate-x-0.5'}`} />
@@ -381,7 +569,7 @@ export default function FormBuilderPage() {
                     <input
                       type="color"
                       value={primaryColor}
-                      onChange={e => setPrimaryColor(e.target.value)}
+                      onChange={e => handlePrimaryColorChange(e.target.value)}
                       className="w-10 h-10 rounded cursor-pointer border border-gray-300 dark:border-slate-600"
                     />
                     <span className="text-sm text-gray-600 dark:text-slate-300">{primaryColor}</span>
@@ -393,7 +581,7 @@ export default function FormBuilderPage() {
                     <input
                       type="color"
                       value={backgroundColor}
-                      onChange={e => setBackgroundColor(e.target.value)}
+                      onChange={e => handleBackgroundColorChange(e.target.value)}
                       className="w-10 h-10 rounded cursor-pointer border border-gray-300 dark:border-slate-600"
                     />
                     <span className="text-sm text-gray-600 dark:text-slate-300">{backgroundColor}</span>
@@ -403,7 +591,7 @@ export default function FormBuilderPage() {
                   <label className="text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wide block mb-2">Font Family</label>
                   <select
                     value={fontFamily}
-                    onChange={e => setFontFamily(e.target.value)}
+                    onChange={e => handleFontFamilyChange(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white outline-none"
                     style={{ fontFamily }}
                   >
@@ -454,3 +642,4 @@ export default function FormBuilderPage() {
     </div>
   );
 }
+
