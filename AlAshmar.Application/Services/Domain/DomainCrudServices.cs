@@ -1,5 +1,6 @@
 using AlAshmar.Application.DTOs.Domain;
 using AlAshmar.Application.Repos;
+using AlAshmar.Application.Repos.Includes;
 using AlAshmar.Application.Services.Crud;
 using AlAshmar.Domain.Entities.Academic;
 using AlAshmar.Domain.Entities.Common;
@@ -22,6 +23,9 @@ public class AttachmentService : CrudServiceBase<Attachment, AttachmentDto, Guid
 {
     public AttachmentService(IRepositoryBase<Attachment, Guid> repository, IMapper mapper)
         : base(repository, mapper) { }
+
+    protected override Func<IQueryable<Attachment>, IQueryable<Attachment>>? GetDefaultIncludes() =>
+        AttachmentIncludes.Instance.Apply();
 }
 
 public interface IContactInfoService : IAdvancedCrudService<ContactInfo, ContactInfoDto, Guid> { }
@@ -50,6 +54,9 @@ public class ManagerService : CrudServiceBase<Manager, ManagerDto, Guid>, IManag
 {
     public ManagerService(IRepositoryBase<Manager, Guid> repository, IMapper mapper)
         : base(repository, mapper) { }
+
+    protected override Func<IQueryable<Manager>, IQueryable<Manager>>? GetDefaultIncludes() =>
+        ManagerIncludes.Instance.Apply();
 }
 
 public interface ITeacherService : IAdvancedCrudService<Teacher, TeacherDto, Guid> { }
@@ -57,6 +64,9 @@ public class TeacherService : CrudServiceBase<Teacher, TeacherDto, Guid>, ITeach
 {
     public TeacherService(IRepositoryBase<Teacher, Guid> repository, IMapper mapper)
         : base(repository, mapper) { }
+
+    protected override Func<IQueryable<Teacher>, IQueryable<Teacher>>? GetDefaultIncludes() =>
+        TeacherIncludes.Instance.Apply();
 }
 
 public interface ITeacherAttendanceService : IAdvancedCrudService<TeacherAttendance, TeacherAttendanceDto, Guid> { }
@@ -71,6 +81,9 @@ public class ClassTeacherEnrollmentService : CrudServiceBase<ClassTeacherEnrollm
 {
     public ClassTeacherEnrollmentService(IRepositoryBase<ClassTeacherEnrollment, Guid> repository, IMapper mapper)
         : base(repository, mapper) { }
+
+    protected override Func<IQueryable<ClassTeacherEnrollment>, IQueryable<ClassTeacherEnrollment>>? GetDefaultIncludes() =>
+        ClassTeacherEnrollmentIncludes.Instance.Apply();
 }
 
 public interface IStudentAttendanceService : IAdvancedCrudService<StudentAttendance, StudentAttendanceDto, Guid> { }
@@ -85,6 +98,9 @@ public class ClassStudentEnrollmentService : CrudServiceBase<ClassStudentEnrollm
 {
     public ClassStudentEnrollmentService(IRepositoryBase<ClassStudentEnrollment, Guid> repository, IMapper mapper)
         : base(repository, mapper) { }
+
+    protected override Func<IQueryable<ClassStudentEnrollment>, IQueryable<ClassStudentEnrollment>>? GetDefaultIncludes() =>
+        ClassStudentEnrollmentIncludes.Instance.Apply();
 }
 
 public interface IBookService : IAdvancedCrudService<Book, BookDto, Guid> { }
@@ -99,6 +115,9 @@ public class HadithService : CrudServiceBase<Hadith, HadithDto, Guid>, IHadithSe
 {
     public HadithService(IRepositoryBase<Hadith, Guid> repository, IMapper mapper)
         : base(repository, mapper) { }
+
+    protected override Func<IQueryable<Hadith>, IQueryable<Hadith>>? GetDefaultIncludes() =>
+        HadithIncludes.Instance.Apply();
 }
 
 public interface ISemesterService : IAdvancedCrudService<Semester, SemesterDto, Guid> { }
@@ -120,4 +139,7 @@ public class PointService : CrudServiceBase<Point, PointDto, Guid>, IPointServic
 {
     public PointService(IRepositoryBase<Point, Guid> repository, IMapper mapper)
         : base(repository, mapper) { }
+
+    protected override Func<IQueryable<Point>, IQueryable<Point>>? GetDefaultIncludes() =>
+        PointIncludes.Instance.Apply();
 }
