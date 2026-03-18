@@ -6,21 +6,12 @@ namespace AlAshmar.Controllers.Forms;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class FormsController : ControllerBase
+public class FormsController(IFormService formService, IMapper mapper) : ControllerBase
 {
-    private readonly IFormService _formService;
-    private readonly IMapper _mapper;
-
-    public FormsController(IFormService formService, IMapper mapper)
-    {
-        _formService = formService;
-        _mapper = mapper;
-    }
-
     [HttpGet]
     public async Task<ActionResult<List<FormDto>>> GetAll(CancellationToken cancellationToken)
     {
-        var result = await _formService.GetAllAsync(cancellationToken);
+        var result = await formService.GetAllAsync(cancellationToken);
         return result.IsError ? BadRequest(result.Errors) : Ok(result.Value);
     }
 
@@ -30,14 +21,14 @@ public class FormsController : ControllerBase
         [FromQuery] int pageSize = 10,
         CancellationToken cancellationToken = default)
     {
-        var result = await _formService.GetPagedAsync(page, pageSize, cancellationToken);
+        var result = await formService.GetPagedAsync(page, pageSize, cancellationToken);
         return result.IsError ? BadRequest(result.Errors) : Ok(result.Value);
     }
 
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<FormDto>> GetById(Guid id, CancellationToken cancellationToken)
     {
-        var result = await _formService.GetByIdAsync(id, cancellationToken);
+        var result = await formService.GetByIdAsync(id, cancellationToken);
         if (result.IsError)
             return result.TopError.Type == ErrorKind.NotFound ? NotFound(result.Errors) : BadRequest(result.Errors);
         return Ok(result.Value);
@@ -47,7 +38,7 @@ public class FormsController : ControllerBase
     [HttpGet("access/{accessToken:guid}")]
     public async Task<ActionResult<FormDto>> GetByAccessToken(Guid accessToken, CancellationToken cancellationToken)
     {
-        var result = await _formService.GetByAccessTokenAsync(accessToken, cancellationToken);
+        var result = await formService.GetByAccessTokenAsync(accessToken, cancellationToken);
         if (result.IsError)
             return result.TopError.Type == ErrorKind.NotFound ? NotFound(result.Errors) : BadRequest(result.Errors);
 
@@ -71,16 +62,16 @@ public class FormsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<FormDto>> Create([FromBody] CreateFormDto dto, CancellationToken cancellationToken)
     {
-        var mapped = _mapper.Map<FormDto>(dto);
-        var result = await _formService.CreateAsync(mapped, cancellationToken);
+        var mapped = mapper.Map<FormDto>(dto);
+        var result = await formService.CreateAsync(mapped, cancellationToken);
         return result.IsError ? BadRequest(result.Errors) : CreatedAtAction(nameof(GetById), new { id = result.Value.Id }, result.Value);
     }
 
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<FormDto>> Update(Guid id, [FromBody] UpdateFormDto dto, CancellationToken cancellationToken)
     {
-        var mapped = _mapper.Map<FormDto>(dto);
-        var result = await _formService.UpdateAsync(id, mapped, cancellationToken);
+        var mapped = mapper.Map<FormDto>(dto);
+        var result = await formService.UpdateAsync(id, mapped, cancellationToken);
         if (result.IsError)
             return result.TopError.Type == ErrorKind.NotFound ? NotFound(result.Errors) : BadRequest(result.Errors);
         return Ok(result.Value);
@@ -89,7 +80,7 @@ public class FormsController : ControllerBase
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {
-        var result = await _formService.DeleteAsync(id, cancellationToken);
+        var result = await formService.DeleteAsync(id, cancellationToken);
         if (result.IsError)
             return result.TopError.Type == ErrorKind.NotFound ? NotFound(result.Errors) : BadRequest(result.Errors);
         return NoContent();
@@ -99,16 +90,10 @@ public class FormsController : ControllerBase
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class FormQuestionsController : ControllerBase
+public class FormQuestionsController(IFormQuestionService service, IMapper mapper) : ControllerBase
 {
-    private readonly IFormQuestionService _service;
-    private readonly IMapper _mapper;
-
-    public FormQuestionsController(IFormQuestionService service, IMapper mapper)
-    {
-        _service = service;
-        _mapper = mapper;
-    }
+    private readonly IFormQuestionService _service = service;
+    private readonly IMapper _mapper = mapper;
 
     [HttpGet]
     public async Task<ActionResult<List<FormQuestionDto>>> GetAll(CancellationToken cancellationToken)
