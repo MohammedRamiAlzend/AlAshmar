@@ -82,11 +82,17 @@ public class EntityMappingProfile : Profile
         CreateMap<CreatePointDto, Point>();
         CreateMap<UpdatePointDto, Point>();
 
-        CreateMap<Form, FormDto>().ReverseMap();
+        CreateMap<Form, FormDto>()
+            .ReverseMap()
+            .ForMember(dest => dest.AccessToken, opt => opt.Ignore())
+            .ForMember(dest => dest.Questions, opt => opt.Ignore());
         CreateMap<CreateFormDto, FormDto>();
         CreateMap<UpdateFormDto, FormDto>();
-        CreateMap<CreateFormDto, Form>();
-        CreateMap<UpdateFormDto, Form>();
+        CreateMap<CreateFormDto, Form>()
+            .ForMember(dest => dest.AccessToken, opt => opt.Ignore());
+        CreateMap<UpdateFormDto, Form>()
+            .ForMember(dest => dest.AccessToken, opt => opt.Ignore());
+
 
         CreateMap<FormQuestion, FormQuestionDto>().ReverseMap();
         CreateMap<CreateFormQuestionDto, FormQuestionDto>();
