@@ -365,6 +365,8 @@ export default function FormBuilderPage() {
         options: [],
       });
       setQuestions(qs => [...qs, created]);
+      // Keep form-level auto-save behavior consistent with typing edits.
+      scheduleFormSave();
     } catch {
       setError('Failed to add question. Please try again.');
     }
