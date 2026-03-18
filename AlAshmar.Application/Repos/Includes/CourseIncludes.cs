@@ -21,6 +21,8 @@ public sealed class CourseIncludes : IEntityIncludes<Course>
         .WithSemester()
         .WithHalaqas();
 
+    public static readonly CourseIncludes Instance = Full;
+
     public CourseIncludes WithSemester() =>
         Add(q => q.Include(d => d.Semester));
 

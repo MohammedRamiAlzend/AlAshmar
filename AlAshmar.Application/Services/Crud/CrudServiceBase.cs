@@ -15,8 +15,20 @@ public abstract class CrudServiceBase<TEntity, TDto, TKey> : IAdvancedCrudServic
         _mapper = mapper;
     }
 
+    protected virtual Func<IQueryable<TEntity>, IQueryable<TEntity>>? GetDefaultIncludes() => null;
+
     public virtual async Task<Result<TDto>> GetByIdAsync(TKey id, CancellationToken cancellationToken = default)
     {
+        var includes = GetDefaultIncludes();
+        if (includes != null)
+        {
+            var result = await _repository.GetAsync(e => e.Id!.Equals(id), includes);
+            if (result.IsError)
+                return result.Errors;
+
+            return _mapper.Map<TDto>(result.Value);
+        }
+
         var entity = await _repository.GetByIdAsync(id);
         if (entity.Value == null)
             return ApplicationErrors.ResourceNotFound;
@@ -26,7 +38,7 @@ public abstract class CrudServiceBase<TEntity, TDto, TKey> : IAdvancedCrudServic
 
     public virtual async Task<Result<List<TDto>>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        var result = await _repository.GetAllAsync();
+        var result = await _repository.GetAllAsync(transform: GetDefaultIncludes());
         if (result.IsError)
             return result.Errors;
 
@@ -35,7 +47,7 @@ public abstract class CrudServiceBase<TEntity, TDto, TKey> : IAdvancedCrudServic
 
     public virtual async Task<Result<PagedList<TDto>>> GetPagedAsync(int page, int pageSize, CancellationToken cancellationToken = default)
     {
-        var result = await _repository.GetPagedAsync(page, pageSize);
+        var result = await _repository.GetPagedAsync(page, pageSize, transform: GetDefaultIncludes());
         if (result.IsError)
             return result.Errors;
 
@@ -82,7 +94,7 @@ public abstract class CrudServiceBase<TEntity, TDto, TKey> : IAdvancedCrudServic
 
     public virtual async Task<Result<List<TDto>>> FindAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
     {
-        var result = await _repository.GetAllAsync(predicate);
+        var result = await _repository.GetAllAsync(predicate, GetDefaultIncludes());
         if (result.IsError)
             return result.Errors;
 

@@ -22,6 +22,8 @@ public sealed class HalaqaIncludes : IEntityIncludes<Halaqa>
         .WithTeacherEnrollments()
         .WithStudentEnrollments();
 
+    public static readonly HalaqaIncludes Instance = Full;
+
     public HalaqaIncludes WithCourse() =>
         Add(q => q.Include(h => h.Course));
 
