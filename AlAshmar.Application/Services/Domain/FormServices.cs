@@ -9,12 +9,39 @@ public interface IFormService : IAdvancedCrudService<Form, FormDto, Guid>
 {
 
     Task<Result<FormDto>> GetByAccessTokenAsync(Guid accessToken, CancellationToken cancellationToken = default);
+    Task<Result<FormDto>> CreateAsync(CreateFormDto dto, CancellationToken cancellationToken = default);
+    Task<Result<FormDto>> UpdateAsync(Guid id, UpdateFormDto dto, CancellationToken cancellationToken = default);
 }
 
 public class FormService : CrudServiceBase<Form, FormDto, Guid>, IFormService
 {
     public FormService(IRepositoryBase<Form, Guid> repository, IMapper mapper)
         : base(repository, mapper) { }
+
+    public async Task<Result<FormDto>> CreateAsync(CreateFormDto dto, CancellationToken cancellationToken = default)
+    {
+        var entity = _mapper.Map<Form>(dto);
+        var result = await _repository.AddAsync(entity);
+        if (result.IsError)
+            return result.Errors;
+
+        return _mapper.Map<FormDto>(entity);
+    }
+
+    public async Task<Result<FormDto>> UpdateAsync(Guid id, UpdateFormDto dto, CancellationToken cancellationToken = default)
+    {
+        var existing = await _repository.GetByIdAsync(id);
+        if (existing.Value == null)
+            return ApplicationErrors.ResourceNotFound;
+
+        _mapper.Map(dto, existing.Value);
+
+        var result = await _repository.UpdateAsync(existing.Value);
+        if (result.IsError)
+            return result.Errors;
+
+        return _mapper.Map<FormDto>(existing.Value);
+    }
 
     public async Task<Result<FormDto>> GetByAccessTokenAsync(Guid accessToken, CancellationToken cancellationToken = default)
     {
@@ -30,18 +57,76 @@ public class FormService : CrudServiceBase<Form, FormDto, Guid>, IFormService
     }
 }
 
-public interface IFormQuestionService : IAdvancedCrudService<FormQuestion, FormQuestionDto, Guid> { }
+public interface IFormQuestionService : IAdvancedCrudService<FormQuestion, FormQuestionDto, Guid>
+{
+    Task<Result<FormQuestionDto>> CreateAsync(CreateFormQuestionDto dto, CancellationToken cancellationToken = default);
+    Task<Result<FormQuestionDto>> UpdateAsync(Guid id, UpdateFormQuestionDto dto, CancellationToken cancellationToken = default);
+}
 public class FormQuestionService : CrudServiceBase<FormQuestion, FormQuestionDto, Guid>, IFormQuestionService
 {
     public FormQuestionService(IRepositoryBase<FormQuestion, Guid> repository, IMapper mapper)
         : base(repository, mapper) { }
+
+    public async Task<Result<FormQuestionDto>> CreateAsync(CreateFormQuestionDto dto, CancellationToken cancellationToken = default)
+    {
+        var entity = _mapper.Map<FormQuestion>(dto);
+        var result = await _repository.AddAsync(entity);
+        if (result.IsError)
+            return result.Errors;
+
+        return _mapper.Map<FormQuestionDto>(entity);
+    }
+
+    public async Task<Result<FormQuestionDto>> UpdateAsync(Guid id, UpdateFormQuestionDto dto, CancellationToken cancellationToken = default)
+    {
+        var existing = await _repository.GetByIdAsync(id);
+        if (existing.Value == null)
+            return ApplicationErrors.ResourceNotFound;
+
+        _mapper.Map(dto, existing.Value);
+
+        var result = await _repository.UpdateAsync(existing.Value);
+        if (result.IsError)
+            return result.Errors;
+
+        return _mapper.Map<FormQuestionDto>(existing.Value);
+    }
 }
 
-public interface IFormQuestionOptionService : IAdvancedCrudService<FormQuestionOption, FormQuestionOptionDto, Guid> { }
+public interface IFormQuestionOptionService : IAdvancedCrudService<FormQuestionOption, FormQuestionOptionDto, Guid>
+{
+    Task<Result<FormQuestionOptionDto>> CreateAsync(CreateFormQuestionOptionDto dto, CancellationToken cancellationToken = default);
+    Task<Result<FormQuestionOptionDto>> UpdateAsync(Guid id, UpdateFormQuestionOptionDto dto, CancellationToken cancellationToken = default);
+}
 public class FormQuestionOptionService : CrudServiceBase<FormQuestionOption, FormQuestionOptionDto, Guid>, IFormQuestionOptionService
 {
     public FormQuestionOptionService(IRepositoryBase<FormQuestionOption, Guid> repository, IMapper mapper)
         : base(repository, mapper) { }
+
+    public async Task<Result<FormQuestionOptionDto>> CreateAsync(CreateFormQuestionOptionDto dto, CancellationToken cancellationToken = default)
+    {
+        var entity = _mapper.Map<FormQuestionOption>(dto);
+        var result = await _repository.AddAsync(entity);
+        if (result.IsError)
+            return result.Errors;
+
+        return _mapper.Map<FormQuestionOptionDto>(entity);
+    }
+
+    public async Task<Result<FormQuestionOptionDto>> UpdateAsync(Guid id, UpdateFormQuestionOptionDto dto, CancellationToken cancellationToken = default)
+    {
+        var existing = await _repository.GetByIdAsync(id);
+        if (existing.Value == null)
+            return ApplicationErrors.ResourceNotFound;
+
+        _mapper.Map(dto, existing.Value);
+
+        var result = await _repository.UpdateAsync(existing.Value);
+        if (result.IsError)
+            return result.Errors;
+
+        return _mapper.Map<FormQuestionOptionDto>(existing.Value);
+    }
 }
 
 public interface IFormResponseService : IAdvancedCrudService<FormResponse, FormResponseDto, Guid>

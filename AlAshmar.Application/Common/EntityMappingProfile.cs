@@ -86,8 +86,6 @@ public class EntityMappingProfile : Profile
             .ReverseMap()
             .ForMember(dest => dest.AccessToken, opt => opt.Ignore())
             .ForMember(dest => dest.Questions, opt => opt.Ignore());
-        CreateMap<CreateFormDto, FormDto>();
-        CreateMap<UpdateFormDto, FormDto>();
         CreateMap<CreateFormDto, Form>()
             .ForMember(dest => dest.AccessToken, opt => opt.Ignore());
         CreateMap<UpdateFormDto, Form>()
@@ -95,16 +93,12 @@ public class EntityMappingProfile : Profile
 
 
         CreateMap<FormQuestion, FormQuestionDto>().ReverseMap();
-        CreateMap<CreateFormQuestionDto, FormQuestionDto>();
         CreateMap<CreateFormQuestionDto, FormQuestion>()
             .ForMember(dest => dest.Options, opt => opt.Ignore());
-        CreateMap<UpdateFormQuestionDto, FormQuestionDto>();
         CreateMap<UpdateFormQuestionDto, FormQuestion>();
 
         CreateMap<FormQuestionOption, FormQuestionOptionDto>().ReverseMap();
-        CreateMap<CreateFormQuestionOptionDto, FormQuestionOptionDto>();
         CreateMap<CreateFormQuestionOptionDto, FormQuestionOption>();
-        CreateMap<UpdateFormQuestionOptionDto, FormQuestionOptionDto>();
         CreateMap<UpdateFormQuestionOptionDto, FormQuestionOption>();
 
         CreateMap<FormResponse, FormResponseDto>().ReverseMap();

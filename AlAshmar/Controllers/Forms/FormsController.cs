@@ -6,7 +6,7 @@ namespace AlAshmar.Controllers.Forms;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class FormsController(IFormService formService, IMapper mapper) : ControllerBase
+public class FormsController(IFormService formService) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<List<FormDto>>> GetAll(CancellationToken cancellationToken)
@@ -62,16 +62,14 @@ public class FormsController(IFormService formService, IMapper mapper) : Control
     [HttpPost]
     public async Task<ActionResult<FormDto>> Create([FromBody] CreateFormDto dto, CancellationToken cancellationToken)
     {
-        var mapped = mapper.Map<FormDto>(dto);
-        var result = await formService.CreateAsync(mapped, cancellationToken);
+        var result = await formService.CreateAsync(dto, cancellationToken);
         return result.IsError ? BadRequest(result.Errors) : CreatedAtAction(nameof(GetById), new { id = result.Value.Id }, result.Value);
     }
 
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<FormDto>> Update(Guid id, [FromBody] UpdateFormDto dto, CancellationToken cancellationToken)
     {
-        var mapped = mapper.Map<FormDto>(dto);
-        var result = await formService.UpdateAsync(id, mapped, cancellationToken);
+        var result = await formService.UpdateAsync(id, dto, cancellationToken);
         if (result.IsError)
             return result.TopError.Type == ErrorKind.NotFound ? NotFound(result.Errors) : BadRequest(result.Errors);
         return Ok(result.Value);
@@ -90,10 +88,9 @@ public class FormsController(IFormService formService, IMapper mapper) : Control
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class FormQuestionsController(IFormQuestionService service, IMapper mapper) : ControllerBase
+public class FormQuestionsController(IFormQuestionService service) : ControllerBase
 {
     private readonly IFormQuestionService _service = service;
-    private readonly IMapper _mapper = mapper;
 
     [HttpGet]
     public async Task<ActionResult<List<FormQuestionDto>>> GetAll(CancellationToken cancellationToken)
@@ -121,16 +118,14 @@ public class FormQuestionsController(IFormQuestionService service, IMapper mappe
     [HttpPost]
     public async Task<ActionResult<FormQuestionDto>> Create([FromBody] CreateFormQuestionDto dto, CancellationToken cancellationToken)
     {
-        var mapped = _mapper.Map<FormQuestionDto>(dto);
-        var result = await _service.CreateAsync(mapped, cancellationToken);
+        var result = await _service.CreateAsync(dto, cancellationToken);
         return result.IsError ? BadRequest(result.Errors) : CreatedAtAction(nameof(GetById), new { id = result.Value.Id }, result.Value);
     }
 
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<FormQuestionDto>> Update(Guid id, [FromBody] UpdateFormQuestionDto dto, CancellationToken cancellationToken)
     {
-        var mapped = _mapper.Map<FormQuestionDto>(dto);
-        var result = await _service.UpdateAsync(id, mapped, cancellationToken);
+        var result = await _service.UpdateAsync(id, dto, cancellationToken);
         if (result.IsError)
             return result.TopError.Type == ErrorKind.NotFound ? NotFound(result.Errors) : BadRequest(result.Errors);
         return Ok(result.Value);
@@ -152,12 +147,10 @@ public class FormQuestionsController(IFormQuestionService service, IMapper mappe
 public class FormQuestionOptionsController : ControllerBase
 {
     private readonly IFormQuestionOptionService _service;
-    private readonly IMapper _mapper;
 
-    public FormQuestionOptionsController(IFormQuestionOptionService service, IMapper mapper)
+    public FormQuestionOptionsController(IFormQuestionOptionService service)
     {
         _service = service;
-        _mapper = mapper;
     }
 
     [HttpGet("{id:guid}")]
@@ -179,16 +172,14 @@ public class FormQuestionOptionsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<FormQuestionOptionDto>> Create([FromBody] CreateFormQuestionOptionDto dto, CancellationToken cancellationToken)
     {
-        var mapped = _mapper.Map<FormQuestionOptionDto>(dto);
-        var result = await _service.CreateAsync(mapped, cancellationToken);
+        var result = await _service.CreateAsync(dto, cancellationToken);
         return result.IsError ? BadRequest(result.Errors) : CreatedAtAction(nameof(GetById), new { id = result.Value.Id }, result.Value);
     }
 
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<FormQuestionOptionDto>> Update(Guid id, [FromBody] UpdateFormQuestionOptionDto dto, CancellationToken cancellationToken)
     {
-        var mapped = _mapper.Map<FormQuestionOptionDto>(dto);
-        var result = await _service.UpdateAsync(id, mapped, cancellationToken);
+        var result = await _service.UpdateAsync(id, dto, cancellationToken);
         if (result.IsError)
             return result.TopError.Type == ErrorKind.NotFound ? NotFound(result.Errors) : BadRequest(result.Errors);
         return Ok(result.Value);
