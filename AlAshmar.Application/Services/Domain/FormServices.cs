@@ -1,5 +1,6 @@
 using AlAshmar.Application.DTOs.Domain;
 using AlAshmar.Application.Repos;
+using AlAshmar.Application.Repos.Includes;
 using AlAshmar.Application.Services.Crud;
 using AlAshmar.Domain.Entities.Forms;
 
@@ -17,6 +18,47 @@ public class FormService : CrudServiceBase<Form, FormDto, Guid>, IFormService
 {
     public FormService(IRepositoryBase<Form, Guid> repository, IMapper mapper)
         : base(repository, mapper) { }
+
+    public override async Task<Result<FormDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var result = await _repository.GetAllAsync(f => f.Id == id, FormIncludes.Instance.Apply());
+        if (result.IsError)
+            return result.Errors;
+
+        var entity = result.Value.FirstOrDefault();
+        if (entity is null)
+            return ApplicationErrors.ResourceNotFound;
+
+        return _mapper.Map<FormDto>(entity);
+    }
+
+    public override async Task<Result<List<FormDto>>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        var result = await _repository.GetAllAsync(transform: FormIncludes.Instance.Apply());
+        if (result.IsError)
+            return result.Errors;
+
+        return result.Value.Select(_mapper.Map<FormDto>).ToList();
+    }
+
+    public override async Task<Result<PagedList<FormDto>>> GetPagedAsync(int page, int pageSize, CancellationToken cancellationToken = default)
+    {
+        var result = await _repository.GetPagedAsync(page, pageSize, transform: FormIncludes.Instance.Apply());
+        if (result.IsError)
+            return result.Errors;
+
+        var items = result.Value.Items.Select(_mapper.Map<FormDto>).ToList();
+        return PagedList<FormDto>.Create(items, result.Value.TotalItems, page, pageSize);
+    }
+
+    public override async Task<Result<List<FormDto>>> FindAsync(Expression<Func<Form, bool>> predicate, CancellationToken cancellationToken = default)
+    {
+        var result = await _repository.GetAllAsync(predicate, FormIncludes.Instance.Apply());
+        if (result.IsError)
+            return result.Errors;
+
+        return result.Value.Select(_mapper.Map<FormDto>).ToList();
+    }
 
     public async Task<Result<FormDto>> CreateAsync(CreateFormDto dto, CancellationToken cancellationToken = default)
     {
@@ -45,7 +87,7 @@ public class FormService : CrudServiceBase<Form, FormDto, Guid>, IFormService
 
     public async Task<Result<FormDto>> GetByAccessTokenAsync(Guid accessToken, CancellationToken cancellationToken = default)
     {
-        var result = await _repository.GetAllAsync(f => f.AccessToken == accessToken);
+        var result = await _repository.GetAllAsync(f => f.AccessToken == accessToken, FormIncludes.Instance.Apply());
         if (result.IsError)
             return result.Errors;
 
@@ -66,6 +108,47 @@ public class FormQuestionService : CrudServiceBase<FormQuestion, FormQuestionDto
 {
     public FormQuestionService(IRepositoryBase<FormQuestion, Guid> repository, IMapper mapper)
         : base(repository, mapper) { }
+
+    public override async Task<Result<FormQuestionDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var result = await _repository.GetAllAsync(fq => fq.Id == id, FormQuestionIncludes.Instance.Apply());
+        if (result.IsError)
+            return result.Errors;
+
+        var entity = result.Value.FirstOrDefault();
+        if (entity is null)
+            return ApplicationErrors.ResourceNotFound;
+
+        return _mapper.Map<FormQuestionDto>(entity);
+    }
+
+    public override async Task<Result<List<FormQuestionDto>>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        var result = await _repository.GetAllAsync(transform: FormQuestionIncludes.Instance.Apply());
+        if (result.IsError)
+            return result.Errors;
+
+        return result.Value.Select(_mapper.Map<FormQuestionDto>).ToList();
+    }
+
+    public override async Task<Result<PagedList<FormQuestionDto>>> GetPagedAsync(int page, int pageSize, CancellationToken cancellationToken = default)
+    {
+        var result = await _repository.GetPagedAsync(page, pageSize, transform: FormQuestionIncludes.Instance.Apply());
+        if (result.IsError)
+            return result.Errors;
+
+        var items = result.Value.Items.Select(_mapper.Map<FormQuestionDto>).ToList();
+        return PagedList<FormQuestionDto>.Create(items, result.Value.TotalItems, page, pageSize);
+    }
+
+    public override async Task<Result<List<FormQuestionDto>>> FindAsync(Expression<Func<FormQuestion, bool>> predicate, CancellationToken cancellationToken = default)
+    {
+        var result = await _repository.GetAllAsync(predicate, FormQuestionIncludes.Instance.Apply());
+        if (result.IsError)
+            return result.Errors;
+
+        return result.Value.Select(_mapper.Map<FormQuestionDto>).ToList();
+    }
 
     public async Task<Result<FormQuestionDto>> CreateAsync(CreateFormQuestionDto dto, CancellationToken cancellationToken = default)
     {
@@ -152,6 +235,47 @@ public class FormResponseService : CrudServiceBase<FormResponse, FormResponseDto
         _formRepository = formRepository;
         _questionRepository = questionRepository;
         _answerRepository = answerRepository;
+    }
+
+    public override async Task<Result<FormResponseDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var result = await _repository.GetAllAsync(fr => fr.Id == id, FormResponseIncludes.Instance.Apply());
+        if (result.IsError)
+            return result.Errors;
+
+        var entity = result.Value.FirstOrDefault();
+        if (entity is null)
+            return ApplicationErrors.ResourceNotFound;
+
+        return _mapper.Map<FormResponseDto>(entity);
+    }
+
+    public override async Task<Result<List<FormResponseDto>>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        var result = await _repository.GetAllAsync(transform: FormResponseIncludes.Instance.Apply());
+        if (result.IsError)
+            return result.Errors;
+
+        return result.Value.Select(_mapper.Map<FormResponseDto>).ToList();
+    }
+
+    public override async Task<Result<PagedList<FormResponseDto>>> GetPagedAsync(int page, int pageSize, CancellationToken cancellationToken = default)
+    {
+        var result = await _repository.GetPagedAsync(page, pageSize, transform: FormResponseIncludes.Instance.Apply());
+        if (result.IsError)
+            return result.Errors;
+
+        var items = result.Value.Items.Select(_mapper.Map<FormResponseDto>).ToList();
+        return PagedList<FormResponseDto>.Create(items, result.Value.TotalItems, page, pageSize);
+    }
+
+    public override async Task<Result<List<FormResponseDto>>> FindAsync(Expression<Func<FormResponse, bool>> predicate, CancellationToken cancellationToken = default)
+    {
+        var result = await _repository.GetAllAsync(predicate, FormResponseIncludes.Instance.Apply());
+        if (result.IsError)
+            return result.Errors;
+
+        return result.Value.Select(_mapper.Map<FormResponseDto>).ToList();
     }
 
     public async Task<Result<FormResponseDto>> SubmitAsync(SubmitFormResponseDto dto, CancellationToken cancellationToken = default)
@@ -249,4 +373,45 @@ public class FormAnswerService : CrudServiceBase<FormAnswer, FormAnswerDto, Guid
 {
     public FormAnswerService(IRepositoryBase<FormAnswer, Guid> repository, IMapper mapper)
         : base(repository, mapper) { }
+
+    public override async Task<Result<FormAnswerDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var result = await _repository.GetAllAsync(fa => fa.Id == id, FormAnswerIncludes.Instance.Apply());
+        if (result.IsError)
+            return result.Errors;
+
+        var entity = result.Value.FirstOrDefault();
+        if (entity is null)
+            return ApplicationErrors.ResourceNotFound;
+
+        return _mapper.Map<FormAnswerDto>(entity);
+    }
+
+    public override async Task<Result<List<FormAnswerDto>>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        var result = await _repository.GetAllAsync(transform: FormAnswerIncludes.Instance.Apply());
+        if (result.IsError)
+            return result.Errors;
+
+        return result.Value.Select(_mapper.Map<FormAnswerDto>).ToList();
+    }
+
+    public override async Task<Result<PagedList<FormAnswerDto>>> GetPagedAsync(int page, int pageSize, CancellationToken cancellationToken = default)
+    {
+        var result = await _repository.GetPagedAsync(page, pageSize, transform: FormAnswerIncludes.Instance.Apply());
+        if (result.IsError)
+            return result.Errors;
+
+        var items = result.Value.Items.Select(_mapper.Map<FormAnswerDto>).ToList();
+        return PagedList<FormAnswerDto>.Create(items, result.Value.TotalItems, page, pageSize);
+    }
+
+    public override async Task<Result<List<FormAnswerDto>>> FindAsync(Expression<Func<FormAnswer, bool>> predicate, CancellationToken cancellationToken = default)
+    {
+        var result = await _repository.GetAllAsync(predicate, FormAnswerIncludes.Instance.Apply());
+        if (result.IsError)
+            return result.Errors;
+
+        return result.Value.Select(_mapper.Map<FormAnswerDto>).ToList();
+    }
 }
