@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { API_URL } from '../config';
+import { useAuthStore } from '../store/authStore';
 import type {
   FormDto, CreateFormDto, UpdateFormDto,
   FormQuestionDto, CreateFormQuestionDto, UpdateFormQuestionDto,
@@ -8,6 +9,32 @@ import type {
 } from '../types/form';
 
 const api = axios.create({ baseURL: API_URL });
+
+// Attach JWT token to every request
+api.interceptors.request.use(config => {
+  const token = useAuthStore.getState().token;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// On 401, clear auth and redirect to login
+api.interceptors.response.use(
+  res => res,
+  err => {
+    if (err.response?.status === 401) {
+      useAuthStore.getState().logout();
+      window.location.href = '/login';
+    }
+    return Promise.reject(err);
+  }
+);
+
+export const authApi = {
+  login: (username: string, password: string) =>
+    api.post<{ token: string; expiresAt: string }>('/auth/login', { username, password }).then(r => r.data),
+};
 
 export const formApi = {
   list: (page = 1, pageSize = 20) =>
