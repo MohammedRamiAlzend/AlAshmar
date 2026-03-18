@@ -1,25 +1,20 @@
-﻿namespace AlAshmar.Infrastructure.Persistence.Migrations
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
+namespace AlAshmar.Infrastructure.Persistence.Migrations
 {
-    using Microsoft.EntityFrameworkCore.Migrations;
-    using System;
-
     /// <inheritdoc />
-
-    /// <summary>
-    /// Defines the <see cref="InitialCreate" />
-    /// </summary>
     public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
-
-        /// <summary>
-        /// The Up
-        /// </summary>
-        /// <param name="migrationBuilder">The migrationBuilder<see cref="MigrationBuilder"/></param>
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AllowableExtentions",
+                name: "AllowableExtensions",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -27,7 +22,7 @@
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AllowableExtentions", x => x.Id);
+                    table.PrimaryKey("PK_AllowableExtensions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -124,7 +119,7 @@
                 });
 
             migrationBuilder.CreateTable(
-                name: "TeacherAttencances",
+                name: "TeacherAttendances",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -134,7 +129,7 @@
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TeacherAttencances", x => x.Id);
+                    table.PrimaryKey("PK_TeacherAttendances", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -146,15 +141,15 @@
                     Type = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     SafeName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     OriginalName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    ExtentionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    ExtensionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Attachments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Attachments_AllowableExtentions_ExtentionId",
-                        column: x => x.ExtentionId,
-                        principalTable: "AllowableExtentions",
+                        name: "FK_Attachments_AllowableExtensions_ExtensionId",
+                        column: x => x.ExtensionId,
+                        principalTable: "AllowableExtensions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
                 });
@@ -228,7 +223,7 @@
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EventName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    CourseName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     SemesterId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -259,6 +254,27 @@
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RefreshTokens",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsRevoked = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshTokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RefreshTokens_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -312,7 +328,7 @@
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClassName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    HalaqaName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -539,7 +555,10 @@
                     CreatedByManagerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedByTeacherId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     HalaqaId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    PrimaryColor = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    BackgroundColor = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    FontFamily = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -751,7 +770,11 @@
                     QuestionType = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Order = table.Column<int>(type: "int", nullable: false),
                     IsRequired = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    Points = table.Column<int>(type: "int", nullable: true)
+                    Points = table.Column<int>(type: "int", nullable: true),
+                    ColumnSpan = table.Column<int>(type: "int", nullable: false, defaultValue: 12),
+                    LabelColor = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    FontSize = table.Column<int>(type: "int", nullable: true),
+                    FontFamily = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -889,15 +912,15 @@
                 values: new object[] { new Guid("00000000-0000-0000-0000-000000000010"), "$2a$11$ugm3BJebpiSW.gjw5fVcYedC2J1OsKlNdykJ6wtVJIemVYnT2rJQO", new Guid("00000000-0000-0000-0000-000000000011"), "1" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AllowableExtentions_ExtName",
-                table: "AllowableExtentions",
+                name: "IX_AllowableExtensions_ExtName",
+                table: "AllowableExtensions",
                 column: "ExtName",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Attachments_ExtentionId",
+                name: "IX_Attachments_ExtensionId",
                 table: "Attachments",
-                column: "ExtentionId");
+                column: "ExtensionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Attachments_SafeName",
@@ -1069,6 +1092,11 @@
                 columns: new[] { "StudentId", "SmesterId", "ClassId" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_RefreshTokens_UserId",
+                table: "RefreshTokens",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RolePermissions_PermissionId",
                 table: "RolePermissions",
                 column: "PermissionId");
@@ -1177,8 +1205,8 @@
                 column: "AttachmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TeacherAttencances_ClassTeacherId_StartDate_EndDate",
-                table: "TeacherAttencances",
+                name: "IX_TeacherAttendances_ClassTeacherId_StartDate_EndDate",
+                table: "TeacherAttendances",
                 columns: new[] { "ClassTeacherId", "StartDate", "EndDate" });
 
             migrationBuilder.CreateIndex(
@@ -1215,11 +1243,6 @@
         }
 
         /// <inheritdoc />
-
-        /// <summary>
-        /// The Down
-        /// </summary>
-        /// <param name="migrationBuilder">The migrationBuilder<see cref="MigrationBuilder"/></param>
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
@@ -1239,6 +1262,9 @@
 
             migrationBuilder.DropTable(
                 name: "Points");
+
+            migrationBuilder.DropTable(
+                name: "RefreshTokens");
 
             migrationBuilder.DropTable(
                 name: "RolePermissions");
@@ -1265,7 +1291,7 @@
                 name: "TeacherAttachments");
 
             migrationBuilder.DropTable(
-                name: "TeacherAttencances");
+                name: "TeacherAttendances");
 
             migrationBuilder.DropTable(
                 name: "TeacherContactInfos");
@@ -1301,7 +1327,7 @@
                 name: "Books");
 
             migrationBuilder.DropTable(
-                name: "AllowableExtentions");
+                name: "AllowableExtensions");
 
             migrationBuilder.DropTable(
                 name: "Students");

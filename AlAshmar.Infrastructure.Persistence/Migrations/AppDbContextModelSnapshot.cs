@@ -197,7 +197,7 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                     b.ToTable("Semesters", (string)null);
                 });
 
-            modelBuilder.Entity("AlAshmar.Domain.Entities.Common.AllowableExtention", b =>
+            modelBuilder.Entity("AlAshmar.Domain.Entities.Common.AllowableExtension", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -213,16 +213,16 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                     b.HasIndex("ExtName")
                         .IsUnique();
 
-                    b.ToTable("AllowableExtentions", (string)null);
+                    b.ToTable("AllowableExtensions", (string)null);
                 });
 
-            modelBuilder.Entity("AlAshmar.Domain.Entities.Common.Attacment", b =>
+            modelBuilder.Entity("AlAshmar.Domain.Entities.Common.Attachment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ExtentionId")
+                    b.Property<Guid?>("ExtensionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("OriginalName")
@@ -247,7 +247,7 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ExtentionId");
+                    b.HasIndex("ExtensionId");
 
                     b.HasIndex("SafeName");
 
@@ -298,6 +298,10 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<string>("BackgroundColor")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.Property<Guid?>("CourseId")
                         .HasColumnType("uniqueidentifier");
 
@@ -314,6 +318,10 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("EndsAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("FontFamily")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("FormType")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -326,6 +334,10 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
+
+                    b.Property<string>("PrimaryColor")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<DateTime?>("StartsAt")
                         .HasColumnType("datetime2");
@@ -408,9 +420,21 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("ColumnSpan")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(12);
+
                     b.Property<string>("Description")
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("FontFamily")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("FontSize")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("FormId")
                         .HasColumnType("uniqueidentifier");
@@ -419,6 +443,10 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
+
+                    b.Property<string>("LabelColor")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<int>("Order")
                         .HasColumnType("int");
@@ -905,7 +933,7 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                     b.ToTable("TeacherAttachments", (string)null);
                 });
 
-            modelBuilder.Entity("AlAshmar.Domain.Entities.Teachers.TeacherAttencance", b =>
+            modelBuilder.Entity("AlAshmar.Domain.Entities.Teachers.TeacherAttendance", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -924,7 +952,7 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("ClassTeacherId", "StartDate", "EndDate");
 
-                    b.ToTable("TeacherAttencances", (string)null);
+                    b.ToTable("TeacherAttendances", (string)null);
                 });
 
             modelBuilder.Entity("AlAshmar.Domain.Entities.Teachers.TeacherContactInfo", b =>
@@ -974,6 +1002,32 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("Permissions", (string)null);
+                });
+
+            modelBuilder.Entity("AlAshmar.Domain.Entities.Users.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("AlAshmar.Domain.Entities.Users.Role", b =>
@@ -1137,14 +1191,14 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("AlAshmar.Domain.Entities.Common.Attacment", b =>
+            modelBuilder.Entity("AlAshmar.Domain.Entities.Common.Attachment", b =>
                 {
-                    b.HasOne("AlAshmar.Domain.Entities.Common.AllowableExtention", "Extention")
+                    b.HasOne("AlAshmar.Domain.Entities.Common.AllowableExtension", "Extension")
                         .WithMany()
-                        .HasForeignKey("ExtentionId")
+                        .HasForeignKey("ExtensionId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.Navigation("Extention");
+                    b.Navigation("Extension");
                 });
 
             modelBuilder.Entity("AlAshmar.Domain.Entities.Forms.Form", b =>
@@ -1274,7 +1328,7 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("AlAshmar.Domain.Entities.Managers.ManagerAttachment", b =>
                 {
-                    b.HasOne("AlAshmar.Domain.Entities.Common.Attacment", "Attachment")
+                    b.HasOne("AlAshmar.Domain.Entities.Common.Attachment", "Attachment")
                         .WithMany()
                         .HasForeignKey("AttachmentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1341,7 +1395,7 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("AlAshmar.Domain.Entities.Students.StudentAttachment", b =>
                 {
-                    b.HasOne("AlAshmar.Domain.Entities.Common.Attacment", "Attachment")
+                    b.HasOne("AlAshmar.Domain.Entities.Common.Attachment", "Attachment")
                         .WithMany()
                         .HasForeignKey("AttachmentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1502,7 +1556,7 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("AlAshmar.Domain.Entities.Teachers.TeacherAttachment", b =>
                 {
-                    b.HasOne("AlAshmar.Domain.Entities.Common.Attacment", "Attachment")
+                    b.HasOne("AlAshmar.Domain.Entities.Common.Attachment", "Attachment")
                         .WithMany()
                         .HasForeignKey("AttachmentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1536,6 +1590,17 @@ namespace AlAshmar.Infrastructure.Persistence.Migrations
                     b.Navigation("ContactInfo");
 
                     b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("AlAshmar.Domain.Entities.Users.RefreshToken", b =>
+                {
+                    b.HasOne("AlAshmar.Domain.Entities.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AlAshmar.Domain.Entities.Users.User", b =>
