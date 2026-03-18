@@ -214,7 +214,7 @@ export default function FormBuilderPage() {
           audience: data.audience,
           isActive: data.isActive,
           allowMultipleResponses: data.allowMultipleResponses,
-          timerMinutes: data.timerMinutes || null,
+          timerMinutes: data.timerMinutes ?? null,
           primaryColor: data.primaryColor,
           backgroundColor: data.backgroundColor,
           fontFamily: data.fontFamily,
