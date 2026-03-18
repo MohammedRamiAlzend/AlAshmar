@@ -50,38 +50,38 @@ export interface FormQuestionOptionDto {
 
 export interface CreateFormDto {
   title: string;
-  description?: string;
+  description?: string | null;
   formType: FormType;
   audience: AudienceType;
-  timerMinutes?: number;
+  timerMinutes?: number | null;
   isActive: boolean;
   allowMultipleResponses: boolean;
-  startsAt?: string;
-  endsAt?: string;
-  createdByManagerId?: string;
-  createdByTeacherId?: string;
-  halaqaId?: string;
-  courseId?: string;
-  primaryColor?: string;
-  backgroundColor?: string;
-  fontFamily?: string;
+  startsAt?: string | null;
+  endsAt?: string | null;
+  createdByManagerId?: string | null;
+  createdByTeacherId?: string | null;
+  halaqaId?: string | null;
+  courseId?: string | null;
+  primaryColor?: string | null;
+  backgroundColor?: string | null;
+  fontFamily?: string | null;
 }
 
 export interface UpdateFormDto {
   title: string;
-  description?: string;
+  description?: string | null;
   formType: FormType;
   audience: AudienceType;
-  timerMinutes?: number;
+  timerMinutes?: number | null;
   isActive: boolean;
   allowMultipleResponses: boolean;
-  startsAt?: string;
-  endsAt?: string;
-  halaqaId?: string;
-  courseId?: string;
-  primaryColor?: string;
-  backgroundColor?: string;
-  fontFamily?: string;
+  startsAt?: string | null;
+  endsAt?: string | null;
+  halaqaId?: string | null;
+  courseId?: string | null;
+  primaryColor?: string | null;
+  backgroundColor?: string | null;
+  fontFamily?: string | null;
 }
 
 export interface CreateFormQuestionOptionDto {

@@ -140,10 +140,21 @@ export default function FormBuilderPage() {
     if (!isEdit) {
       formApi.create({
         title: 'Untitled Form',
+        description: null,
         formType: 'Normal',
         audience: 'Students',
+        timerMinutes: null,
         isActive: true,
         allowMultipleResponses: false,
+        startsAt: null,
+        endsAt: null,
+        createdByManagerId: null,
+        createdByTeacherId: null,
+        halaqaId: null,
+        courseId: null,
+        primaryColor: null,
+        backgroundColor: null,
+        fontFamily: null,
       }).then(created => {
         navigate(`/forms/${created.id}/edit`, { replace: true });
       }).catch(() => {
@@ -198,12 +209,12 @@ export default function FormBuilderPage() {
       try {
         await formApi.update(id, {
           title: data.title.trim() || 'Untitled Form',
-          description: data.description.trim() || undefined,
+          description: data.description.trim() || null,
           formType: data.formType,
           audience: data.audience,
           isActive: data.isActive,
           allowMultipleResponses: data.allowMultipleResponses,
-          timerMinutes: data.timerMinutes || undefined,
+          timerMinutes: data.timerMinutes || null,
           primaryColor: data.primaryColor,
           backgroundColor: data.backgroundColor,
           fontFamily: data.fontFamily,
