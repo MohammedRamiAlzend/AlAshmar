@@ -12,6 +12,68 @@ import type {
 
 const api = axios.create({ baseURL: API_URL });
 
+const canRetryWithFallback = (error: unknown) => {
+  if (!axios.isAxiosError(error)) return false;
+  const status = error.response?.status;
+  return status === 404 || status === 405;
+};
+
+async function getWithFallback<T>(paths: string[]): Promise<T> {
+  let lastError: unknown;
+  for (const path of paths) {
+    try {
+      const response = await api.get<T>(path);
+      return response.data;
+    } catch (error) {
+      lastError = error;
+      if (!canRetryWithFallback(error)) throw error;
+    }
+  }
+  throw lastError;
+}
+
+async function postWithFallback<TResponse, TBody>(paths: string[], data: TBody): Promise<TResponse> {
+  let lastError: unknown;
+  for (const path of paths) {
+    try {
+      const response = await api.post<TResponse>(path, data);
+      return response.data;
+    } catch (error) {
+      lastError = error;
+      if (!canRetryWithFallback(error)) throw error;
+    }
+  }
+  throw lastError;
+}
+
+async function putWithFallback<TResponse, TBody>(paths: string[], data: TBody): Promise<TResponse> {
+  let lastError: unknown;
+  for (const path of paths) {
+    try {
+      const response = await api.put<TResponse>(path, data);
+      return response.data;
+    } catch (error) {
+      lastError = error;
+      if (!canRetryWithFallback(error)) throw error;
+    }
+  }
+  throw lastError;
+}
+
+async function deleteWithFallback(paths: string[]): Promise<void> {
+  let lastError: unknown;
+  for (const path of paths) {
+    try {
+      await api.delete(path);
+      return;
+    } catch (error) {
+      lastError = error;
+      if (!canRetryWithFallback(error)) throw error;
+    }
+  }
+  throw lastError;
+}
+
 function normalizeArrayResponse<T>(payload: unknown): T[] {
   if (Array.isArray(payload)) {
     return payload as T[];
@@ -92,39 +154,45 @@ export const halaqaApi = {
 
 export const studentApi = {
   list: () =>
-    api.get<unknown>('/students').then(r => normalizeArrayResponse<StudentDto>(r.data)),
+    getWithFallback<unknown>(['/students', '/student']).then(payload => normalizeArrayResponse<StudentDto>(payload)),
   get: (id: string) =>
-    api.get<StudentDto>(`/students/${id}`).then(r => r.data),
+    getWithFallback<StudentDto>([`/students/${id}`, `/student/${id}`]),
   create: (data: CreateStudentDto) =>
-    api.post<StudentDto>('/students', data).then(r => r.data),
+    postWithFallback<StudentDto, CreateStudentDto>(['/students', '/student'], data),
   update: (id: string, data: UpdateStudentDto) =>
-    api.put<StudentDto>(`/students/${id}`, data).then(r => r.data),
+    putWithFallback<StudentDto, UpdateStudentDto>([`/students/${id}`, `/student/${id}`], data),
   delete: (id: string) =>
-    api.delete(`/students/${id}`),
+    deleteWithFallback([`/students/${id}`, `/student/${id}`]),
 };
 
 export const teacherApi = {
   list: () =>
-    api.get<unknown>('/teachers').then(r => normalizeArrayResponse<TeacherDto>(r.data)),
+    getWithFallback<unknown>(['/teachers', '/teacher']).then(payload => normalizeArrayResponse<TeacherDto>(payload)),
   get: (id: string) =>
-    api.get<TeacherDto>(`/teachers/${id}`).then(r => r.data),
+    getWithFallback<TeacherDto>([`/teachers/${id}`, `/teacher/${id}`]),
   create: (data: CreateTeacherDto) =>
-    api.post<TeacherDto>('/teachers', data).then(r => r.data),
+    postWithFallback<TeacherDto, CreateTeacherDto>(['/teachers', '/teacher'], data),
   update: (id: string, data: UpdateTeacherDto) =>
-    api.put<TeacherDto>(`/teachers/${id}`, data).then(r => r.data),
+    putWithFallback<TeacherDto, UpdateTeacherDto>([`/teachers/${id}`, `/teacher/${id}`], data),
   delete: (id: string) =>
-    api.delete(`/teachers/${id}`),
+    deleteWithFallback([`/teachers/${id}`, `/teacher/${id}`]),
 };
 
 export const enrollmentApi = {
   list: () =>
-    api.get<unknown>('/enrollments').then(r => normalizeArrayResponse<EnrollmentDto>(r.data)),
+    getWithFallback<unknown>(['/enrollments', '/enrollment']).then(payload => normalizeArrayResponse<EnrollmentDto>(payload)),
   byStudent: (studentId: string) =>
-    api.get<unknown>(`/enrollments/by-student/${studentId}`).then(r => normalizeArrayResponse<EnrollmentDto>(r.data)),
+    getWithFallback<unknown>([
+      `/enrollments/by-student/${studentId}`,
+      `/enrollment/by-student/${studentId}`,
+    ]).then(payload => normalizeArrayResponse<EnrollmentDto>(payload)),
   byHalaqa: (halaqaId: string) =>
-    api.get<unknown>(`/enrollments/by-halaqa/${halaqaId}`).then(r => normalizeArrayResponse<EnrollmentDto>(r.data)),
+    getWithFallback<unknown>([
+      `/enrollments/by-halaqa/${halaqaId}`,
+      `/enrollment/by-halaqa/${halaqaId}`,
+    ]).then(payload => normalizeArrayResponse<EnrollmentDto>(payload)),
   create: (data: CreateEnrollmentDto) =>
-    api.post<EnrollmentDto>('/enrollments', data).then(r => r.data),
+    postWithFallback<EnrollmentDto, CreateEnrollmentDto>(['/enrollments', '/enrollment'], data),
   delete: (id: string) =>
-    api.delete(`/enrollments/${id}`),
+    deleteWithFallback([`/enrollments/${id}`, `/enrollment/${id}`]),
 };
