@@ -1,6 +1,7 @@
 using AlAshmar.Application.DTOs;
 using AlAshmar.Application.DTOs.Domain;
 using AlAshmar.Application.Repos;
+using AlAshmar.Domain.Entities.Common;
 using AlAshmar.Domain.Entities.Students;
 
 namespace AlAshmar.Application.UseCases.Students.CreateStudent;
@@ -12,7 +13,8 @@ public record CreateStudentCommand(
     string NationalityNumber,
     string? Email,
     string UserName,
-    string Password
+    string Password,
+    List<CreateStudentContactInfoDto>? ContactInfos
 ) : IRequest<Result<StudentBasicInfoDto>>;
 
 public class CreateStudentHandler(IRepositoryBase<Student, Guid> repository)
@@ -33,6 +35,25 @@ public class CreateStudentHandler(IRepositoryBase<Student, Guid> repository)
             command.UserName,
             command.Password
         );
+
+        if (command.ContactInfos is not null)
+        {
+            foreach (var contact in command.ContactInfos)
+            {
+                if (string.IsNullOrWhiteSpace(contact.Number))
+                    continue;
+
+                student.StudentContactInfos.Add(new StudentContactInfo
+                {
+                    ContactInfo = new ContactInfo
+                    {
+                        Number = contact.Number,
+                        Email = contact.Email,
+                        IsActive = contact.IsActive,
+                    }
+                });
+            }
+        }
 
         var addResult = await repository.AddAsync(student);
         if (addResult.IsError)

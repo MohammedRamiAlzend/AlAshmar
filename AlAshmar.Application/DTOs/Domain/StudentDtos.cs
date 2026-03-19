@@ -243,7 +243,8 @@ public record CreateStudentDto(
     string FatherName,
     string MotherName,
     string NationalityNumber,
-    string? Email
+    string? Email,
+    List<CreateStudentContactInfoDto>? ContactInfos = null
 );
 
 public record CreateStudentWithAccountDto(
@@ -257,7 +258,6 @@ public record CreateStudentWithAccountDto(
 );
 
 public record CreateStudentContactInfoDto(
-    Guid StudentId,
     string Number,
     string? Email,
     bool IsActive = true

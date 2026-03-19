@@ -178,8 +178,17 @@ public record UpdateUserDto(string UserName, Guid? RoleId);
 public record CreateManagerDto(string Name, Guid? UserId);
 public record UpdateManagerDto(string Name, Guid? UserId);
 
-public record CreateTeacherDto(string Name, string FatherName, string MotherName, string NationalityNumber, string? Email, Guid? UserId);
+public record CreateTeacherDto(
+    string Name,
+    string FatherName,
+    string MotherName,
+    string NationalityNumber,
+    string? Email,
+    Guid? UserId,
+    List<CreateTeacherContactInfoDto>? ContactInfos = null
+);
 public record UpdateTeacherDto(string Name, string FatherName, string MotherName, string NationalityNumber, string? Email);
+public record CreateTeacherContactInfoDto(string Number, string? Email, bool IsActive = true);
 
 public record CreateBookDto(string Name);
 public record UpdateBookDto(string Name);

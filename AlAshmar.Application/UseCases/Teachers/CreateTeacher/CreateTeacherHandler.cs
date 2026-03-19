@@ -1,5 +1,6 @@
 using AlAshmar.Application.DTOs;
 using AlAshmar.Application.Repos;
+using AlAshmar.Domain.Entities.Common;
 using AlAshmar.Domain.Entities.Teachers;
 
 namespace AlAshmar.Application.UseCases.Teachers.CreateTeacher;
@@ -11,7 +12,8 @@ public record CreateTeacherCommand(
     string NationalityNumber,
     string? Email,
     string UserName,
-    string Password
+    string Password,
+    List<CreateTeacherContactInfoDto>? ContactInfos
 ) : IRequest<Result<TeacherDto>>;
 
 public class CreateTeacherHandler(IRepositoryBase<Teacher, Guid> repository) :
@@ -32,6 +34,25 @@ public class CreateTeacherHandler(IRepositoryBase<Teacher, Guid> repository) :
             command.UserName,
             command.Password
         );
+
+        if (command.ContactInfos is not null)
+        {
+            foreach (var contact in command.ContactInfos)
+            {
+                if (string.IsNullOrWhiteSpace(contact.Number))
+                    continue;
+
+                teacher.TeacherContactInfos.Add(new TeacherContactInfo
+                {
+                    ContactInfo = new ContactInfo
+                    {
+                        Number = contact.Number,
+                        Email = contact.Email,
+                        IsActive = contact.IsActive,
+                    }
+                });
+            }
+        }
 
         var addResult = await repository.AddAsync(teacher);
         if (addResult.IsError)

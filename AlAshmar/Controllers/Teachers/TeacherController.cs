@@ -47,7 +47,8 @@ public class TeacherController : ControllerBase
         var command = new CreateTeacherCommand(
             dto.Name, dto.FatherName, dto.MotherName,
             dto.NationalityNumber, dto.Email,
-            userName, password
+            userName, password,
+            dto.ContactInfos
         );
         var result = await _sender.Send(command, cancellationToken);
         return result.ToActionResult();

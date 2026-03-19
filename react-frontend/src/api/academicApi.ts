@@ -90,6 +90,76 @@ function normalizeArrayResponse<T>(payload: unknown): T[] {
   return [];
 }
 
+function normalizeStudentResponse(payload: unknown): StudentDto[] {
+  const items = normalizeArrayResponse<Record<string, unknown>>(payload);
+  return items.map(item => ({
+    id: String(item.id ?? ''),
+    name: String(item.name ?? ''),
+    fatherName: String(item.fatherName ?? ''),
+    motherName: String(item.motherName ?? ''),
+    nationalityNumber: String(item.nationalityNumber ?? ''),
+    email: typeof item.email === 'string' ? item.email : undefined,
+    userName: typeof item.userName === 'string' ? item.userName : undefined,
+    roleType: typeof item.roleType === 'string' ? item.roleType : undefined,
+  })).filter(item => item.id && item.name);
+}
+
+function normalizeTeacherResponse(payload: unknown): TeacherDto[] {
+  const items = normalizeArrayResponse<Record<string, unknown>>(payload);
+  return items.map(item => {
+    const contactItems = Array.isArray(item.teacherContactInfos)
+      ? item.teacherContactInfos as Record<string, unknown>[]
+      : [];
+
+    const contactInfos = contactItems.map(contact => {
+      const contactInfo = contact.contactInfo && typeof contact.contactInfo === 'object'
+        ? contact.contactInfo as Record<string, unknown>
+        : null;
+
+      return {
+        number: String(contactInfo?.number ?? ''),
+        email: typeof contactInfo?.email === 'string' ? contactInfo.email : undefined,
+        isActive: typeof contactInfo?.isActive === 'boolean' ? contactInfo.isActive : undefined,
+      };
+    }).filter(contact => contact.number);
+
+    return {
+      id: String(item.id ?? ''),
+      name: String(item.name ?? ''),
+      fatherName: String(item.fatherName ?? ''),
+      motherName: String(item.motherName ?? ''),
+      nationalityNumber: String(item.nationalityNumber ?? ''),
+      email: typeof item.email === 'string' ? item.email : undefined,
+      contactInfos,
+    };
+  }).filter(item => item.id && item.name);
+}
+
+function normalizeEnrollmentResponse(payload: unknown): EnrollmentDto[] {
+  const items = normalizeArrayResponse<Record<string, unknown>>(payload);
+  return items.map(item => {
+    const id = String(item.id ?? '');
+    const studentId = String(item.studentId ?? '');
+    const halaqaId = String(item.classId ?? item.halaqaId ?? '');
+    const studentName = typeof item.studentName === 'string' ? item.studentName : undefined;
+    const halaqaName = typeof item.className === 'string' ? item.className : undefined;
+
+    return {
+      id,
+      studentId,
+      halaqaId,
+      student: studentName ? {
+        id: studentId,
+        name: studentName,
+        fatherName: '',
+        motherName: '',
+        nationalityNumber: '',
+      } : undefined,
+      halaqa: halaqaName ? { id: halaqaId, className: halaqaName, courseId: '' } : undefined,
+    };
+  }).filter(item => item.id && item.studentId && item.halaqaId);
+}
+
 api.interceptors.request.use(config => {
   const token = useAuthStore.getState().token;
   if (token) {
@@ -154,45 +224,65 @@ export const halaqaApi = {
 
 export const studentApi = {
   list: () =>
-    getWithFallback<unknown>(['/students', '/student']).then(payload => normalizeArrayResponse<StudentDto>(payload)),
+    getWithFallback<unknown>(['/students/filtered', '/students', '/student']).then(payload => normalizeStudentResponse(payload)),
   get: (id: string) =>
     getWithFallback<StudentDto>([`/students/${id}`, `/student/${id}`]),
-  create: (data: CreateStudentDto) =>
-    postWithFallback<StudentDto, CreateStudentDto>(['/students', '/student'], data),
+  create: async (data: CreateStudentDto) => {
+    const formData = new FormData();
+    formData.append('Name', data.name);
+    formData.append('FatherName', data.fatherName);
+    formData.append('MotherName', data.motherName);
+    formData.append('NationalityNumber', data.nationalityNumber);
+    formData.append('Email', data.email ?? '');
+
+    (data.contactInfos ?? []).forEach((contact, index) => {
+      formData.append(`ContactInfos[${index}].Number`, contact.number);
+      formData.append(`ContactInfos[${index}].Email`, contact.email ?? '');
+      formData.append(`ContactInfos[${index}].IsActive`, String(contact.isActive ?? true));
+    });
+
+    const response = await api.post<unknown>('/students', formData);
+    const payload = response.data as Record<string, unknown>;
+    const idFromRoot = payload && typeof payload.id !== 'undefined' ? String(payload.id) : '';
+    const nested = payload && typeof payload.data === 'object' && payload.data
+      ? payload.data as Record<string, unknown>
+      : null;
+    const idFromData = nested && typeof nested.id !== 'undefined' ? String(nested.id) : '';
+    return idFromRoot || idFromData;
+  },
   update: (id: string, data: UpdateStudentDto) =>
-    putWithFallback<StudentDto, UpdateStudentDto>([`/students/${id}`, `/student/${id}`], data),
+    putWithFallback<unknown, UpdateStudentDto>([`/students/${id}`, `/student/${id}`], data),
   delete: (id: string) =>
     deleteWithFallback([`/students/${id}`, `/student/${id}`]),
 };
 
 export const teacherApi = {
   list: () =>
-    getWithFallback<unknown>(['/teachers', '/teacher']).then(payload => normalizeArrayResponse<TeacherDto>(payload)),
+    getWithFallback<unknown>(['/teachers/filtered', '/teachers', '/teacher']).then(payload => normalizeTeacherResponse(payload)),
   get: (id: string) =>
     getWithFallback<TeacherDto>([`/teachers/${id}`, `/teacher/${id}`]),
   create: (data: CreateTeacherDto) =>
-    postWithFallback<TeacherDto, CreateTeacherDto>(['/teachers', '/teacher'], data),
+    postWithFallback<unknown, CreateTeacherDto>(['/teachers', '/teacher'], data),
   update: (id: string, data: UpdateTeacherDto) =>
-    putWithFallback<TeacherDto, UpdateTeacherDto>([`/teachers/${id}`, `/teacher/${id}`], data),
+    putWithFallback<unknown, UpdateTeacherDto>([`/teachers/${id}`, `/teacher/${id}`], data),
   delete: (id: string) =>
     deleteWithFallback([`/teachers/${id}`, `/teacher/${id}`]),
 };
 
 export const enrollmentApi = {
-  list: () =>
-    getWithFallback<unknown>(['/enrollments', '/enrollment']).then(payload => normalizeArrayResponse<EnrollmentDto>(payload)),
+  listByStudents: async (studentIds: string[]) => {
+    const enrollmentLists = await Promise.all(studentIds.map(studentId =>
+      getWithFallback<unknown>([`/students/${studentId}/enrollments`]).then(payload => normalizeEnrollmentResponse(payload))
+    ));
+
+    return enrollmentLists.flat();
+  },
   byStudent: (studentId: string) =>
-    getWithFallback<unknown>([
-      `/enrollments/by-student/${studentId}`,
-      `/enrollment/by-student/${studentId}`,
-    ]).then(payload => normalizeArrayResponse<EnrollmentDto>(payload)),
-  byHalaqa: (halaqaId: string) =>
-    getWithFallback<unknown>([
-      `/enrollments/by-halaqa/${halaqaId}`,
-      `/enrollment/by-halaqa/${halaqaId}`,
-    ]).then(payload => normalizeArrayResponse<EnrollmentDto>(payload)),
+    getWithFallback<unknown>([`/students/${studentId}/enrollments`]).then(payload => normalizeEnrollmentResponse(payload)),
+  byHalaqa: async (_halaqaId: string) => [],
   create: (data: CreateEnrollmentDto) =>
-    postWithFallback<EnrollmentDto, CreateEnrollmentDto>(['/enrollments', '/enrollment'], data),
-  delete: (id: string) =>
-    deleteWithFallback([`/enrollments/${id}`, `/enrollment/${id}`]),
+    postWithFallback<unknown, string>([`/students/${data.studentId}/enrollments`], data.halaqaId).then(() => undefined),
+  delete: async (_id: string) => {
+    throw new Error('Enrollment delete endpoint is not available in backend.');
+  },
 };

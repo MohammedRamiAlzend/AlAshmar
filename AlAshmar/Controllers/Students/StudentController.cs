@@ -38,7 +38,12 @@ public class StudentController : ControllerBase
     {
         var query = new GetStudentByIdQuery(id);
         var result = await _sender.Send(query, cancellationToken);
-        return result.ToActionResult();
+        if (result.IsError)
+            return result.TopError.Type == ErrorKind.NotFound
+                ? NotFound(result.Errors)
+                : BadRequest(result.Errors);
+
+        return result.Value is null ? NotFound() : Ok(result.Value);
     }
 
     [HttpPost]
@@ -54,11 +59,15 @@ public class StudentController : ControllerBase
         var command = new CreateStudentCommand(
             dto.Name, dto.FatherName, dto.MotherName,
             dto.NationalityNumber, dto.Email,
-            userName, password
+            userName, password,
+            dto.ContactInfos
         );
         var result = await _sender.Send(command, cancellationToken);
         if (result.IsError)
             return result.ToActionResult();
+
+        if (result.Value is null)
+            return BadRequest();
 
         var studentId = result.Value.Id;
 
@@ -79,6 +88,9 @@ public class StudentController : ControllerBase
                 }
 
                 var metadata = saveResult.Value;
+                if (metadata is null)
+                    continue;
+
                 var attachmentCommand = new AddAttachmentCommand(
                     studentId,
                     metadata.FilePath,

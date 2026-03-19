@@ -1,17 +1,26 @@
 import { useEffect, useState } from 'react';
 import { teacherApi } from '../api/academicApi';
-import type { TeacherDto } from '../types/academic';
+import type { CreateTeacherContactInfoDto, TeacherDto } from '../types/academic';
 import MainLayout from '../components/MainLayout';
 import { useT } from '../i18n';
 
 interface TeacherFormState {
   name: string;
+  fatherName: string;
+  motherName: string;
+  nationalityNumber: string;
   email: string;
-  phone: string;
-  nationalId: string;
+  contactInfos: CreateTeacherContactInfoDto[];
 }
 
-const emptyForm = (): TeacherFormState => ({ name: '', email: '', phone: '', nationalId: '' });
+const emptyForm = (): TeacherFormState => ({
+  name: '',
+  fatherName: '',
+  motherName: '',
+  nationalityNumber: '',
+  email: '',
+  contactInfos: [{ number: '', email: '', isActive: true }],
+});
 
 export default function TeacherListPage() {
   const t = useT();
@@ -50,8 +59,10 @@ export default function TeacherListPage() {
     setForm({
       name: teacher.name ?? '',
       email: teacher.email ?? '',
-      phone: teacher.phone ?? '',
-      nationalId: teacher.nationalId ?? '',
+      fatherName: teacher.fatherName ?? '',
+      motherName: teacher.motherName ?? '',
+      nationalityNumber: teacher.nationalityNumber ?? '',
+      contactInfos: [{ number: teacher.contactInfos?.[0]?.number ?? '', email: teacher.email ?? '', isActive: true }],
     });
     setEditingId(teacher.id);
   };
@@ -63,12 +74,24 @@ export default function TeacherListPage() {
     setSaving(true);
     try {
       if (editingId === undefined) {
-        const created = await teacherApi.create(form);
-        setTeachers(prev => [...prev, created]);
+        await teacherApi.create({
+          name: form.name,
+          fatherName: form.fatherName,
+          motherName: form.motherName,
+          nationalityNumber: form.nationalityNumber,
+          email: form.email || undefined,
+          contactInfos: form.contactInfos.filter(c => c.number.trim().length > 0),
+        });
       } else if (editingId) {
-        const updated = await teacherApi.update(editingId, form);
-        setTeachers(prev => prev.map(teacher => (teacher.id === editingId ? updated : teacher)));
+        await teacherApi.update(editingId, {
+          name: form.name,
+          fatherName: form.fatherName,
+          motherName: form.motherName,
+          nationalityNumber: form.nationalityNumber,
+          email: form.email || undefined,
+        });
       }
+      await load();
       closeForm();
     } catch {
       alert(t.connectionError);
@@ -91,6 +114,27 @@ export default function TeacherListPage() {
   };
 
   const isFormOpen = editingId !== null;
+
+  const addContactInfo = () => {
+    setForm(prev => ({
+      ...prev,
+      contactInfos: [...prev.contactInfos, { number: '', email: prev.email || '', isActive: true }],
+    }));
+  };
+
+  const removeContactInfo = (index: number) => {
+    setForm(prev => ({
+      ...prev,
+      contactInfos: prev.contactInfos.filter((_, i) => i !== index),
+    }));
+  };
+
+  const updateContactInfo = (index: number, field: keyof CreateTeacherContactInfoDto, value: string | boolean) => {
+    setForm(prev => ({
+      ...prev,
+      contactInfos: prev.contactInfos.map((contact, i) => i === index ? { ...contact, [field]: value } : contact),
+    }));
+  };
 
   return (
     <MainLayout
@@ -140,7 +184,6 @@ export default function TeacherListPage() {
                   </label>
                   <input
                     type="email"
-                    required
                     value={form.email}
                     onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
@@ -148,29 +191,88 @@ export default function TeacherListPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                    {t.phone}
+                    Father Name
                   </label>
                   <input
                     type="text"
                     required
-                    value={form.phone}
-                    onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
+                    value={form.fatherName}
+                    onChange={e => setForm(f => ({ ...f, fatherName: e.target.value }))}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                    {t.nationalId}
+                    Mother Name
                   </label>
                   <input
                     type="text"
                     required
-                    value={form.nationalId}
-                    onChange={e => setForm(f => ({ ...f, nationalId: e.target.value }))}
+                    value={form.motherName}
+                    onChange={e => setForm(f => ({ ...f, motherName: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
+                    Nationality Number
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={form.nationalityNumber}
+                    onChange={e => setForm(f => ({ ...f, nationalityNumber: e.target.value }))}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                   />
                 </div>
               </div>
+
+              {editingId === undefined && (
+                <div className="space-y-3 pt-2">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-sm font-semibold text-gray-800 dark:text-slate-200">Contact Infos</h4>
+                    <button
+                      type="button"
+                      onClick={addContactInfo}
+                      className="px-3 py-1.5 text-xs font-semibold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/20 rounded-xl hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors"
+                    >
+                      + Add Contact
+                    </button>
+                  </div>
+
+                  {form.contactInfos.map((contact, index) => (
+                    <div key={index} className="grid sm:grid-cols-[1fr_1fr_auto] gap-3 items-end">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{t.phone}</label>
+                        <input
+                          type="text"
+                          required={index === 0}
+                          value={contact.number ?? ''}
+                          onChange={e => updateContactInfo(index, 'number', e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">{t.email}</label>
+                        <input
+                          type="email"
+                          value={contact.email ?? ''}
+                          onChange={e => updateContactInfo(index, 'email', e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-xl text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        disabled={form.contactInfos.length === 1}
+                        onClick={() => removeContactInfo(index)}
+                        className="px-3 py-2 text-xs font-semibold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors disabled:opacity-50"
+                      >
+                        {t.delete}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
 
               <div className="flex items-center gap-3 pt-2">
                 <button
@@ -229,10 +331,13 @@ export default function TeacherListPage() {
                 <div>
                   <h3 className="text-base font-semibold text-gray-900 dark:text-white">{teacher.name}</h3>
                   <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">
-                    {teacher.email} • {teacher.phone}
+                    {teacher.fatherName} • {teacher.motherName}
                   </p>
                   <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">
-                    {t.nationalId}: {teacher.nationalId}
+                    Nationality Number: {teacher.nationalityNumber}
+                  </p>
+                  <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">
+                    {t.email}: {teacher.email || '-'} • {t.phone}: {teacher.contactInfos?.[0]?.number || '-'}
                   </p>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">

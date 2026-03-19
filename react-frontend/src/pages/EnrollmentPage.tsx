@@ -37,12 +37,13 @@ export default function EnrollmentPage() {
     try {
       setLoading(true);
       setError(null);
-      const [std, crs, hal, enr] = await Promise.all([
+      const [std, crs, hal] = await Promise.all([
         studentApi.list(),
         courseApi.list(),
         halaqaApi.list(),
-        enrollmentApi.list(),
       ]);
+
+      const enr = await enrollmentApi.listByStudents(std.map(student => student.id));
 
       setStudents(std);
       setCourses(crs);
@@ -75,8 +76,9 @@ export default function EnrollmentPage() {
 
     setSaving(true);
     try {
-      const created = await enrollmentApi.create(form);
-      setEnrollments(prev => [...prev, created]);
+      await enrollmentApi.create(form);
+      const latest = await enrollmentApi.listByStudents(students.map(student => student.id));
+      setEnrollments(latest);
     } catch {
       alert(t.connectionError);
     } finally {
@@ -89,9 +91,8 @@ export default function EnrollmentPage() {
     setDeletingId(id);
     try {
       await enrollmentApi.delete(id);
-      setEnrollments(prev => prev.filter(enrollment => enrollment.id !== id));
     } catch {
-      alert(t.deleteError);
+      alert('Enrollment delete is not available yet in backend API.');
     } finally {
       setDeletingId(null);
     }
