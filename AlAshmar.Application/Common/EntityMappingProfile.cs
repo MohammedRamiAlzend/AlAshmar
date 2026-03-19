@@ -64,6 +64,8 @@ public class EntityMappingProfile : Profile
 
         CreateMap<Semester, SemesterDto>().ReverseMap();
         CreateMap<CreateSemesterDto, Semester>();
+        CreateMap<CreateSemesterDto, SemesterDto>()
+            .ConstructUsing(src => new SemesterDto(Guid.Empty, src.StartDate, src.EndDate, src.Name));
         CreateMap<UpdateSemesterDto, Semester>();
 
         CreateMap<Course, CourseDto>().ReverseMap();
