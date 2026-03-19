@@ -1,7 +1,7 @@
 using AlAshmar.Application.Interfaces;
 using AlAshmar.Application.Interfaces.Reports;
 using AlAshmar.Infrastructure.Services;
-using AlAshmar.Infrastructure.Services.Domain;
+using AlAshmar.Application.Services.Domain;
 using AlAshmar.Infrastructure.Services.Reports;
 using FileManager.Extensions;
 
