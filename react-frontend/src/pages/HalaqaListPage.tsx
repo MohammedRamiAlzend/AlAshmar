@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { courseApi, halaqaApi } from '../api/academicApi';
 import type { CourseDto, HalaqaDto } from '../types/academic';
 import MainLayout from '../components/MainLayout';
@@ -13,6 +14,7 @@ const emptyForm = (): HalaqaFormState => ({ className: '', courseId: '' });
 
 export default function HalaqaListPage() {
   const t = useT();
+  const navigate = useNavigate();
   const [courses, setCourses] = useState<CourseDto[]>([]);
   const [halaqas, setHalaqas] = useState<HalaqaDto[]>([]);
   const [loading, setLoading] = useState(true);
@@ -98,10 +100,16 @@ export default function HalaqaListPage() {
       headerContent={
         <div className="flex justify-end w-full">
           <button
-            onClick={openAdd}
+            onClick={() => {
+              if (courses.length === 0) {
+                navigate('/courses');
+                return;
+              }
+              openAdd();
+            }}
             className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-xl font-semibold text-sm hover:bg-blue-700 active:bg-blue-800 transition-colors shadow-sm"
           >
-            {t.addHalaqa}
+            {courses.length === 0 ? t.addCourse : t.addHalaqa}
           </button>
         </div>
       }
@@ -204,6 +212,18 @@ export default function HalaqaListPage() {
             <p className="text-red-500 dark:text-red-400 text-sm mb-5">{error}</p>
             <button onClick={loadAll} className="px-5 py-2 text-sm font-medium text-red-600 dark:text-red-400 border border-red-300 dark:border-red-700 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors">
               {t.tryAgain}
+            </button>
+          </div>
+        ) : courses.length === 0 ? (
+          <div className="flex flex-col items-center py-20 text-center">
+            <div className="w-20 h-20 rounded-3xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-4xl mb-5 shadow-inner">📚</div>
+            <h2 className="text-xl font-semibold text-gray-800 dark:text-white">{t.noCourses}</h2>
+            <p className="text-gray-500 dark:text-slate-400 mt-2 mb-7 text-sm max-w-xs">{t.noCoursesDesc}</p>
+            <button
+              onClick={() => navigate('/courses')}
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-xl font-semibold text-sm hover:bg-blue-700 transition-colors shadow-sm"
+            >
+              {t.addCourse}
             </button>
           </div>
         ) : filtered.length === 0 ? (

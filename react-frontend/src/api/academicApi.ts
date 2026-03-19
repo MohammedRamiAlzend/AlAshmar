@@ -9,6 +9,22 @@ import type {
 
 const api = axios.create({ baseURL: API_URL });
 
+function normalizeArrayResponse<T>(payload: unknown): T[] {
+  if (Array.isArray(payload)) {
+    return payload as T[];
+  }
+
+  if (payload && typeof payload === 'object') {
+    const record = payload as Record<string, unknown>;
+    const candidate = record.items ?? record.data ?? record.result ?? record.value;
+    if (Array.isArray(candidate)) {
+      return candidate as T[];
+    }
+  }
+
+  return [];
+}
+
 api.interceptors.request.use(config => {
   const token = useAuthStore.getState().token;
   if (token) {
@@ -30,7 +46,7 @@ api.interceptors.response.use(
 
 export const semesterApi = {
   list: () =>
-    api.get<SemesterDto[]>('/semesters').then(r => r.data),
+    api.get<unknown>('/semesters').then(r => normalizeArrayResponse<SemesterDto>(r.data)),
   get: (id: string) =>
     api.get<SemesterDto>(`/semesters/${id}`).then(r => r.data),
   create: (data: CreateSemesterDto) =>
@@ -43,9 +59,9 @@ export const semesterApi = {
 
 export const courseApi = {
   list: () =>
-    api.get<CourseDto[]>('/courses').then(r => r.data),
+    api.get<unknown>('/courses').then(r => normalizeArrayResponse<CourseDto>(r.data)),
   bySemester: (semesterId: string) =>
-    api.get<CourseDto[]>(`/courses/by-semester/${semesterId}`).then(r => r.data),
+    api.get<unknown>(`/courses/by-semester/${semesterId}`).then(r => normalizeArrayResponse<CourseDto>(r.data)),
   get: (id: string) =>
     api.get<CourseDto>(`/courses/${id}`).then(r => r.data),
   create: (data: CreateCourseDto) =>
@@ -58,9 +74,9 @@ export const courseApi = {
 
 export const halaqaApi = {
   list: () =>
-    api.get<HalaqaDto[]>('/halaqas').then(r => r.data),
+    api.get<unknown>('/halaqas').then(r => normalizeArrayResponse<HalaqaDto>(r.data)),
   byCourse: (courseId: string) =>
-    api.get<HalaqaDto[]>(`/halaqas/by-course/${courseId}`).then(r => r.data),
+    api.get<unknown>(`/halaqas/by-course/${courseId}`).then(r => normalizeArrayResponse<HalaqaDto>(r.data)),
   get: (id: string) =>
     api.get<HalaqaDto>(`/halaqas/${id}`).then(r => r.data),
   create: (data: CreateHalaqaDto) =>
