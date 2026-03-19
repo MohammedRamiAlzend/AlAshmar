@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { formApi } from '../api/formApi';
 import type { FormDto } from '../types/form';
-import AppHeader from '../components/AppHeader';
+import MainLayout from '../components/MainLayout';
 import { useT } from '../i18n';
 
 export default function FormListPage() {
@@ -50,9 +50,9 @@ export default function FormListPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
-      <AppHeader>
-        <div className="flex justify-end">
+    <MainLayout
+      headerContent={
+        <div className="flex justify-end w-full">
           <Link
             to="/forms/new"
             className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-xl font-semibold text-sm hover:bg-blue-700 active:bg-blue-800 transition-colors shadow-sm"
@@ -60,7 +60,8 @@ export default function FormListPage() {
             {t.newForm}
           </Link>
         </div>
-      </AppHeader>
+      }
+    >
 
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Page title + search */}
@@ -217,7 +218,7 @@ export default function FormListPage() {
           </div>
         )}
       </div>
-    </div>
+    </MainLayout>
   );
 }
 

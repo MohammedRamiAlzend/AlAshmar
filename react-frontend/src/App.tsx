@@ -8,6 +8,9 @@ import FormBuilderPage from './pages/FormBuilderPage';
 import FormPreviewPage from './pages/FormPreviewPage';
 import FormFillPage from './pages/FormFillPage';
 import FormResponsesPage from './pages/FormResponsesPage';
+import SemesterListPage from './pages/SemesterListPage';
+import CourseListPage from './pages/CourseListPage';
+import HalaqaListPage from './pages/HalaqaListPage';
 
 function AppEffects() {
   const { theme, lang } = useSettingsStore();
@@ -43,6 +46,9 @@ export default function App() {
         <Route path="/forms/:id/edit" element={<ProtectedRoute><FormBuilderPage /></ProtectedRoute>} />
         <Route path="/forms/:id/preview" element={<ProtectedRoute><FormPreviewPage /></ProtectedRoute>} />
         <Route path="/forms/:id/responses" element={<ProtectedRoute><FormResponsesPage /></ProtectedRoute>} />
+        <Route path="/semesters" element={<ProtectedRoute><SemesterListPage /></ProtectedRoute>} />
+        <Route path="/courses" element={<ProtectedRoute><CourseListPage /></ProtectedRoute>} />
+        <Route path="/halaqas" element={<ProtectedRoute><HalaqaListPage /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   );
