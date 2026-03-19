@@ -44,7 +44,7 @@ export default function SemesterListPage() {
   };
 
   const openEdit = (s: SemesterDto) => {
-    setForm({ name: s.name, startDate: s.startDate.slice(0, 10), endDate: s.endDate.slice(0, 10) });
+    setForm({ name: s.name, startDate: (s.startDate ?? '').slice(0, 10), endDate: (s.endDate ?? '').slice(0, 10) });
     setEditingId(s.id);
   };
 
@@ -210,7 +210,7 @@ export default function SemesterListPage() {
                 <div>
                   <h3 className="text-base font-semibold text-gray-900 dark:text-white">{s.name}</h3>
                   <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">
-                    {s.startDate.slice(0, 10)} – {s.endDate.slice(0, 10)}
+                    {(s.startDate ?? '').slice(0, 10)} – {(s.endDate ?? '').slice(0, 10)}
                   </p>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">

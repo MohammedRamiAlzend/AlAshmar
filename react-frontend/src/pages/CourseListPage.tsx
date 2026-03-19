@@ -49,7 +49,7 @@ export default function CourseListPage() {
   };
 
   const openEdit = (c: CourseDto) => {
-    setForm({ eventName: c.eventName, semesterId: c.semesterId });
+    setForm({ eventName: c.eventName, semesterId: c.semesterId ?? '' });
     setEditingId(c.id);
   };
 

@@ -49,7 +49,7 @@ export default function HalaqaListPage() {
   };
 
   const openEdit = (h: HalaqaDto) => {
-    setForm({ className: h.className, courseId: h.courseId });
+    setForm({ className: h.className, courseId: h.courseId ?? '' });
     setEditingId(h.id);
   };
 
