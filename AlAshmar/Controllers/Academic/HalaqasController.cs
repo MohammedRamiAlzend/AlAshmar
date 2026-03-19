@@ -23,7 +23,7 @@ public class HalaqasController : ControllerBase
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default)
     {
         var result = await _sender.Send(new GetAllHalaqasQuery(), cancellationToken);
-        return result.ToActionResult();
+        return result.IsError ? BadRequest(result.Errors) : Ok(result.Value);
     }
 
     [HttpGet("by-course/{courseId:guid}")]
@@ -32,7 +32,7 @@ public class HalaqasController : ControllerBase
         CancellationToken cancellationToken = default)
     {
         var result = await _sender.Send(new GetHalaqasByCourseQuery(courseId), cancellationToken);
-        return result.ToActionResult();
+        return result.IsError ? BadRequest(result.Errors) : Ok(result.Value);
     }
 
     [HttpGet("{id:guid}")]
@@ -41,7 +41,9 @@ public class HalaqasController : ControllerBase
         CancellationToken cancellationToken = default)
     {
         var result = await _sender.Send(new GetHalaqaByIdQuery(id), cancellationToken);
-        return result.ToActionResult();
+        if (result.IsError)
+            return result.TopError.Type == ErrorKind.NotFound ? NotFound(result.Errors) : BadRequest(result.Errors);
+        return Ok(result.Value);
     }
 
     [HttpPost]
@@ -50,7 +52,7 @@ public class HalaqasController : ControllerBase
         CancellationToken cancellationToken = default)
     {
         var result = await _sender.Send(new CreateHalaqaCommand(dto.ClassName, dto.CourseId), cancellationToken);
-        return result.ToActionResult();
+        return result.IsError ? BadRequest(result.Errors) : Ok(result.Value);
     }
 
     [HttpPut("{id:guid}")]
@@ -60,7 +62,9 @@ public class HalaqasController : ControllerBase
         CancellationToken cancellationToken = default)
     {
         var result = await _sender.Send(new UpdateHalaqaCommand(id, dto.ClassName), cancellationToken);
-        return result.ToActionResult();
+        if (result.IsError)
+            return result.TopError.Type == ErrorKind.NotFound ? NotFound(result.Errors) : BadRequest(result.Errors);
+        return Ok(result.Value);
     }
 
     [HttpDelete("{id:guid}")]
@@ -69,6 +73,8 @@ public class HalaqasController : ControllerBase
         CancellationToken cancellationToken = default)
     {
         var result = await _sender.Send(new DeleteHalaqaCommand(id), cancellationToken);
-        return result.ToActionResult();
+        if (result.IsError)
+            return result.TopError.Type == ErrorKind.NotFound ? NotFound(result.Errors) : BadRequest(result.Errors);
+        return NoContent();
     }
 }

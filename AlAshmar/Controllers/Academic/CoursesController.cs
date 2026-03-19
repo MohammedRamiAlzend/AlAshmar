@@ -23,7 +23,7 @@ public class CoursesController : ControllerBase
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default)
     {
         var result = await _sender.Send(new GetAllCoursesQuery(), cancellationToken);
-        return result.ToActionResult();
+        return result.IsError ? BadRequest(result.Errors) : Ok(result.Value);
     }
 
     [HttpGet("by-semester/{semesterId:guid}")]
@@ -32,7 +32,7 @@ public class CoursesController : ControllerBase
         CancellationToken cancellationToken = default)
     {
         var result = await _sender.Send(new GetCoursesBySemesterQuery(semesterId), cancellationToken);
-        return result.ToActionResult();
+        return result.IsError ? BadRequest(result.Errors) : Ok(result.Value);
     }
 
     [HttpGet("{id:guid}")]
@@ -41,7 +41,9 @@ public class CoursesController : ControllerBase
         CancellationToken cancellationToken = default)
     {
         var result = await _sender.Send(new GetCourseByIdQuery(id), cancellationToken);
-        return result.ToActionResult();
+        if (result.IsError)
+            return result.TopError.Type == ErrorKind.NotFound ? NotFound(result.Errors) : BadRequest(result.Errors);
+        return Ok(result.Value);
     }
 
     [HttpPost]
@@ -50,7 +52,7 @@ public class CoursesController : ControllerBase
         CancellationToken cancellationToken = default)
     {
         var result = await _sender.Send(new CreateCourseCommand(dto.EventName, dto.SemesterId), cancellationToken);
-        return result.ToActionResult();
+        return result.IsError ? BadRequest(result.Errors) : Ok(result.Value);
     }
 
     [HttpPut("{id:guid}")]
@@ -60,7 +62,9 @@ public class CoursesController : ControllerBase
         CancellationToken cancellationToken = default)
     {
         var result = await _sender.Send(new UpdateCourseCommand(id, dto.EventName), cancellationToken);
-        return result.ToActionResult();
+        if (result.IsError)
+            return result.TopError.Type == ErrorKind.NotFound ? NotFound(result.Errors) : BadRequest(result.Errors);
+        return Ok(result.Value);
     }
 
     [HttpDelete("{id:guid}")]
@@ -69,6 +73,8 @@ public class CoursesController : ControllerBase
         CancellationToken cancellationToken = default)
     {
         var result = await _sender.Send(new DeleteCourseCommand(id), cancellationToken);
-        return result.ToActionResult();
+        if (result.IsError)
+            return result.TopError.Type == ErrorKind.NotFound ? NotFound(result.Errors) : BadRequest(result.Errors);
+        return NoContent();
     }
 }
