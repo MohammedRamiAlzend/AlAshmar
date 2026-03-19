@@ -79,6 +79,24 @@ export default function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
                 {!collapsed && <span>{t.halaqas}</span>}
               </NavLink>
             </li>
+            <li>
+              <NavLink to="/students" className={navLinkClass}>
+                <span className="text-base flex-shrink-0">👨‍🎓</span>
+                {!collapsed && <span>{t.students}</span>}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/teachers" className={navLinkClass}>
+                <span className="text-base flex-shrink-0">👨‍🏫</span>
+                {!collapsed && <span>{t.teachers}</span>}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/enrollments" className={navLinkClass}>
+                <span className="text-base flex-shrink-0">🔗</span>
+                {!collapsed && <span>{t.enrollments}</span>}
+              </NavLink>
+            </li>
           </ul>
         </div>
       </nav>

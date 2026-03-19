@@ -20,6 +20,30 @@ export interface HalaqaDto {
   course?: CourseDto;
 }
 
+export interface StudentDto {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  nationalId: string;
+}
+
+export interface TeacherDto {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  nationalId: string;
+}
+
+export interface EnrollmentDto {
+  id: string;
+  studentId: string;
+  halaqaId: string;
+  student?: StudentDto;
+  halaqa?: HalaqaDto;
+}
+
 export interface CreateSemesterDto {
   name: string;
   startDate: string;
@@ -48,4 +72,37 @@ export interface CreateHalaqaDto {
 
 export interface UpdateHalaqaDto {
   className: string;
+}
+
+export interface CreateStudentDto {
+  name: string;
+  email: string;
+  phone: string;
+  nationalId: string;
+}
+
+export interface UpdateStudentDto {
+  name: string;
+  email: string;
+  phone: string;
+  nationalId: string;
+}
+
+export interface CreateTeacherDto {
+  name: string;
+  email: string;
+  phone: string;
+  nationalId: string;
+}
+
+export interface UpdateTeacherDto {
+  name: string;
+  email: string;
+  phone: string;
+  nationalId: string;
+}
+
+export interface CreateEnrollmentDto {
+  studentId: string;
+  halaqaId: string;
 }

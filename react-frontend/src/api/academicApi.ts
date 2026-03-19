@@ -5,6 +5,9 @@ import type {
   SemesterDto, CreateSemesterDto, UpdateSemesterDto,
   CourseDto, CreateCourseDto, UpdateCourseDto,
   HalaqaDto, CreateHalaqaDto, UpdateHalaqaDto,
+  StudentDto, CreateStudentDto, UpdateStudentDto,
+  TeacherDto, CreateTeacherDto, UpdateTeacherDto,
+  EnrollmentDto, CreateEnrollmentDto,
 } from '../types/academic';
 
 const api = axios.create({ baseURL: API_URL });
@@ -85,4 +88,43 @@ export const halaqaApi = {
     api.put<HalaqaDto>(`/halaqas/${id}`, data).then(r => r.data),
   delete: (id: string) =>
     api.delete(`/halaqas/${id}`),
+};
+
+export const studentApi = {
+  list: () =>
+    api.get<unknown>('/students').then(r => normalizeArrayResponse<StudentDto>(r.data)),
+  get: (id: string) =>
+    api.get<StudentDto>(`/students/${id}`).then(r => r.data),
+  create: (data: CreateStudentDto) =>
+    api.post<StudentDto>('/students', data).then(r => r.data),
+  update: (id: string, data: UpdateStudentDto) =>
+    api.put<StudentDto>(`/students/${id}`, data).then(r => r.data),
+  delete: (id: string) =>
+    api.delete(`/students/${id}`),
+};
+
+export const teacherApi = {
+  list: () =>
+    api.get<unknown>('/teachers').then(r => normalizeArrayResponse<TeacherDto>(r.data)),
+  get: (id: string) =>
+    api.get<TeacherDto>(`/teachers/${id}`).then(r => r.data),
+  create: (data: CreateTeacherDto) =>
+    api.post<TeacherDto>('/teachers', data).then(r => r.data),
+  update: (id: string, data: UpdateTeacherDto) =>
+    api.put<TeacherDto>(`/teachers/${id}`, data).then(r => r.data),
+  delete: (id: string) =>
+    api.delete(`/teachers/${id}`),
+};
+
+export const enrollmentApi = {
+  list: () =>
+    api.get<unknown>('/enrollments').then(r => normalizeArrayResponse<EnrollmentDto>(r.data)),
+  byStudent: (studentId: string) =>
+    api.get<unknown>(`/enrollments/by-student/${studentId}`).then(r => normalizeArrayResponse<EnrollmentDto>(r.data)),
+  byHalaqa: (halaqaId: string) =>
+    api.get<unknown>(`/enrollments/by-halaqa/${halaqaId}`).then(r => normalizeArrayResponse<EnrollmentDto>(r.data)),
+  create: (data: CreateEnrollmentDto) =>
+    api.post<EnrollmentDto>('/enrollments', data).then(r => r.data),
+  delete: (id: string) =>
+    api.delete(`/enrollments/${id}`),
 };

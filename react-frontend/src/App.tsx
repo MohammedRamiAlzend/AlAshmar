@@ -11,6 +11,9 @@ import FormResponsesPage from './pages/FormResponsesPage';
 import SemesterListPage from './pages/SemesterListPage';
 import CourseListPage from './pages/CourseListPage';
 import HalaqaListPage from './pages/HalaqaListPage';
+import StudentListPage from './pages/StudentListPage';
+import TeacherListPage from './pages/TeacherListPage';
+import EnrollmentPage from './pages/EnrollmentPage';
 
 function AppEffects() {
   const { theme, lang } = useSettingsStore();
@@ -49,6 +52,9 @@ export default function App() {
         <Route path="/semesters" element={<ProtectedRoute><SemesterListPage /></ProtectedRoute>} />
         <Route path="/courses" element={<ProtectedRoute><CourseListPage /></ProtectedRoute>} />
         <Route path="/halaqas" element={<ProtectedRoute><HalaqaListPage /></ProtectedRoute>} />
+        <Route path="/students" element={<ProtectedRoute><StudentListPage /></ProtectedRoute>} />
+        <Route path="/teachers" element={<ProtectedRoute><TeacherListPage /></ProtectedRoute>} />
+        <Route path="/enrollments" element={<ProtectedRoute><EnrollmentPage /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   );
