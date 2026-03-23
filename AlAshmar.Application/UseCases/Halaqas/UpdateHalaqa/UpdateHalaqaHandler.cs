@@ -1,5 +1,5 @@
-using AlAshmar.Application.DTOs.Domain;
 using AlAshmar.Application.Repos;
+using AlAshmar.Domain.DTOs.Domain;
 using AlAshmar.Domain.Entities.Academic;
 
 namespace AlAshmar.Application.UseCases.Halaqas.UpdateHalaqa;

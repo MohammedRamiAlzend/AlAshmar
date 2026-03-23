@@ -1,4 +1,5 @@
 using AlAshmar.Application.UseCases.Students.UpdateStudentPassword;
+using AlAshmar.Domain.DTOs.Domain;
 
 namespace AlAshmar.Controllers.Students;
 

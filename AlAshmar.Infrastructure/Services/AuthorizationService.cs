@@ -1,4 +1,5 @@
-using AlAshmar.Domain.Entities.Users;
+global using AlAshmar.Domain.DTOs.Domain;
+global using AlAshmar.Domain.Entities.Users;
 
 namespace AlAshmar.Infrastructure.Services;
 

@@ -9,7 +9,6 @@
     <ProjectReference Include="..\PdfGenerator\PdfGenerator.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DTOs\" />
     <Folder Include="Interfaces\" />
     <Folder Include="UseCases\" />
   </ItemGroup>

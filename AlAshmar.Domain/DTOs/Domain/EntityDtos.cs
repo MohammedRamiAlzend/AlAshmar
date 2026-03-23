@@ -1,4 +1,4 @@
-namespace AlAshmar.Application.DTOs.Domain;
+namespace AlAshmar.Domain.DTOs.Domain;
 
 public record AllowableExtensionDto(
     Guid Id,
@@ -47,9 +47,9 @@ public record ManagerDto(
     Guid Id,
     string Name,
     Guid? UserId,
-    UserDto? User,
-    List<ManagerContactInfoDto> ManagerContactInfos,
-    List<ManagerAttachmentDto> ManagerAttachments
+    UserDto? User= null,
+    List<ManagerContactInfoDto>? ManagerContactInfos = null,
+    List<ManagerAttachmentDto>? ManagerAttachments = null
 );
 
 public record ManagerContactInfoDto(
@@ -74,10 +74,10 @@ public record TeacherDto(
     string? NationalityNumber,
     string? Email,
     Guid? UserId,
-    UserDto? User,
-    List<TeacherContactInfoDto> TeacherContactInfos,
-    List<TeacherAttachmentDto> TeacherAttachments,
-    List<ClassTeacherEnrollmentDto> ClassTeacherEnrollments
+    UserDto? User =null,
+    List<TeacherContactInfoDto>? TeacherContactInfos = null,
+    List<TeacherAttachmentDto>? TeacherAttachments = null,
+    List<ClassTeacherEnrollmentDto>? ClassTeacherEnrollments = null
 );
 
 public record TeacherContactInfoDto(
@@ -291,4 +291,27 @@ public record TeacherStatisticsDto(
     int TotalPointsGiven,
     int TotalPointsCount,
     int TotalContactInfos
+);
+
+
+public record CreatePermissionDto(
+    string Name,
+    string Description,
+    string Resource,
+    string Action
+);
+
+public record AssignPermissionsToRoleDto(
+    Guid RoleId,
+    List<Guid> PermissionIds
+);
+
+public record AssignRoleToUserDto(
+    Guid UserId,
+    Guid RoleId
+);
+
+public record AuthorizationResultDto(
+    bool IsAuthorized,
+    string? Reason = null
 );

@@ -1,4 +1,3 @@
-global using AlAshmar.Application.DTOs.Authorization;
 global using AlAshmar.Domain.Commons;
 global using AlAshmar.Infrastructure.Authorization.Handlers;
 global using AlAshmar.Infrastructure.Persistence;

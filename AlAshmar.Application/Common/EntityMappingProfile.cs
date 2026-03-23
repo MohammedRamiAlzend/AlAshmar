@@ -1,4 +1,4 @@
-using AlAshmar.Application.DTOs.Domain;
+using AlAshmar.Domain.DTOs.Domain;
 using AlAshmar.Domain.Entities.Academic;
 using AlAshmar.Domain.Entities.Common;
 using AlAshmar.Domain.Entities.Forms;

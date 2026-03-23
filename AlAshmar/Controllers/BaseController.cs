@@ -1,4 +1,6 @@
-using AlAshmar.Application.Services.Crud;
+global using AlAshmar.Application.Services.Crud;
+global using AlAshmar.Domain.Entities.Abstraction;
+global using AutoMapper;
 
 namespace AlAshmar.Controllers;
 

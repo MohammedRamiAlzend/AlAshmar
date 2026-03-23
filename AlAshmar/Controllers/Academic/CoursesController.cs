@@ -1,9 +1,13 @@
-using AlAshmar.Application.UseCases.Courses.CreateCourse;
-using AlAshmar.Application.UseCases.Courses.DeleteCourse;
-using AlAshmar.Application.UseCases.Courses.GetAllCourses;
-using AlAshmar.Application.UseCases.Courses.GetCourseById;
-using AlAshmar.Application.UseCases.Courses.GetCoursesBySemester;
-using AlAshmar.Application.UseCases.Courses.UpdateCourse;
+global using AlAshmar.Application.UseCases.Courses.CreateCourse;
+global using AlAshmar.Application.UseCases.Courses.DeleteCourse;
+global using AlAshmar.Application.UseCases.Courses.GetAllCourses;
+global using AlAshmar.Application.UseCases.Courses.GetCourseById;
+global using AlAshmar.Application.UseCases.Courses.GetCoursesBySemester;
+global using AlAshmar.Application.UseCases.Courses.UpdateCourse;
+global using AlAshmar.Domain.DTOs.Domain;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Mvc;
+global using MediatR;
 
 namespace AlAshmar.Controllers.Academic;
 

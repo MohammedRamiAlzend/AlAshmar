@@ -1,6 +1,6 @@
-using AlAshmar.Application.DTOs;
-using AlAshmar.Application.Repos;
-using AlAshmar.Domain.Entities.Managers;
+global using AlAshmar.Application.Repos;
+global using AlAshmar.Domain.Entities.Managers;
+using AlAshmar.Domain.DTOs.Domain;
 
 namespace AlAshmar.Application.UseCases.Managers.UpdateManager;
 

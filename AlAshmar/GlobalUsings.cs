@@ -1,4 +1,3 @@
-global using AlAshmar.Application.DTOs.Domain;
 global using AlAshmar.Application.Repos;
 global using AlAshmar.Application.UseCases.Managers.AddAttachment;
 global using AlAshmar.Application.UseCases.Managers.CreateManager;

@@ -1,4 +1,5 @@
-using AlAshmar.Application.DTOs.Authorization;
+
+using AlAshmar.Domain.DTOs.Domain;
 
 namespace AlAshmar.Application.Interfaces;
 

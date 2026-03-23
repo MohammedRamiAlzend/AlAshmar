@@ -1,4 +1,5 @@
 using AlAshmar.Application.Services.Domain;
+using AlAshmar.Domain.DTOs.Domain;
 using AlAshmar.Domain.Entities.Students;
 using AlAshmar.Domain.Entities.Teachers;
 using AlAshmar.Domain.Entities.Users;

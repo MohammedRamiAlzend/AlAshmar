@@ -1,4 +1,4 @@
-namespace AlAshmar.Application.DTOs.Domain;
+namespace AlAshmar.Domain.DTOs.Domain;
 
 public record StudentBasicInfoDto(
     Guid Id,

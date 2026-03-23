@@ -1,5 +1,4 @@
-using AlAshmar.Application.DTOs;
-using AlAshmar.Application.DTOs.Domain;
+using AlAshmar.Domain.DTOs.Domain;
 using AlAshmar.Application.Repos;
 using AlAshmar.Application.Repos.Includes;
 using AlAshmar.Domain.Entities.Academic;
@@ -46,13 +45,13 @@ public record SearchParameters(
 
 public interface ITeacherManagementService
 {
-    Task<Result<List<AlAshmar.Application.DTOs.Domain.TeacherDto>>> GetAllFilteredAsync(
+    Task<Result<List<TeacherDto>>> GetAllFilteredAsync(
         TeacherFilterParameters filter,
         CancellationToken cancellationToken = default);
 
-    Task<Result<AlAshmar.Application.DTOs.TeacherDto?>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<Result<TeacherDto?>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
-    Task<Result<AlAshmar.Application.DTOs.TeacherDto>> CreateAsync(
+    Task<Result<TeacherDto>> CreateAsync(
         string name,
         string fatherName,
         string motherName,
@@ -62,7 +61,7 @@ public interface ITeacherManagementService
         string password,
         CancellationToken cancellationToken = default);
 
-    Task<Result<AlAshmar.Application.DTOs.TeacherDto>> UpdateAsync(
+    Task<Result<TeacherDto>> UpdateAsync(
         Guid id,
         string name,
         string fatherName,
@@ -134,7 +133,7 @@ public interface ITeacherManagementService
         PointsFilterParameters? filter = null,
         CancellationToken cancellationToken = default);
 
-    Task<Result<List<AlAshmar.Application.DTOs.TeacherDto>>> SearchByNameAsync(
+    Task<Result<List<TeacherDto>>> SearchByNameAsync(
         SearchParameters parameters,
         CancellationToken cancellationToken = default);
 
@@ -172,7 +171,7 @@ public class TeacherManagementService : ITeacherManagementService
         _classStudentEnrollmentRepository = classStudentEnrollmentRepository;
     }
 
-    public async Task<Result<List<AlAshmar.Application.DTOs.Domain.TeacherDto>>> GetAllFilteredAsync(
+    public async Task<Result<List<TeacherDto>>> GetAllFilteredAsync(
         TeacherFilterParameters filter,
         CancellationToken cancellationToken = default)
     {
@@ -206,7 +205,7 @@ public class TeacherManagementService : ITeacherManagementService
             teachers = [.. result.Value!];
         }
 
-        var teacherDtos = teachers.Select(t => new AlAshmar.Application.DTOs.Domain.TeacherDto(
+        var teacherDtos = teachers.Select(t => new AlAshmar.Domain.DTOs.Domain.TeacherDto(
             t.Id,
             t.Name,
             t.FatherName,
@@ -236,14 +235,14 @@ public class TeacherManagementService : ITeacherManagementService
         return teacherDtos;
     }
 
-    public async Task<Result<AlAshmar.Application.DTOs.TeacherDto?>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Result<TeacherDto?>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var teacher = await _teacherRepository.GetByIdAsync(id);
 
         if (teacher.Value == null)
             return ApplicationErrors.TeacherNotFound;
 
-        return new AlAshmar.Application.DTOs.TeacherDto(
+        return new TeacherDto(
             teacher.Value.Id,
             teacher.Value.Name,
             teacher.Value.FatherName,
@@ -254,7 +253,7 @@ public class TeacherManagementService : ITeacherManagementService
         );
     }
 
-    public async Task<Result<AlAshmar.Application.DTOs.TeacherDto>> CreateAsync(
+    public async Task<Result<TeacherDto>> CreateAsync(
         string name,
         string fatherName,
         string motherName,
@@ -278,7 +277,7 @@ public class TeacherManagementService : ITeacherManagementService
         if (addResult.IsError)
             return addResult.Errors;
 
-        return new AlAshmar.Application.DTOs.TeacherDto(
+        return new TeacherDto(
             teacher.Id,
             teacher.Name,
             teacher.FatherName,
@@ -289,7 +288,7 @@ public class TeacherManagementService : ITeacherManagementService
         );
     }
 
-    public async Task<Result<AlAshmar.Application.DTOs.TeacherDto>> UpdateAsync(
+    public async Task<Result<TeacherDto>> UpdateAsync(
         Guid id,
         string name,
         string fatherName,
@@ -315,7 +314,7 @@ public class TeacherManagementService : ITeacherManagementService
         if (updateResult.IsError)
             return updateResult.Errors;
 
-        return new AlAshmar.Application.DTOs.TeacherDto(
+        return new TeacherDto(
             teacher.Id,
             teacher.Name,
             teacher.FatherName,
@@ -496,7 +495,7 @@ public class TeacherManagementService : ITeacherManagementService
         return t => t.ClassTeacherEnrollments.Any(cte => cte.ClassId == classId);
     }
 
-    private static System.Linq.Expressions.Expression<Func<Teacher, bool>> BuildSemesterFilter(Guid semesterId)
+    private static Expression<Func<Teacher, bool>> BuildSemesterFilter(Guid semesterId)
     {
         return t => t.GivenPoints.Any(p => p.SmesterId == semesterId);
     }
@@ -703,7 +702,7 @@ public class TeacherManagementService : ITeacherManagementService
         );
     }
 
-    public async Task<Result<List<AlAshmar.Application.DTOs.TeacherDto>>> SearchByNameAsync(
+    public async Task<Result<List<TeacherDto>>> SearchByNameAsync(
         SearchParameters parameters,
         CancellationToken cancellationToken = default)
     {
@@ -720,7 +719,7 @@ public class TeacherManagementService : ITeacherManagementService
         if (result.IsError)
             return result.Errors;
 
-        var teacherDtos = result.Value!.Items.Select(t => new AlAshmar.Application.DTOs.TeacherDto(
+        var teacherDtos = result.Value!.Items.Select(t => new TeacherDto(
             t.Id,
             t.Name,
             t.FatherName,

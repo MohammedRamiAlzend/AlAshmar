@@ -1,4 +1,4 @@
-using AlAshmar.Application.DTOs.Domain;
+using AlAshmar.Domain.DTOs.Domain;
 
 namespace AlAshmar.Application.UseCases.Students.GetAttachments;
 

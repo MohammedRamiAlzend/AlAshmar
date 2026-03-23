@@ -1,7 +1,7 @@
-using AlAshmar.Application.DTOs.Domain;
 using AlAshmar.Application.Repos;
 using AlAshmar.Application.Repos.Includes;
 using AlAshmar.Application.Services.Crud;
+using AlAshmar.Domain.DTOs.Domain;
 using AlAshmar.Domain.Entities.Academic;
 using AlAshmar.Domain.Entities.Common;
 using AlAshmar.Domain.Entities.Managers;

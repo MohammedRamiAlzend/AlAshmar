@@ -1,6 +1,6 @@
-using AlAshmar.Application.DTOs;
-using AlAshmar.Application.DTOs.Domain;
+ 
 using AlAshmar.Application.Repos;
+using AlAshmar.Domain.DTOs.Domain;
 using AlAshmar.Domain.Entities.Common;
 using AlAshmar.Domain.Entities.Students;
 

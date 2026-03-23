@@ -4,6 +4,7 @@ using AlAshmar.Application.UseCases.Halaqas.GetAllHalaqas;
 using AlAshmar.Application.UseCases.Halaqas.GetHalaqaById;
 using AlAshmar.Application.UseCases.Halaqas.GetHalaqasByCourse;
 using AlAshmar.Application.UseCases.Halaqas.UpdateHalaqa;
+using AlAshmar.Domain.DTOs.Domain;
 
 namespace AlAshmar.Controllers.Academic;
 

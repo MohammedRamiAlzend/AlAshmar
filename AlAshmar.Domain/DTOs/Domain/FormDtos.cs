@@ -1,6 +1,6 @@
 using AlAshmar.Domain.Entities.Forms;
 
-namespace AlAshmar.Application.DTOs.Domain;
+namespace AlAshmar.Domain.DTOs.Domain;
 
 public record FormDto(
     Guid Id,

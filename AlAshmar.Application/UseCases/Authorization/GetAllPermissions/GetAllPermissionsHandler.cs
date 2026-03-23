@@ -1,5 +1,5 @@
-using AlAshmar.Application.DTOs.Authorization;
 using AlAshmar.Application.Interfaces;
+using AlAshmar.Domain.DTOs.Domain;
 
 namespace AlAshmar.Application.UseCases.Authorization.GetAllPermissions;
 

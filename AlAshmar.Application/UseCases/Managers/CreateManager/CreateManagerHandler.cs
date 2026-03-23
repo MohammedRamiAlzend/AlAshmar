@@ -1,5 +1,5 @@
-using AlAshmar.Application.DTOs;
 using AlAshmar.Application.Repos;
+using AlAshmar.Domain.DTOs.Domain;
 using AlAshmar.Domain.Entities.Managers;
 
 namespace AlAshmar.Application.UseCases.Managers.CreateManager;

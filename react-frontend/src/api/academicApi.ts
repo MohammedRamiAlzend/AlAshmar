@@ -225,6 +225,8 @@ export const halaqaApi = {
 export const studentApi = {
   list: () =>
     getWithFallback<unknown>(['/students/filtered', '/students', '/student']).then(payload => normalizeStudentResponse(payload)),
+  listPaged: (pageNumber: number, pageSize: number) =>
+    api.get<unknown>(`/students/filtered?pageNumber=${pageNumber}&pageSize=${pageSize}`).then(r => normalizeStudentResponse(r.data)),
   get: (id: string) =>
     getWithFallback<StudentDto>([`/students/${id}`, `/student/${id}`]),
   create: async (data: CreateStudentDto) => {
@@ -252,6 +254,8 @@ export const studentApi = {
   },
   update: (id: string, data: UpdateStudentDto) =>
     putWithFallback<unknown, UpdateStudentDto>([`/students/${id}`, `/student/${id}`], data),
+  resetPassword: (id: string, newPassword: string) =>
+    api.put(`/students/${id}/password`, { newPassword }),
   delete: (id: string) =>
     deleteWithFallback([`/students/${id}`, `/student/${id}`]),
 };
@@ -259,12 +263,16 @@ export const studentApi = {
 export const teacherApi = {
   list: () =>
     getWithFallback<unknown>(['/teachers/filtered', '/teachers', '/teacher']).then(payload => normalizeTeacherResponse(payload)),
+  listPaged: (pageNumber: number, pageSize: number) =>
+    api.get<unknown>(`/teachers/filtered?pageNumber=${pageNumber}&pageSize=${pageSize}`).then(r => normalizeTeacherResponse(r.data)),
   get: (id: string) =>
     getWithFallback<TeacherDto>([`/teachers/${id}`, `/teacher/${id}`]),
   create: (data: CreateTeacherDto) =>
     postWithFallback<unknown, CreateTeacherDto>(['/teachers', '/teacher'], data),
   update: (id: string, data: UpdateTeacherDto) =>
     putWithFallback<unknown, UpdateTeacherDto>([`/teachers/${id}`, `/teacher/${id}`], data),
+  resetPassword: (id: string, newPassword: string) =>
+    api.put(`/teachers/${id}/password`, { newPassword }),
   delete: (id: string) =>
     deleteWithFallback([`/teachers/${id}`, `/teacher/${id}`]),
 };

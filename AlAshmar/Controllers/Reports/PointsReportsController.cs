@@ -1,4 +1,5 @@
 using AlAshmar.Application.Interfaces.Reports;
+using AlAshmar.Domain.DTOs.Domain;
 
 namespace AlAshmar.Controllers.Reports;
 

@@ -1,3 +1,5 @@
+using AlAshmar.Domain.DTOs.Domain;
+
 namespace AlAshmar.Controllers.Managers;
 
 [ApiController]
